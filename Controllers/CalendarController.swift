@@ -11,11 +11,8 @@ import Foundation
 
 class CalendarController {
   
+  let eventController = EventController()
   let ModelController = ToDoModelController()
-  
-  func test() {
-    print(ModelController.toDoList)
-  }
   
   func calculateDayNumberForCell(indexPathRow: Int) -> String {
     let index = indexPathRow - 100 //start calendar 100 days prior
@@ -40,6 +37,14 @@ class CalendarController {
     return dayOfWeekString
   }
   
+  func calendarPress(indexPathRow: Int) -> String {
+    let numberOfDaysFromToday = indexPathRow - 100
+    let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: "MMM dd, yyyy")
+    print("calendarPress: \(pressedDate)")
+    return pressedDate
+  }
+  
+  
   
   func calculateDate(days: Int, date: Date, format: String) -> String {
     let formatter = DateFormatter()
@@ -50,11 +55,5 @@ class CalendarController {
     let result = formatter.string(from: newDay!)
     return result
   }
-  
-  
-  
-  
-  
-  
   
 }

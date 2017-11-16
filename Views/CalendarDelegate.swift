@@ -21,6 +21,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let todayIndexPath = IndexPath(row: 100, section: 0)
     let cell = calendarCollectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCell", for: indexPath) as! CalendarCollectionViewCell
     cell.numberOfMonthLabel.text = controller.calculateDayNumberForCell(indexPathRow: indexPath.row)
     cell.dayOfWeekLabel.text = controller.calculateDayOfWeekLabelForCell(indexPathRow: indexPath.row)
@@ -28,19 +29,27 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
     cell.dayIndicatorView.layer.shadowOffset = CGSize(width: 0, height: 3)
     cell.dayIndicatorView.layer.shadowOpacity = 0.7
     
-    if indexPath == selectedCalendarIndexPath {
-      cell.dayIndicatorView.backgroundColor = .red
-      cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
-      cell.numberOfMonthLabel.textColor = .white
-    } else {
-      cell.dayIndicatorView.backgroundColor = .white
-      cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
-      cell.numberOfMonthLabel.textColor = .black
+    switch indexPath.row {
+    case selectedCalendarIndexPath?.row ?? 1000000: // if nil, 100000 will not load
+        cell.dayIndicatorView.backgroundColor = .red
+        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
+        cell.numberOfMonthLabel.textColor = .white
+      case todayIndexPath.row:
+        cell.dayIndicatorView.backgroundColor = UIColor(red: 0.604, green: 0.759, blue: 1.0, alpha: 1.0)
+        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
+        cell.numberOfMonthLabel.textColor = .white
+      default:
+        cell.dayIndicatorView.backgroundColor = .white
+        cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
+        cell.numberOfMonthLabel.textColor = .black
     }
+    
     return cell
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let pressedDate = controller.calendarPress(indexPathRow: indexPath.row)
+    delegate?.calendarDayPressed(pressedDate)
     selectedCalendarIndexPath = indexPath
     guard let cell = calendarCollectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell else {return}
     cell.dayIndicatorView.backgroundColor = .red

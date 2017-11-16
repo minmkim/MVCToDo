@@ -24,7 +24,13 @@ class ToDoModelController {
     let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: todayString, dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
     let toDo4 = ToDo(toDoItem: "Swipe this away to delete", dueDate: todayString, dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
     let toDo5 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: todayString, dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
-    toDoList = [toDo1, toDo2, toDo3, toDo4, toDo5]
+    let toDo6 = ToDo(toDoItem: "Welcome", dueDate: "Dec 17, 1990", dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo1")
+    let toDo7 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: "Apr 22, 2017", dueTime: "10:30 AM", checked: true, context: "Work", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo2")
+    let toDo8 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: todayString, dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
+    let toDo9 = ToDo(toDoItem: "Swipe this away to delete", dueDate: todayString, dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
+    let toDo10 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: todayString, dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
+    toDoList = [toDo1, toDo2, toDo3, toDo4, toDo5, toDo6, toDo7, toDo8, toDo9, toDo10]
+    loadFromDisk()
   }
   
   func addNewToDoItem(toDoItem: String) {
@@ -66,6 +72,27 @@ class ToDoModelController {
     return result
   }
   
+  // MARK: save and load from disk
   
+  func saveToDisk() {
+    let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let archiveURL = documentsDirectory.appendingPathComponent("ToDoList").appendingPathExtension("plist")
+    
+    let propertyListEncoder = PropertyListEncoder()
+    let encodedNotes = try? propertyListEncoder.encode(toDoList)
+    
+    try? encodedNotes?.write(to: archiveURL, options: .noFileProtection)
+  }
+  
+  func loadFromDisk() {
+    let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    let archiveURL = documentsDirectory.appendingPathComponent("ToDoList").appendingPathExtension("plist")
+    let propertyListDecoder = PropertyListDecoder()
+    if let retrievedNotesData = try? Data(contentsOf: archiveURL),
+      let decodedNotes = try?
+        propertyListDecoder.decode(Array<ToDo>.self, from: retrievedNotesData) {
+      toDoList = decodedNotes
+    }
+  }
     
 }

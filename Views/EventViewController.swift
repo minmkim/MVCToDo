@@ -9,14 +9,29 @@
 import UIKit
 
 
-class EventViewController: UIViewController {
+class EventViewController: UIViewController, InformEventTableDelegate {
+  
+  func sendCalendarPressInformation(_ Date: String) {
+    let index = controller.scrollToCalendarPressDate(Date)
+    let newIndexPath = IndexPath(row:0, section: index)
+    eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
+  }
+  
 
   @IBOutlet weak var eventTableView: UITableView!
   let controller = EventController()
   
+  var calendarPressDate: Int? {
+    didSet {
+      guard let selectedSection = controller.calendarPressIndex else {return}
+      print("here")
+      let indexPath = IndexPath(row: 0, section: selectedSection)
+      eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
+  }
+  
   override func viewDidLoad() {
         super.viewDidLoad()
-
     eventTableView.delegate = self
     eventTableView.dataSource = self
         // Do any additional setup after loading the view.
@@ -26,7 +41,6 @@ class EventViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
+  
 
 }

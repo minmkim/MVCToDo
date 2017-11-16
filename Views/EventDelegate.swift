@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 extension EventViewController: UITableViewDelegate, UITableViewDataSource {
+
+  
   
   func numberOfSections(in tableView: UITableView) -> Int {
     let numberOfSections = controller.numberOfSections()
@@ -46,6 +48,9 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     returnedView.addSubview(label)
     return returnedView
   }
+  
+  
+  
   
 
   

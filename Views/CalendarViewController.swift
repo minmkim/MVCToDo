@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol InformEventTableOfCalendarPressDelegate: class {
+  func calendarDayPressed(_ Date: String)
+}
+
 class CalendarViewController: UIViewController {
   
   @IBOutlet weak var calendarCollectionView: UICollectionView!
+  weak var delegate: InformEventTableOfCalendarPressDelegate?
   
   var controller: CalendarController = CalendarController()
   var didInitialScroll = false // did user touch calendar yet?
@@ -20,17 +25,14 @@ class CalendarViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    controller.test()
     calendarCollectionView.delegate = self
     calendarCollectionView.dataSource = self
-    // Do any additional setup after loading the view.
   }
   
   override func viewDidLayoutSubviews() {
     // If we haven't done the initial scroll, do it once.
     if !didInitialScroll {
       didInitialScroll = true
-      print("here")
       let todayIndexPath = IndexPath(row: 100, section: 0)
       calendarCollectionView.scrollToItem(at: todayIndexPath, at: .left, animated: true)
     }
