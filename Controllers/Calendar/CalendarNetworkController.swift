@@ -1,5 +1,5 @@
 //
-//  CalendarModelController.swift
+//  CalendarNetworkController.swift
 //  TestingNewArch
 //
 //  Created by Min Kim on 11/18/17.
@@ -8,8 +8,7 @@
 
 import Foundation
 
-class CalendarModelController {
-  
+class CalendarNetworkController {
   
   
 }

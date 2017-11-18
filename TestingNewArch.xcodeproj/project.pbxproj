@@ -12,6 +12,7 @@
 		A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */; };
 		A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */; };
 		A4BA783C1FC02BDB007281F3 /* CalendarModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */; };
+		A4BA78401FC02F09007281F3 /* CalendarNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */; };
 		A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */; };
 		A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD211FBEB85800F17D37 /* AddToDoTableViewCell.swift */; };
 		A4BFAD271FBEB97800F17D37 /* ContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD261FBEB97800F17D37 /* ContextViewController.swift */; };
@@ -62,6 +63,7 @@
 		A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModelController.swift; sourceTree = "<group>"; };
+		A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNetworkController.swift; sourceTree = "<group>"; };
 		A4BFAD211FBEB85800F17D37 /* AddToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoTableViewCell.swift; sourceTree = "<group>"; };
 		A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoController.swift; sourceTree = "<group>"; };
 		A4BFAD261FBEB97800F17D37 /* ContextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A4BA783D1FC02EB5007281F3 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */,
+				A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		A4BA783E1FC02ECF007281F3 /* ToDo */ = {
+			isa = PBXGroup;
+			children = (
+				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
+			);
+			path = ToDo;
+			sourceTree = "<group>";
+		};
 		A4DD2C821FB9AECB008CF72E = {
 			isa = PBXGroup;
 			children = (
@@ -208,10 +227,10 @@
 		A4DD2CCA1FBB3E89008CF72E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
-				A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */,
-				A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */,
+				A4BA783E1FC02ECF007281F3 /* ToDo */,
+				A4BA783D1FC02EB5007281F3 /* Calendar */,
 				A4DD2CCD1FBB3EB6008CF72E /* EventController.swift */,
+				A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */,
 				A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */,
 				A4BFAD301FBEC60100F17D37 /* NotificationController.swift */,
 			);
@@ -354,6 +373,7 @@
 			files = (
 				A4BFAD311FBEC60100F17D37 /* NotificationController.swift in Sources */,
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
+				A4BA78401FC02F09007281F3 /* CalendarNetworkController.swift in Sources */,
 				A4DD2CD61FBB42D7008CF72E /* CalendarModel.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
