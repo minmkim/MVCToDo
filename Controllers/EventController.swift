@@ -11,6 +11,8 @@ import Foundation
 class EventController {
   
   let ModelController = ToDoModelController()
+  
+  //update scroll to calendar press
   var calendarPressIndex: Int?
   
   var toDoDatesString = [String]() {
@@ -26,27 +28,13 @@ class EventController {
   
   var toDoDates = [Date]()
   
-  
   // set labels for todolist
-  func cellLabelStrings(indexPath: IndexPath) -> [String] {
+  func cellLabelStrings(indexPath: IndexPath) -> ToDo {
     var cellLabelString = [String]() // [todoitem, context, duedate]
     let date = toDoDatesString[indexPath.section]
     let listOfToDoForDate = ModelController.toDoList.filter( {$0.dueDate == date})
-    let toDoString = listOfToDoForDate[indexPath.row].toDoItem
-    let contextString = listOfToDoForDate[indexPath.row].context
-    let dueString = listOfToDoForDate[indexPath.row].dueTime
-    let checkedString = listOfToDoForDate[indexPath.row].checked
-    let checkmarkAssetString: String
-    cellLabelString.insert(toDoString, at: 0)
-    cellLabelString.insert(contextString ?? "", at: 1)
-    cellLabelString.insert(dueString ?? "", at: 2)
-    if !checkedString {
-      checkmarkAssetString = checkMarkAsset.uncheckedCircle
-    } else {
-      checkmarkAssetString = checkMarkAsset.checkedCircle
-    }
-    cellLabelString.insert(checkmarkAssetString, at: 3)
-    return cellLabelString
+    let toDoItem = listOfToDoForDate[indexPath.row]
+    return toDoItem
   }
   
   func setToDoDates() {

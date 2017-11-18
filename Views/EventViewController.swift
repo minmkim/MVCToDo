@@ -42,5 +42,17 @@ class EventViewController: UIViewController, InformEventTableDelegate {
         // Dispose of any resources that can be recreated.
     }
   
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == segueIdentifiers.editToDoSegue {
+      let controller = segue.destination as! AddItemTableViewController
+      print("segue")
+      controller.controller.title = "Edit To Do"
+      
+      if let indexPath = eventTableView.indexPath(for: sender as! EventTableViewCell) {
+        let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
+        controller.controller.toDoItem = cell.toDoItem
+      }
+    }
+  }
 
 }

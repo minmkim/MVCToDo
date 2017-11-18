@@ -25,11 +25,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
-    let cellLabelStrings = controller.cellLabelStrings(indexPath: indexPath) // [todoitem, context, duedate]
-    cell.toDoLabel?.text = cellLabelStrings[0]
-    cell.contextLabel?.text = cellLabelStrings[1]
-    cell.dueLabel?.text = cellLabelStrings[2]
-    cell.checkmarkButton.setImage(UIImage(named: cellLabelStrings[3]), for: .normal)
+    cell.toDoItem = controller.cellLabelStrings(indexPath: indexPath)
     return cell
   }
   
@@ -48,11 +44,5 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     returnedView.addSubview(label)
     return returnedView
   }
-  
-  
-  
-  
-
-  
   
 }

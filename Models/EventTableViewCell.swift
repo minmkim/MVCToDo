@@ -10,6 +10,19 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
   
+  var toDoItem: ToDo? {
+    didSet {
+      toDoLabel.text = toDoItem?.toDoItem
+      contextLabel.text = toDoItem?.context
+      dueLabel.text = toDoItem?.dueTime
+      if !(toDoItem?.checked)! {
+        checkmarkButton.setImage(UIImage(named: checkMarkAsset.uncheckedCircle), for: .normal)
+      } else {
+        checkmarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+      }
+    }
+  }
+  
   @IBOutlet weak var toDoLabel: UILabel!
   @IBOutlet weak var contextLabel: UILabel!
   @IBOutlet weak var dueLabel: UILabel!
