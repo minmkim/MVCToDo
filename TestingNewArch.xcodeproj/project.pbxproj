@@ -11,8 +11,9 @@
 		A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */; };
 		A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */; };
 		A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */; };
-		A4BA783C1FC02BDB007281F3 /* CalendarModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */; };
 		A4BA78401FC02F09007281F3 /* CalendarNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */; };
+		A4BA78421FC08453007281F3 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA78411FC08453007281F3 /* Controller.swift */; };
+		A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BA78431FC087E0007281F3 /* CalendarEventModel.swift */; };
 		A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */; };
 		A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD211FBEB85800F17D37 /* AddToDoTableViewCell.swift */; };
 		A4BFAD271FBEB97800F17D37 /* ContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFAD261FBEB97800F17D37 /* ContextViewController.swift */; };
@@ -62,8 +63,9 @@
 		A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndentedEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
-		A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModelController.swift; sourceTree = "<group>"; };
 		A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNetworkController.swift; sourceTree = "<group>"; };
+		A4BA78411FC08453007281F3 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
+		A4BA78431FC087E0007281F3 /* CalendarEventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventModel.swift; sourceTree = "<group>"; };
 		A4BFAD211FBEB85800F17D37 /* AddToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoTableViewCell.swift; sourceTree = "<group>"; };
 		A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoController.swift; sourceTree = "<group>"; };
 		A4BFAD261FBEB97800F17D37 /* ContextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +127,7 @@
 		A4BA783D1FC02EB5007281F3 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
-				A4BA783B1FC02BDB007281F3 /* CalendarModelController.swift */,
+				A4BA78411FC08453007281F3 /* Controller.swift */,
 				A4BA783F1FC02F09007281F3 /* CalendarNetworkController.swift */,
 			);
 			path = Calendar;
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				A4DD2CC41FBB3BDE008CF72E /* ToDoItemModel.swift */,
+				A4BA78431FC087E0007281F3 /* CalendarEventModel.swift */,
 				A4DD2CC61FBB3C30008CF72E /* CloudKitModel.swift */,
 				A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */,
 				A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */,
@@ -380,6 +383,7 @@
 				A4DD2CBD1FB9AEE3008CF72E /* CalendarViewController.swift in Sources */,
 				A4DD2CCC1FBB3EA1008CF72E /* ToDoModelController.swift in Sources */,
 				A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */,
+				A4BA78421FC08453007281F3 /* Controller.swift in Sources */,
 				A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */,
 				A4DD2CCE1FBB3EB6008CF72E /* EventController.swift in Sources */,
 				A4DD2CBF1FB9AEE8008CF72E /* EventViewController.swift in Sources */,
@@ -387,7 +391,6 @@
 				A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */,
 				A48E0B991FBCC20E007ED8FD /* Assets.swift in Sources */,
 				A4DD2C911FB9AECB008CF72E /* ViewController.swift in Sources */,
-				A4BA783C1FC02BDB007281F3 /* CalendarModelController.swift in Sources */,
 				A4BFAD2F1FBEC57300F17D37 /* DateTimeEnum.swift in Sources */,
 				A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */,
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,
@@ -396,6 +399,7 @@
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,
 				A4DD2CC71FBB3C30008CF72E /* CloudKitModel.swift in Sources */,
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
+				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,
 				A4BFAD291FBEBB0400F17D37 /* AddNotesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

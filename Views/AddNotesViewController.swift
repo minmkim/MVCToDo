@@ -56,7 +56,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
       notesTextView.text.append("\n\(todayString)\n")
       
       // scroll to bottom
-      let range = NSMakeRange(notesTextView.text.characters.count - 1, 0)
+      let range = NSMakeRange(notesTextView.text.count - 1, 0)
       notesTextView.scrollRangeToVisible(range)
       
       self.navigationItem.rightBarButtonItem?.title = "Save"

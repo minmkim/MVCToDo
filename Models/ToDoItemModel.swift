@@ -13,7 +13,7 @@ import CloudKit
 struct ToDo: Codable {
   
   var toDoItem: String
-  var dueDate: String?
+  var dueDate: Date?
   var dueTime: String?
   var checked: Bool
   var context: String?
@@ -35,7 +35,7 @@ extension ToDo {
   
   init?(remoteRecord: CKRecord) {
     guard let toDoItem = remoteRecord.object(forKey: toDoCloud.toDoItem) as? String,
-      let dueDate = remoteRecord.object(forKey: toDoCloud.dueDate) as? String,
+      let dueDate = remoteRecord.object(forKey: toDoCloud.dueDate) as? Date,
       let dueTime = remoteRecord.object(forKey: toDoCloud.dueTime) as? String,
       let checked = remoteRecord.object(forKey: toDoCloud.checked) as? String,
       let context = remoteRecord.object(forKey: toDoCloud.context) as? String,

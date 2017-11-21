@@ -68,23 +68,23 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let indexPath = tableView.indexPathForSelectedRow //optional, to get from any UIButton for example
-    let currentCell = tableView.cellForRow(at: indexPath!) as! UITableViewCell
-    if let label = currentCell.textLabel!.text {
-      if label.hasPrefix("Create") {
-        print("Label is \(label)")
-        newContext = String(label.dropFirst(8))
-        
-        print("newContext is \(newContext)")
-        listToUse! += ["\(newContext)"]
-        performSegue(withIdentifier: "unwindSegue", sender: self)
-      } else {
-        print("Label2 is \(label)")
-        newContext = label
-        performSegue(withIdentifier: "unwindSegue", sender: self)
-        
-      }
+    guard let indexPath = tableView.indexPathForSelectedRow else {return}//optional, to get from any UIButton for example
+    guard let currentCell = tableView.cellForRow(at: indexPath) as? UITableViewCell else {return}
+    guard let label = currentCell.textLabel?.text else {return}
+    if label.hasPrefix("Create") {
+      print("Label is \(label)")
+      newContext = String(label.dropFirst(8))
+      
+      print("newContext is \(newContext)")
+      listToUse! += ["\(newContext)"]
+      performSegue(withIdentifier: "unwindSegue", sender: self)
+    } else {
+      print("Label2 is \(label)")
+      newContext = label
+      performSegue(withIdentifier: "unwindSegue", sender: self)
+      
     }
+    
     
   }
   

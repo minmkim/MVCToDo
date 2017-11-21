@@ -10,78 +10,80 @@ import Foundation
 
 class EventController {
   
-  let ModelController = ToDoModelController()
+  let toDoModelController = ToDoModelController()
+  let calendarModelController = CalendarModelController()
   
   //update scroll to calendar press
   var calendarPressIndex: Int?
   
-  var toDoDatesString = [String]() {
+  var toDoDatesDate = [Date]() {
     didSet {
-      toDoDatesString.sort(by: { (formatStringToDate(date: $0, format: "MMM dd, yyyy").compare(formatStringToDate(date: $1, format: "MMM dd, yyyy")) == .orderedAscending) })
+      toDoDatesDate.sort(by: { $0.compare($1) == .orderedAscending })
     }
   }
+  var allDates = [Date]()
   
   init() {
     setToDoDates()
-    print("event controller Hello")
   }
   
   var toDoDates = [Date]()
+  var formattedToDoDates = [Date]()
   
   // set labels for todolist
   func cellLabelStrings(indexPath: IndexPath) -> ToDo {
-    var cellLabelString = [String]() // [todoitem, context, duedate]
-    let date = toDoDatesString[indexPath.section]
-    let listOfToDoForDate = ModelController.toDoList.filter( {$0.dueDate == date})
+    let date = toDoDatesDate[indexPath.section]
+     let formattedDate = formatStringToDate(date: formatDateToString(date: date, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)
+    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate!, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
     let toDoItem = listOfToDoForDate[indexPath.row]
     return toDoItem
   }
   
   func setToDoDates() {
-    toDoDatesString = ModelController.toDoList.flatMap( {$0.dueDate} )
-    toDoDatesString = Array(Set(toDoDatesString))
-    toDoDatesString.sort(by: { (formatStringToDate(date: $0, format: "MMM dd, yyyy").compare(formatStringToDate(date: $1, format: "MMM dd, yyyy")) == .orderedAscending) })
-    for date in toDoDatesString {
-      toDoDates.append(formatStringToDate(date: date, format: "MM/dd/yy"))
-    }
+    toDoDatesDate = toDoModelController.toDoList.flatMap( {$0.dueDate} )
+    toDoDatesDate = toDoDatesDate.map( { formatStringToDate(date: formatDateToString(date: $0, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)  })
+    
+    toDoDatesDate = Array(Set(toDoDatesDate))
+    toDoDatesDate.sort(by: { $0.compare($1) == .orderedAscending })
   }
   
   // set sections and rows
   func numberOfSections() -> Int {
-    return toDoDatesString.count
+    return toDoDatesDate.count
   }
   
   func rowsPerSection(section: Int) -> Int {
-    let date = toDoDatesString[section]
-    let listOfToDoForDate = ModelController.toDoList.filter( {$0.dueDate == date})
+    let date = toDoDatesDate[section]
+    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate!, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == date} )
     let rowsPerSection = listOfToDoForDate.count
+    print("count:\(section) \(rowsPerSection)")
     return rowsPerSection
   }
   
   func headerTitleOfSections(index: Int) -> String {
-    let date = (formatDateToString(date: toDoDates[index], format: "EEE MM/dd/yy")).uppercased()
+    let date = (formatDateToString(date: toDoDatesDate[index], format: "EEE MM/dd/yy")).uppercased()
     return date
   }
   
   func countItemsInToDoList() -> Int {
-    return ModelController.toDoList.count
+    return toDoModelController.toDoList.count
   }
 
   func scrollToCalendarPressDate(_ Date: String) -> Int {
+    print(calendarModelController.calendars)
+    print(calendarModelController.events)
     let pressedDate = Date
     let datePressedDate = formatStringToDate(date: pressedDate, format: "MMM dd, yyyy")
     var counter = -1
     var tempSection: Int?
-    for date in toDoDatesString {
+    for date in toDoDatesDate {
       counter += 1
-      if datePressedDate <= formatStringToDate(date: date, format: "MMM dd, yyyy") {
-        print(pressedDate)
-        print(formatStringToDate(date: date, format: "MMM dd, yyyy"))
+      if datePressedDate <= date {
         tempSection = counter
         break
       }
     }
-    guard let scrollToSection = tempSection else {return (toDoDatesString.count - 1)}
+    guard let scrollToSection = tempSection else {return (toDoDatesDate.count - 1)}
     return scrollToSection
   }
 

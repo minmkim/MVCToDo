@@ -52,21 +52,27 @@ class CalendarController {
   
   func calendarPress(indexPathRow: Int) -> String {
     let numberOfDaysFromToday = indexPathRow - 100
-    let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: "MMM dd, yyyy")
-    print("calendarPress: \(pressedDate)")
-    return pressedDate
+    let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: dateAndTime.monthDateYear)
+    let formattedPressedDateString = formatDateToString(date: pressedDate, format: dateAndTime.monthDateYear)
+    return formattedPressedDateString
+  }
+  
+  func formatDateToString(date: Date, format: String) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = format
+    let result = formatter.string(from: date)
+    return result
   }
   
   
-  
-  func calculateDate(days: Int, date: Date, format: String) -> String {
+  func calculateDate(days: Int, date: Date, format: String) -> Date {
     let formatter = DateFormatter()
     let calendar = Calendar.current
     formatter.dateFormat = format
     formatter.locale = Locale(identifier: "en_US_POSIX")
-    let newDay = calendar.date(byAdding: .day, value: days, to: date)
-    let result = formatter.string(from: newDay!)
-    return result
+    guard let newDay = calendar.date(byAdding: .day, value: days, to: date) else {return Date()}
+    return newDay
   }
   
 }

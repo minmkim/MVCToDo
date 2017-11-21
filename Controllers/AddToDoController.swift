@@ -43,14 +43,14 @@ class AddEditToDoController {
     let toDoItem = editItem.toDoItem
     let context = editItem.context ?? ""
     let notes = editItem.notes ?? ""
-    let dueDate = editItem.dueDate ?? ""
+    let dueDate = editItem.dueDate ?? Date()
     let dueTime = editItem.dueTime ?? ""
     let repeatNumber = editItem.repeatNumber ?? 0
     let repeatCycle = editItem.repeatCycle ?? ""
     let nagNumber = editItem.nagNumber ?? 0
     labelStrings.append(toDoItem)
     labelStrings.append(context)
-    labelStrings.append(dueDate)
+    labelStrings.append(formatDateToString(date: dueDate, format: dateAndTime.monthDateYear))
     labelStrings.append(dueTime)
     labelStrings.append(notes)
     labelStrings.append(String(describing: repeatNumber))

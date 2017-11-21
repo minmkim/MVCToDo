@@ -12,23 +12,23 @@ class ToDoModelController {
   
   var toDoList = [ToDo]() {
     didSet {
-      toDoList.sort( by: {!$0.checked == !$1.checked ? (formatStringToDate(date: $0.dueDate!, format: "MMM dd, yyyy")).compare(formatStringToDate(date: $1.dueDate!, format: "MMM dd, yyyy")) == .orderedAscending : !$0.checked && $1.checked })
+      let defaultDate = formatStringToDate(date: "Mar 14, 1984", format: dateAndTime.monthDateYear)
+      toDoList.sort( by: {!$0.checked == !$1.checked ? ($0.dueDate ?? defaultDate).compare($1.dueDate ?? defaultDate) == .orderedAscending : !$0.checked && $1.checked })
     }
   }
 
   
   init() {
-    let todayString = calculateDateAndFormatDateToString(days: 0, date: Date(), format: "MMM dd, yyyy")
-    let toDo1 = ToDo(toDoItem: "Welcome", dueDate: "Dec 17, 1990", dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo1")
-    let toDo2 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: "Apr 22, 2017", dueTime: "10:30 AM", checked: true, context: "Work", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo2")
-    let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: todayString, dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
-    let toDo4 = ToDo(toDoItem: "Swipe this away to delete", dueDate: todayString, dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
-    let toDo5 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: todayString, dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
-    let toDo6 = ToDo(toDoItem: "Welcome", dueDate: "Dec 17, 1990", dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo1")
-    let toDo7 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: "Apr 22, 2017", dueTime: "10:30 AM", checked: true, context: "Work", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo2")
-    let toDo8 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: todayString, dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
-    let toDo9 = ToDo(toDoItem: "Swipe this away to delete", dueDate: todayString, dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
-    let toDo10 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: todayString, dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
+    let toDo1 = ToDo(toDoItem: "Welcome", dueDate: formatStringToDate(date: "Dec 17, 1990", format: dateAndTime.monthDateYear), dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo1")
+    let toDo2 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: formatStringToDate(date: "Apr 22, 2017", format: dateAndTime.monthDateYear), dueTime: "10:30 AM", checked: true, context: "Work", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo2")
+    let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
+    let toDo4 = ToDo(toDoItem: "Swipe this away to delete", dueDate: Date(), dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
+    let toDo5 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: Date(), dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
+    let toDo6 = ToDo(toDoItem: "Welcome", dueDate: formatStringToDate(date: "Dec 17, 1990", format: dateAndTime.monthDateYear), dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo1")
+    let toDo7 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: formatStringToDate(date: "Apr 22, 2017", format: dateAndTime.monthDateYear), dueTime: "10:30 AM", checked: true, context: "Work", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo2")
+    let toDo8 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo3")
+    let toDo9 = ToDo(toDoItem: "Swipe this away to delete", dueDate: Date(), dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo4")
+    let toDo10 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: Date(), dueTime: "", checked: false, context: "Inbox", notes: "", repeatNumber: nil, repeatCycle: "", nagNumber: nil, cloudRecordID: "toDo5")
     toDoList = [toDo1, toDo2, toDo3, toDo4, toDo5, toDo6, toDo7, toDo8, toDo9, toDo10]
     loadFromDisk()
   }
@@ -44,14 +44,13 @@ class ToDoModelController {
     toDoList = toDoList.filter( {$0.cloudRecordID != ID})
   }
   
-  func calculateDateAndFormatDateToString(days: Int, date: Date, format: String) -> String {
+  func calculateDate(days: Int, date: Date, format: String) -> Date {
     let formatter = DateFormatter()
     let calendar = Calendar.current
     formatter.dateFormat = format
     formatter.locale = Locale(identifier: "en_US_POSIX")
     let newDay = calendar.date(byAdding: .day, value: days, to: date)
-    let result = formatter.string(from: newDay!)
-    return result
+    return newDay ?? Date()
   }
   
   func formatStringToDate(date: String, format: String) -> Date {
