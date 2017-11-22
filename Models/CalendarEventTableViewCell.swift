@@ -20,7 +20,7 @@ class CalendarEventTableViewCell: UITableViewCell {
     didSet {
       eventLabel.text = calendarEvent?.title
       endTimeLabel.text = formatDateToString(date: calendarEvent?.end ?? Date(), format: dateAndTime.hourMinute)
-      startTimeLabel.text = formatDateToString(date: calendarEvent?.start ?? Date(), format: dateAndTime.hourMinute)
+      startTimeLabel.text = formatDateToString(date: calendarEvent?.dueDate ?? Date(), format: dateAndTime.hourMinute)
       locationLabel.text = calendarEvent?.location
     }
   }

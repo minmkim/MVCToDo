@@ -24,9 +24,23 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
-    cell.toDoItem = controller.cellLabelStrings(indexPath: indexPath)
-    return cell
+    
+    let item = controller.cellLabelStrings(indexPath: indexPath)
+    if let toDo = item as? ToDo {
+      let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
+      cell.toDoItem = toDo
+      return cell
+    } else {
+      let cell = eventTableView.dequeueReusableCell(withIdentifier: "CalendarEventCell", for: indexPath) as! CalendarEventTableViewCell
+      cell.calendarEvent =  item as! CalendarEvent
+      return cell
+    }
+    
+
+    
+    
+   
+
   }
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

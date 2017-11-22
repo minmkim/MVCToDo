@@ -13,7 +13,7 @@ struct CalendarEvent: Codable {
   var title: String
   var location: String?
   var calendar: String
-  var start: Date
+  var dueDate: Date
   var end: Date
   var allDay: Bool?
 }

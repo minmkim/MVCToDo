@@ -65,7 +65,7 @@ class CalendarModelController {
   
   func organizeCalendarEvents() {
     for event in events {
-      let newEvent = CalendarEvent(title: event.title, location: event.location, calendar: event.calendar.title, start: event.startDate, end: event.endDate, allDay: event.isAllDay)
+      let newEvent = CalendarEvent(title: event.title, location: event.location, calendar: event.calendar.title, dueDate: event.startDate, end: event.endDate, allDay: event.isAllDay)
       organizedCalendars.append(newEvent)
     }
   }

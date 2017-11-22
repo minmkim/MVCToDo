@@ -11,7 +11,6 @@ import Foundation
 
 class NotificationController {
   
-  
 /*  func makeNewNotification(title: String, date: String, identifier: String) {
     let center = UNUserNotificationCenter.current()
     let content = UNMutableNotificationContent()
