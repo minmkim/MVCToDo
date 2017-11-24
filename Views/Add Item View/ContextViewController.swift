@@ -10,35 +10,24 @@ import UIKit
 
 class ContextSearchViewController: UITableViewController, UISearchResultsUpdating {
   
+  var controller = ContextController()
   let searchController = UISearchController(searchResultsController: nil)
-  var listToUse: [String]?
-  var filteredList: [String]?
-  var newList: [String]?
   var newContext = ""
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    filteredList = listToUse
-    if let newList = listToUse {
-      print("newList \(newList)")
-    }
-    
     searchController.searchResultsUpdater = self
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.dimsBackgroundDuringPresentation = false
     searchController.searchBar.sizeToFit()
     self.tableView.tableHeaderView = searchController.searchBar
-    
   }
   
   func updateSearchResults(for searchController: UISearchController) {
     if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-      filteredList = listToUse?.filter { context in
-        return context.lowercased().contains(searchText.lowercased())
-      }
-      filteredList! += ["Create: " + searchText]
+      controller.searchResults(searchText)
     } else {
-      filteredList = listToUse
+      controller.filteredList = controller.listOfContext
     }
     tableView.reloadData()
   }
@@ -48,50 +37,38 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let contextList = filteredList else {
-      return 0
-    }
-    
-    return contextList.count
-    
+    let numberOfRows = controller.numberOfRowsInSection()
+    return numberOfRows
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
     let cell = tableView.dequeueReusableCell(withIdentifier: "contextCell", for: indexPath)
-    
-    if let contextList = filteredList {
-      let context = contextList[indexPath.row]
-      cell.textLabel?.text = context
-    }
+    let context = controller.returnCellLabel(indexPath.row)
+    cell.textLabel?.text = context
     return cell
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let indexPath = tableView.indexPathForSelectedRow else {return}//optional, to get from any UIButton for example
-    guard let currentCell = tableView.cellForRow(at: indexPath) as? UITableViewCell else {return}
-    guard let label = currentCell.textLabel?.text else {return}
-    if label.hasPrefix("Create") {
-      print("Label is \(label)")
-      newContext = String(label.dropFirst(8))
-      
-      print("newContext is \(newContext)")
-      listToUse! += ["\(newContext)"]
-      performSegue(withIdentifier: "unwindSegue", sender: self)
-    } else {
-      print("Label2 is \(label)")
-      newContext = label
-      performSegue(withIdentifier: "unwindSegue", sender: self)
-      
+    guard let currentCell = tableView.cellForRow(at: indexPath) else {return}
+    guard let contextString = currentCell.textLabel?.text else {return}
+    controller.setChosenContext(contextString)
+    print("performing")
+    performSegue(withIdentifier: "unwindSegueWithContext", sender: self)
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "unwindSegueWithContext" {
+      let destination = segue.destination as! AddItemTableViewController
+      self.controller.delegate = destination.controller as ChosenContextDelegate
+      print("preparing")
+      controller.sendContext()
     }
-    
-    
   }
   
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    controller.removeContext(indexPath.row)
     let indexPaths = [indexPath]
-    listToUse!.remove(at: indexPath.row)
-    filteredList!.remove(at: indexPath.row)
     tableView.deleteRows(at: indexPaths, with: .automatic)
     tableView.reloadData()
   }

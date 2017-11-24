@@ -15,12 +15,12 @@ struct ToDo: Codable {
   var toDoItem: String
   var dueDate: Date?
   var dueTime: String?
-  var checked: Bool
+  var checked = false
   var context: String?
   var notes: String?
-  var repeatNumber: Int?
+  var repeatNumber = 0
   var repeatCycle: String?
-  var nagNumber: Int?
+  var nagNumber = 0
   var cloudRecordID: String
 }
 
@@ -28,7 +28,6 @@ extension ToDo {
   
   init?(toDoItem: String, cloudRecordID: String) {
     self.toDoItem = toDoItem
-    self.checked = false
     self.cloudRecordID = cloudRecordID
     
   }

@@ -31,17 +31,17 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
     
     switch indexPath.row {
     case selectedCalendarIndexPath?.row ?? 1000000: // if nil, 100000 will not load
-        cell.dayIndicatorView.backgroundColor = .red
-        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
-        cell.numberOfMonthLabel.textColor = .white
-      case todayIndexPath.row:
-        cell.dayIndicatorView.backgroundColor = UIColor(red: 0.604, green: 0.759, blue: 1.0, alpha: 1.0)
-        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
-        cell.numberOfMonthLabel.textColor = .white
-      default:
-        cell.dayIndicatorView.backgroundColor = .white
-        cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
-        cell.numberOfMonthLabel.textColor = .black
+      cell.dayIndicatorView.backgroundColor = .red
+      cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
+      cell.numberOfMonthLabel.textColor = .white
+    case todayIndexPath.row:
+      cell.dayIndicatorView.backgroundColor = UIColor(red: 0.604, green: 0.759, blue: 1.0, alpha: 1.0)
+      cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
+      cell.numberOfMonthLabel.textColor = .white
+    default:
+      cell.dayIndicatorView.backgroundColor = .white
+      cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
+      cell.numberOfMonthLabel.textColor = .black
     }
     
     return cell
@@ -66,6 +66,6 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
       }
     }
   }
-
+  
   
 }

@@ -11,58 +11,51 @@ import UIKit
 
 class NotesViewController: UIViewController, UITextViewDelegate {
   
-  @IBOutlet weak var scrollView: UIScrollView!
   @IBOutlet weak var notesTextView: UITextView!
   @IBOutlet weak var bottom: NSLayoutConstraint!
   
-  var noteText: String?
-  
+  var controller = NotesController()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     registerForKeyboardNotifications()
-    let todayString = returnTodayDateString()
     notesTextView.delegate = self
-    
-    if let savedNotes = noteText {
-      notesTextView.text = savedNotes
-    }
+    notesTextView.text = controller.setNote()
     
     if notesTextView.text == "" {
       self.navigationItem.rightBarButtonItem?.title = "Save"
+      let todayString = controller.returnTodayDateString()
       notesTextView.text.append("\(todayString)\n")
     } else {
-      print("Here")
       self.navigationItem.rightBarButtonItem?.title = "Edit"
       notesTextView.isEditable = false
     }
-    
-  }
-  
-  func returnTodayDateString() -> String {
-    let formatter = DateFormatter()
-    let _ = Calendar.current
-    formatter.dateFormat = "MMMM dd, yyyy - hh:mm a"
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    let todayString = formatter.string(from: Date())
-    return todayString
   }
   
   @IBAction func savePress(_ sender: Any) {
-    if notesTextView.isEditable == false {
-      let todayString = returnTodayDateString()
+    if notesTextView.isEditable == false { // edit pressed
       notesTextView.isEditable = true
       notesTextView.becomeFirstResponder()
-      notesTextView.text.append("\n\(todayString)\n")
+      let todayString = controller.returnTodayDateString()
+      notesTextView.text.append("\n\n\(todayString)\n")
       
       // scroll to bottom
       let range = NSMakeRange(notesTextView.text.count - 1, 0)
       notesTextView.scrollRangeToVisible(range)
-      
       self.navigationItem.rightBarButtonItem?.title = "Save"
-    } else {
-      noteText = notesTextView.text
+    } else { // save pressed
+      print(notesTextView.text)
       performSegue(withIdentifier: "UnwindWithNotesSegue", sender: self)
+      print("segue2")
+    }
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "UnwindWithNotesSegue" {
+      let destination = segue.destination as! AddItemTableViewController
+      print("segue1")
+      self.controller.delegate = destination.controller
+      controller.sendFinishedNote(notesTextView.text)
     }
   }
   
@@ -78,8 +71,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    let todayString = returnTodayDateString()
-    if notesTextView.text == ("\(todayString)\n") {
+    if controller.receivedNote == "" {
       notesTextView.becomeFirstResponder()
     }
   }
@@ -104,7 +96,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
       self.view.layoutIfNeeded()
     })
   }
-  
   
   @objc func keyboardWillBeHidden(_ notification: NSNotification) {
     self.view.layoutIfNeeded()

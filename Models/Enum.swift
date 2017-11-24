@@ -12,6 +12,7 @@ enum dateAndTime {
   static let monthDateYear = "MMM dd, yyyy"
   static let weekMonthDateYear = "EEE MM/dd/yy"
   static let hourMinute = "hh:mm a"
+  static let headerFormat = "EEE MM/dd/yy"
 }
 
 enum segueIdentifiers {

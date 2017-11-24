@@ -14,19 +14,6 @@ class CalendarController {
   let eventController = EventController()
   let ModelController = ToDoModelController()
   
-  func eventsDate(_ indexPath: IndexPath) {
-    let indexPathSection = indexPath.section
-    let numberOfDays = indexPathSection - 100
-    let date = calculateDate(days: numberOfDays, date: Date(), format: dateAndTime.monthDateYear)
-    let dateEvents = ModelController.toDoList.filter( {$0.dueDate == date})
-    
-
-    let numberOfEvents = dateEvents.count // this will give number of events today - need to check for unchecked to add to label
-  }
-  
-  
-  
-  
   func calculateDayNumberForCell(indexPathRow: Int) -> String {
     let index = indexPathRow - 100 //start calendar 100 days prior
     let calendar = Calendar.current
