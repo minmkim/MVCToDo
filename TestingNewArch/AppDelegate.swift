@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
     }
     UNUserNotificationCenter.current().delegate = self
-    UIApplication.shared.statusBarStyle = .lightContent
+   // UIApplication.shared.statusBarStyle = .lightContent
     
     return true
   }

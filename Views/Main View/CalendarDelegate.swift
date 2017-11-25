@@ -23,6 +23,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let todayIndexPath = IndexPath(row: 100, section: 0)
     let cell = calendarCollectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCell", for: indexPath) as! CalendarCollectionViewCell
+    cell.backgroundColor = .white
     let newVariable = VariableChange()
     newVariable.variable = collectionView.indexPathsForVisibleItems
     cell.numberOfMonthLabel.text = controller.calculateDayNumberForCell(indexPathRow: indexPath.row)
@@ -50,7 +51,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let pressedDate = controller.calendarPress(indexPathRow: indexPath.row)
+    let pressedDate = controller.convertIndexPathRowToDateString(indexPath.row)
     delegate?.calendarDayPressed(pressedDate)
     selectedCalendarIndexPath = indexPath
     guard let cell = calendarCollectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell else {return}

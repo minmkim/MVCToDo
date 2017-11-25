@@ -77,7 +77,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
       
       eventTableView.beginUpdates()
       eventTableView.deleteRows(at: [indexPath], with: .fade)
-      if !controller.checkForItemsInDate(section: indexPath.section) {
+      if controller.checkForItemsInDate(section: indexPath.section) {
         controller.setToDoDates()
         eventTableView.deleteSections([indexPath.section], with: .fade)
       }

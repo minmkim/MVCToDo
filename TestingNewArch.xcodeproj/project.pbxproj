@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
+		A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */; };
+		A43FF2A81FC9D55100A5ECB4 /* CalendarDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */; };
 		A45CA2381FC6ABD1004F18A6 /* PickerViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */; };
 		A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2391FC86618004F18A6 /* NotesController.swift */; };
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
@@ -61,6 +63,8 @@
 
 /* Begin PBXFileReference section */
 		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
+		A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDropDelegate.swift; sourceTree = "<group>"; };
+		A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDropDelegate.swift; sourceTree = "<group>"; };
 		A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewExtension.swift; sourceTree = "<group>"; };
 		A45CA2391FC86618004F18A6 /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		A45CA23B1FC87102004F18A6 /* ContextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextController.swift; sourceTree = "<group>"; };
@@ -151,8 +155,10 @@
 				A4DD2C901FB9AECB008CF72E /* ViewController.swift */,
 				A4DD2CBC1FB9AEE3008CF72E /* CalendarViewController.swift */,
 				A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */,
+				A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */,
 				A4DD2CBE1FB9AEE8008CF72E /* EventViewController.swift */,
 				A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */,
+				A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */,
 			);
 			path = "Main View";
 			sourceTree = "<group>";
@@ -417,6 +423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A45CA2381FC6ABD1004F18A6 /* PickerViewExtension.swift in Sources */,
+				A43FF2A81FC9D55100A5ECB4 /* CalendarDropDelegate.swift in Sources */,
 				A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */,
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
@@ -436,6 +443,7 @@
 				A4BFAD2F1FBEC57300F17D37 /* Enum.swift in Sources */,
 				A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */,
 				A4FE91911FC5E0540034A32D /* EventController.swift in Sources */,
+				A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */,
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,

@@ -10,6 +10,7 @@ import UIKit
 
 protocol InformEventTableOfCalendarPressDelegate: class {
   func calendarDayPressed(_ Date: String)
+  func toDoDroppedOnCalendarDate(_ newDate: String)
 }
 
 class CalendarViewController: UIViewController {
@@ -21,12 +22,14 @@ class CalendarViewController: UIViewController {
   var didInitialScroll = false // did user touch calendar yet?
   var previousSelectedCalendayIndexPath: IndexPath?
   var selectedCalendarIndexPath: IndexPath?
+  var previousDragIndexPath: IndexPath?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     calendarCollectionView.delegate = self
     calendarCollectionView.dataSource = self
+    calendarCollectionView.dropDelegate = self
   }
   
   override func viewDidLayoutSubviews() {

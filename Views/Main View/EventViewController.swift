@@ -11,6 +11,35 @@ import UIKit
 
 class EventViewController: UIViewController, InformEventTableDelegate {
   
+  // MARK: Delegate functions
+  func sendNewToDoDueDateAfterDropSession(_ newDate: String) {
+    DispatchQueue.main.async() {
+      self.eventTableView.beginUpdates()
+      let isDueDateDifferent = self.controller.updateDueDateForToDoItem(newDate)
+      guard let originalIndexPath = self.controller.dragIndexPathOrigin else {return}
+      if isDueDateDifferent { //need to check origin before updating controller
+        if self.controller.checkForItemsInDate(section: originalIndexPath.section) {
+          print("deleting section")
+          self.eventTableView.deleteSections([originalIndexPath.section], with: .fade)
+        }
+        print("here2")
+        self.controller.setToDoDates()
+        self.eventTableView.deleteRows(at: [originalIndexPath], with: .fade)
+        let indexPath = self.controller.calculateIndexPath(newDate)
+        
+        if self.controller.rowsPerSection(section: indexPath.section) == 1 {
+          print("inserting section")
+          self.eventTableView.insertSections([indexPath.section], with: .fade)
+        }
+        
+        self.eventTableView.insertRows(at: [indexPath], with: .fade)
+        print("here1")
+        
+      }
+      self.eventTableView.endUpdates()
+    }
+  }
+  
   func sendCalendarPressInformation(_ Date: String) {
     let index = controller.scrollToCalendarPressDate(Date)
     if index != -1 {
@@ -18,6 +47,7 @@ class EventViewController: UIViewController, InformEventTableDelegate {
       eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
     }
   }
+  // end delegate functions
   
   @IBOutlet weak var eventTableView: UITableView!
   var controller = EventController()
@@ -26,6 +56,8 @@ class EventViewController: UIViewController, InformEventTableDelegate {
     super.viewDidLoad()
     eventTableView.delegate = self
     eventTableView.dataSource = self
+    eventTableView.dragDelegate = self
+    eventTableView.dragInteractionEnabled = true
     let index = controller.scrollToCalendarPressDate(controller.formatDateToString(date: Date(), format: dateAndTime.monthDateYear))
     if index != -1 {
       let newIndexPath = IndexPath(row:0, section: index)

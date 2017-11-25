@@ -55,20 +55,44 @@ class ToDoModelController {
   func editToDoItem(_ toDoItem: ToDo) {
     guard let index = toDoList.index(where: {$0.cloudRecordID == toDoItem.cloudRecordID}) else {return}
     let tempToDoItem = toDoList[index]
-    removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
+    if tempToDoItem.notification {
+      removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
+    }
+    
     toDoList.remove(at: index)
     toDoList.append(toDoItem)
     saveToDisk()
     
     if toDoItem.notification {
-      let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
-      
-      if toDoItem.nagNumber != 0 { // if nag
-        notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
-      } else { // if no nag
-        notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
-      }
+      makeNewNotification(toDoItem)
     }
+  }
+  
+  func editToDoItemAfterDragAndDrop(ToDo: ToDo, newDueDate: String) -> Bool {
+    guard let index = toDoList.index(where: {$0.cloudRecordID == ToDo.cloudRecordID}) else {return false}
+    var tempToDoItem = toDoList[index]
+    var isDueDateDifferent = true
+    if let originalDueDate = tempToDoItem.dueDate {
+      let stringOriginalDueDate = formatDateToString(date: originalDueDate, format: dateAndTime.monthDateYear)
+      if stringOriginalDueDate == newDueDate {
+        isDueDateDifferent = false
+      } else {
+        isDueDateDifferent = true
+      }
+    } else {
+      print("weird error")
+    }
+    
+    
+    if tempToDoItem.notification {
+      removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
+      makeNewNotificationWithUpdatedDate(toDoItem: tempToDoItem, newDueDate: newDueDate)
+    }
+    toDoList.remove(at: index)
+    tempToDoItem.dueDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
+    toDoList.append(tempToDoItem)
+    saveToDisk()
+    return isDueDateDifferent
   }
   
   func deleteToDoItem(ID: String) {
@@ -86,6 +110,27 @@ class ToDoModelController {
       notificationController.removeNagNotification(identifier: ID)
     } else {
       notificationController.removeNotification(identifier: ID)
+    }
+  }
+  
+  func makeNewNotification(_ toDoItem: ToDo) {
+    let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
+    
+    if toDoItem.nagNumber != 0 { // if nag
+      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+    } else { // if no nag
+      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
+    }
+  }
+  
+  func makeNewNotificationWithUpdatedDate(toDoItem: ToDo, newDueDate: String) {
+    let formattedNewDueDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
+    let formattedDate = notificationController.formatDateAndTime(dueDate: formattedNewDueDate, dueTime: toDoItem.dueTime!)
+    
+    if toDoItem.nagNumber != 0 { // if nag
+      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+    } else { // if no nag
+      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
     }
   }
   

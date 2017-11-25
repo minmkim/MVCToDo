@@ -18,7 +18,8 @@ class EventController {
       self.updateEventTableView?()
     }
   }
-  var allDates = [Date]()
+  var dragAndDropToDo: ToDo?
+  var dragIndexPathOrigin: IndexPath?
   
   init() {
     toDoModelController = ToDoModelController()
@@ -71,14 +72,17 @@ class EventController {
   }
   
   func checkForItemsInDate(section: Int) -> Bool {
+    print("here3")
     toDoModelController = ToDoModelController()
     let date = toDoDatesDate[section]
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == date} )
     let rowsPerSection = listOfToDoForDate.count
+    print("listOfToDoForDate: \(listOfToDoForDate)")
     if rowsPerSection == 0 {
-      return false
-    } else {
+      print("rows per section: \(rowsPerSection)")
       return true
+    } else {
+      return false
     }
   }
   
@@ -128,7 +132,6 @@ class EventController {
   
   func checkmarkButtonPressedController(_ ID: String) -> String {
     toDoModelController = ToDoModelController()
-    print("here2")
     let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
     print(checkmarkIcon)
     if checkmarkIcon == true {
@@ -139,6 +142,56 @@ class EventController {
       return checkMarkAsset.uncheckedCircle
     }
   }
+  
+  func calculateIndexPath(_ newDueDate: String) -> IndexPath {
+    let formattedDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
+    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
+    let indexRow = listOfToDoForDate.index(where: {$0.cloudRecordID == dragAndDropToDo?.cloudRecordID})
+    
+    var counter = -1
+    var indexSection = 0
+    for date in toDoDatesDate {
+      counter += 1
+      if formattedDate <= date {
+        indexSection = counter
+        break
+      }
+    }
+    if indexSection == -1 {
+      indexSection = 0
+    }
+    let indexPath = IndexPath(row: indexRow!, section: indexSection)
+    return indexPath
+  }
+  
+  func needToInsertSection(_ newDueDate: String) -> Bool {
+    let formattedDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
+    let indexSection = toDoDatesDate.index(where: {$0 == formattedDate})
+    if indexSection != nil {
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  // MARK: Drag and Drop functions
+  
+  func returnDragIndexPath(_ indexPath: IndexPath) {
+    dragIndexPathOrigin = indexPath
+  }
+  
+  func dragAndDropInitiated(_ ToDo: ToDo) {
+    dragAndDropToDo = ToDo
+  }
+  
+  // TODO: finish this function to update todoitem
+  func updateDueDateForToDoItem(_ newDueDate: String) -> Bool {
+    guard let itemToEdit = dragAndDropToDo else {return false}
+    let isDueDateDifferent = toDoModelController.editToDoItemAfterDragAndDrop(ToDo: itemToEdit, newDueDate: newDueDate)
+    return isDueDateDifferent
+  }
+  
+  // MARK: Date Formatting Functions
 
   func calculateDate(days: Int, date: Date, format: String) -> String {
     let formatter = DateFormatter()

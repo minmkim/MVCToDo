@@ -36,12 +36,16 @@ class CalendarController {
     return dayOfWeekString
   }
   
-  func calendarPress(indexPathRow: Int) -> String {
+  func convertIndexPathRowToDateString(_ indexPathRow: Int) -> String {
     let numberOfDaysFromToday = indexPathRow - 100
     let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: dateAndTime.monthDateYear)
     let formattedPressedDateString = formatDateToString(date: pressedDate, format: dateAndTime.monthDateYear)
     return formattedPressedDateString
   }
+  
+
+  
+  // MARK: Date Formatting functions
   
   func formatDateToString(date: Date, format: String) -> String {
     let formatter = DateFormatter()

@@ -10,9 +10,14 @@ import UIKit
 
 protocol InformEventTableDelegate: class {
   func sendCalendarPressInformation(_ Date: String)
+  func sendNewToDoDueDateAfterDropSession(_ newDate: String)
 }
 
 class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate {
+  func toDoDroppedOnCalendarDate(_ newDate: String) {
+    delegate?.sendNewToDoDueDateAfterDropSession(newDate)
+  }
+  
   
   
   @IBOutlet weak var addItemButton: UIButton!
