@@ -30,7 +30,6 @@ extension CalendarViewController: UICollectionViewDropDelegate {
   
   func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
     if let testPath = previousDragIndexPath {
-      //     print("First \(previousIndexPath)")
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let previousCell = calendarCollectionView.cellForItem(at: testPath) as! CalendarCollectionViewCell

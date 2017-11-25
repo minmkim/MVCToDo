@@ -43,6 +43,29 @@ class CalendarController {
     return formattedPressedDateString
   }
   
+  func calculateDayOfMonthFromIndexRow(_ indexRow: Int) -> String {
+    let index = indexRow - 100 //start calendar 100 days prior
+    let formatter = DateFormatter()
+    var dayOfWeek: String?
+    let calendar = Calendar.current
+    let calculatedDate = calendar.date(byAdding: .day, value: index, to: Date())
+    formatter.dateFormat = "MMMM"
+    dayOfWeek = formatter.string(from: calculatedDate ?? Date())
+    guard let dayOfWeekString = dayOfWeek else {return ""}
+    return dayOfWeekString
+  }
+  
+  func updateMonthLabel(IndexArray: [IndexPath]) -> String {
+    let sortedArray = IndexArray.sorted(by: {$0[1] < $1[1]})
+    if sortedArray != [] {
+      let firstCellIndexRow = sortedArray[0][1]
+      let monthString = calculateDayOfMonthFromIndexRow(firstCellIndexRow)
+      return monthString
+    } else {
+      return ""
+    }
+  }
+  
 
   
   // MARK: Date Formatting functions

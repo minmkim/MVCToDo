@@ -15,6 +15,7 @@ protocol InformEventTableOfCalendarPressDelegate: class {
 
 class CalendarViewController: UIViewController {
   
+  @IBOutlet weak var monthLabel: UILabel!
   @IBOutlet weak var calendarCollectionView: UICollectionView!
   weak var delegate: InformEventTableOfCalendarPressDelegate?
   
@@ -23,10 +24,16 @@ class CalendarViewController: UIViewController {
   var previousSelectedCalendayIndexPath: IndexPath?
   var selectedCalendarIndexPath: IndexPath?
   var previousDragIndexPath: IndexPath?
+  var displayMonthText = "November" {
+    didSet {
+      monthLabel.text = displayMonthText
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    monthLabel.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
+    monthLabel.backgroundColor = UIColor(white: 1, alpha: 0.5)
     calendarCollectionView.delegate = self
     calendarCollectionView.dataSource = self
     calendarCollectionView.dropDelegate = self

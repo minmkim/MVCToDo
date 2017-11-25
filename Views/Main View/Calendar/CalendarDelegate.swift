@@ -26,6 +26,8 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
     cell.backgroundColor = .white
     let newVariable = VariableChange()
     newVariable.variable = collectionView.indexPathsForVisibleItems
+    let monthString = controller.updateMonthLabel(IndexArray: newVariable.variable)
+    displayMonthText = monthString
     cell.numberOfMonthLabel.text = controller.calculateDayNumberForCell(indexPathRow: indexPath.row)
     cell.dayOfWeekLabel.text = controller.calculateDayOfWeekLabelForCell(indexPathRow: indexPath.row)
     cell.dayIndicatorView.layer.cornerRadius = 13
@@ -69,6 +71,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
       }
     }
   }
+  
   
   
 }
