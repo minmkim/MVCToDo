@@ -143,6 +143,8 @@ class ToDoModelController {
     return !isChecked
   }
   
+  // MARK: Date Formatting Functions
+  
   func calculateDate(days: Int, date: Date, format: String) -> Date {
     let formatter = DateFormatter()
     let calendar = Calendar.current
