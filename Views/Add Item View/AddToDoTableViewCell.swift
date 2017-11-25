@@ -355,7 +355,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "NoteSegue" {
+    if segue.identifier == segueIdentifiers.noteSegue {
       let controller = segue.destination as! NotesViewController
       self.controller.delegate = controller.controller
       self.controller.setNotes()

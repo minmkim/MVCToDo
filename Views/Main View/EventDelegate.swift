@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AudioToolbox.AudioServices
 
 extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   
@@ -30,8 +31,13 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   @objc func checkmarkButtonPress(sender:UIButton) {
+    let generator = UISelectionFeedbackGenerator()
     guard let cellID = sender.title(for: .normal) else {return}
     let image = controller.checkmarkButtonPressedController(cellID)
+    let peek = SystemSoundID(1519)
+    generator.prepare()
+    AudioServicesPlaySystemSound(peek)
+    generator.selectionChanged()
     sender.setImage(UIImage(named: image), for: .normal)
   }
   

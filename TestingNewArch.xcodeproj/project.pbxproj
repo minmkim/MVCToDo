@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
 		A45CA2381FC6ABD1004F18A6 /* PickerViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */; };
 		A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2391FC86618004F18A6 /* NotesController.swift */; };
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
@@ -59,6 +60,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
 		A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewExtension.swift; sourceTree = "<group>"; };
 		A45CA2391FC86618004F18A6 /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		A45CA23B1FC87102004F18A6 /* ContextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				A4FE91901FC5E0540034A32D /* EventController.swift */,
 				A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */,
+				A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */,
 			);
 			path = "Main View Controller";
 			sourceTree = "<group>";
@@ -440,6 +443,7 @@
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
 				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,
 				A4BFAD291FBEBB0400F17D37 /* AddNotesViewController.swift in Sources */,
+				A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

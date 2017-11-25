@@ -20,6 +20,9 @@ enum segueIdentifiers {
   static let eventSegue = "EventSegue"
   static let addToDoSegue = "AddToDoSegue"
   static let editToDoSegue = "EditToDoSegue"
+  static let noteSegue = "NoteSegue"
+  static let unwindNoteSegue = "UnwindWithNotesSegue"
+  static let unwindContextSegue = "unwindSegueWithContext"
 }
 
 enum checkMarkAsset {

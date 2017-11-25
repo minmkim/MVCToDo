@@ -23,6 +23,8 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let todayIndexPath = IndexPath(row: 100, section: 0)
     let cell = calendarCollectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCell", for: indexPath) as! CalendarCollectionViewCell
+    let newVariable = VariableChange()
+    newVariable.variable = collectionView.indexPathsForVisibleItems
     cell.numberOfMonthLabel.text = controller.calculateDayNumberForCell(indexPathRow: indexPath.row)
     cell.dayOfWeekLabel.text = controller.calculateDayOfWeekLabelForCell(indexPathRow: indexPath.row)
     cell.dayIndicatorView.layer.cornerRadius = 13

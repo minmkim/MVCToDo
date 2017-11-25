@@ -10,6 +10,7 @@ import Foundation
 import EventKit
 import UIKit
 
+
 class CalendarModelController {
   
   //adding calendar functionality
@@ -80,10 +81,6 @@ class CalendarModelController {
     let result = formatter.string(from: newDay!)
     return result
   }
-  
-  
-  
-  
-  
+
 }
 

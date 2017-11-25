@@ -18,7 +18,6 @@ class NotesController: NotesDelegate {
   var receivedNote = ""
   
   func sendNotes(_ notes: String) {
-    print("received \(notes)")
     receivedNote = notes
   }
   

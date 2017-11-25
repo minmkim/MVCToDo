@@ -7,29 +7,12 @@
 //
 
 import Foundation
-import UIKit
-import CloudKit
 
 protocol NotesDelegate: class {
   func sendNotes(_ notes: String)
 }
 
-class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
-  func sendChosenContext(_ context: String) {
-    print("recevied \(context)")
-    self.context = context
-  }
-  
-  func updateContextField() -> String {
-    print("new context: \(context)")
-    return context
-  }
-  
-  func returnSavedNote(_ notes: String) {
-    self.notes = notes
-    print("here3")
-    print(self.notes)
-  }
+class AddEditToDoController {
   
   let toDoModelController = ToDoModelController()
   weak var delegate: NotesDelegate?
@@ -168,6 +151,10 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
     notification = state
   }
   
+  func updateContextField() -> String {
+    return context
+  }
+  
   
   func formatStringToDate(date: String, format: String) -> Date {
     let formatter = DateFormatter()
@@ -204,57 +191,18 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
     let result = formatter.string(from: newDay!)
     return result
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  // update list if coming from edit segue
- /* func updateList() {
-    if let toDoItem = itemToEdit?.toDoItem {
-      title = "Edit Item"
-      firstItem = itemToEdit
-      toDoItemText.text = toDoItem
-      contextField.text = itemToEdit?.context
-      noteText = itemToEdit?.notes ?? ""
-      selectedDate = itemToEdit?.dueDate ?? ""
-      dueDateField.text = selectedDate
-      dueTimeField.text = itemToEdit?.dueTime
-      numberRepeatInt = itemToEdit?.repeatNumber ?? nil
-      cycleRepeatString = itemToEdit?.repeatCycle ?? ""
-      if numberRepeatInt == nil {
-        
-      } else if numberRepeatInt == 1 {
-        switch cycleRepeatString {
-        case "Days"?:
-          repeatingField.text = "Every Day"
-        case "Weeks"?:
-          repeatingField.text = "Every Week"
-        case "Months"?:
-          repeatingField.text = "Every Month"
-        default:
-          print("error in selecting picker row")
-        }
-      } else {
-        repeatingField.text = "Every \(itemToEdit?.repeatNumber!) \(itemToEdit?.repeatCycle!)"
-      }
-      nagInt = itemToEdit?.nagNumber
-      if nagInt == nil {
-      } else if nagInt == 1 {
-        nagLabel.text = "Every Minute"
-      } else {
-        nagLabel.text = "Every \(nagInt!) Minutes"
-      }
-    }
-  }*/
-  
+}
+
+extension AddEditToDoController: SavedNoteDelegate {
+  func returnSavedNote(_ notes: String) {
+    self.notes = notes
+    print(self.notes)
+  }
+}
+
+extension AddEditToDoController: ChosenContextDelegate {
+  func sendChosenContext(_ context: String) {
+    print("recevied \(context)")
+    self.context = context
+  }
 }

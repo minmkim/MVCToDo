@@ -36,12 +36,14 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     delegate?.sendCalendarPressInformation(Date) // send data to delegate to eventcontroller
   }
   
-  
   @IBAction func buttonPress(_ sender: Any) {
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
+    generator.impactOccurred()
     UIView.animate(withDuration: 0.2, animations: {
       let rotateTransform = CGAffineTransform(rotationAngle: .pi)
       self.addItemButton.transform = rotateTransform
     }) { (_) in
+      
       self.addItemButton.transform = CGAffineTransform.identity
     }
     DispatchQueue.main.async {
@@ -66,9 +68,6 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       return
     }
   }
-  
-  
-  
   
 }
 

@@ -51,9 +51,8 @@ class EventController {
   
   func setToDoDates() {
     toDoModelController = ToDoModelController()
-    toDoDatesDate = toDoModelController.toDoList.flatMap( {$0.dueDate} )
+    toDoDatesDate = toDoModelController.toDoList.map( {$0.dueDate ?? Date()} ) // if duedate is nil, will set it as today. all nil items are put on today
     toDoDatesDate = toDoDatesDate.map( { formatStringToDate(date: formatDateToString(date: $0, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)  })
-    
     toDoDatesDate = Array(Set(toDoDatesDate))
     toDoDatesDate.sort(by: { $0.compare($1) == .orderedAscending })
   }
@@ -147,7 +146,7 @@ class EventController {
     formatter.dateFormat = format
     formatter.locale = Locale(identifier: "en_US_POSIX")
     let newDay = calendar.date(byAdding: .day, value: days, to: date)
-    let result = formatter.string(from: newDay!)
+    let result = formatter.string(from: newDay ?? Date())
     return result
   }
   
@@ -156,7 +155,7 @@ class EventController {
     formatter.locale = Locale(identifier: "en_US_POSIX")
     formatter.dateFormat = format
     guard let result = formatter.date(from: date) else {
-      return formatter.date(from: "Mar 14, 1984")!
+      return Date()
     }
     return result
   }

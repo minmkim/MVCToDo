@@ -54,14 +54,13 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
     guard let contextString = currentCell.textLabel?.text else {return}
     controller.setChosenContext(contextString)
     print("performing")
-    performSegue(withIdentifier: "unwindSegueWithContext", sender: self)
+    performSegue(withIdentifier: segueIdentifiers.unwindContextSegue, sender: self)
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "unwindSegueWithContext" {
+    if segue.identifier == segueIdentifiers.unwindContextSegue {
       let destination = segue.destination as! AddItemTableViewController
       self.controller.delegate = destination.controller as ChosenContextDelegate
-      print("preparing")
       controller.sendContext()
     }
   }
