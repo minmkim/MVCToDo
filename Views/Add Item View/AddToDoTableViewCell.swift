@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
@@ -36,6 +37,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   @IBAction func dueTimeClearPress(_ sender: Any) {
     dueTimeField.text = ""
+    notificationSwitch.isOn = false
   }
   @IBAction func dueDateClearPress(_ sender: Any) {
     dueDateField.text = ""
@@ -51,21 +53,26 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func NotificationPressed(_ sender: Any) {
+    if notificationSwitch.isOn {
+      controller.setNotification(true)
+    } else {
+      controller.setNotification(false)
+      controller.nagInt = 0
+    }
     //update row heights to reveal nag and repeat
     tableView.beginUpdates()
     tableView.endUpdates()
   }
   
-  
   @IBAction func infoPressed(_ sender: Any) {
-    /*  let center = UNUserNotificationCenter.current()
+      let center = UNUserNotificationCenter.current()
      center.getPendingNotificationRequests { (notifications) in
      print("Count: \(notifications.count)")
      for item in notifications {
-     //print(item.content)
+     print(item.content)
      //UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [item.identifier])
      }
-     }*/
+     }
   }
   
   @IBAction func notesPressed(_ sender: Any) {
@@ -125,6 +132,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.title = controller.setTitle()
+    notificationSwitch.isEnabled = false
     updateLabels()
     
     toDoItemText.delegate = self
@@ -140,12 +148,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     infoButton.backgroundColor = UIColor(red: 0.876, green: 0.876, blue: 0.876, alpha: 1)
     notesButton.backgroundColor = UIColor.white
-    
-    if dueTimeField.text == "" {
-      nagStepper.isUserInteractionEnabled = false
-    } else {
-      nagStepper.isUserInteractionEnabled = true
-    }
   }  // end viewdidload
   
   override func didReceiveMemoryWarning() {
@@ -155,7 +157,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   func updateLabels() {
     let labelStrings = controller.updateLabels()
-    //labelStrings //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText]
+    //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText, notification]
     if labelStrings != [] {
       self.navigationController?.navigationBar.tintColor = .white
       DispatchQueue.main.async {
@@ -163,8 +165,17 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         self.contextField.text = labelStrings[1]
         self.dueDateField.text = labelStrings[2]
         self.dueTimeField.text = labelStrings[3]
-        self.repeatingField.text = labelStrings[4]
-        self.nagLabel.text = labelStrings[5]
+        self.repeatingField.text = labelStrings[5]
+        self.nagLabel.text = labelStrings[6]
+        print("notification: \(labelStrings[7])")
+        if labelStrings[7] == "true" {
+          self.notificationSwitch.isOn = true
+          print(self.notificationSwitch.isOn)
+          self.tableView.reloadData()
+        }
+        if self.dueTimeField.text != "" {
+          self.notificationSwitch.isEnabled = true
+        }
       }
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
@@ -175,6 +186,21 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         self.toDoItemText.becomeFirstResponder()
       }
       doneButton.isEnabled = false
+    }
+  }
+  
+  //MARK: Stepper
+  func updateNagNumber() {
+    switch nagStepper.value {
+    case 0:
+      nagLabel.text = "None"
+    //   controller.nagInt = nil
+    case 1:
+      nagLabel.text = "Every Minute"
+      controller.nagInt = Int(nagStepper.value)
+    default:
+      nagLabel.text = "Every \(Int(nagStepper.value)) Minutes"
+      controller.nagInt = Int(nagStepper.value)
     }
   }
  
@@ -238,6 +264,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print(nagStepper.isUserInteractionEnabled)
     tableView.deselectRow(at: indexPath, animated: true)
     switch (indexPath.section, indexPath.row) {
     case (dueDatePickerCellIndexPath.section, dueDatePickerCellIndexPath.row - 1):
@@ -306,7 +333,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
       }
-    case (IndexPath(row:8, section:1).section, IndexPath(row:8, section: 1).row):
+    case (nagFieldIndexPath.section, nagFieldIndexPath.row):
       if dueTimeField.text == "" { //do not enable nag stepper if time was not added
         nagStepper.isUserInteractionEnabled = false
       } else {
@@ -318,7 +345,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   // MARK: segue
-  
   @IBAction func unwindWithContex(sender: UIStoryboardSegue) {
     contextField.text = controller.updateContextField()
   }

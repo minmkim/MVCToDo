@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
+    let center = UNUserNotificationCenter.current()
+    center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+      if granted {
+        DispatchQueue.main.async {
+          UIApplication.shared.registerForRemoteNotifications()
+        }
+      } else {
+        print("error!")
+        // handle the error
+      }
+    }
+    UNUserNotificationCenter.current().delegate = self
+    UIApplication.shared.statusBarStyle = .lightContent
+    
     return true
   }
 
@@ -42,5 +57,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
 
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  
+  /*  public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+   print(response.notification.request.content.categoryIdentifier)
+   } */
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    
+    completionHandler([.alert, .sound, .badge])
+  }
+  
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    switch response.actionIdentifier {
+    case "Complete" :
+      //checkmarkButton.setImage(UIImage(named: "checkCircle"), for: UIControlState.normal)
+      //item.checked = true
+      print("Complete")
+    default: print("Unknown Action")
+    }
+  }
+  
+  
 }
 

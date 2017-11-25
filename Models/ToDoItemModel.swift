@@ -9,7 +9,6 @@
 import Foundation
 import CloudKit
 
-
 struct ToDo: Codable {
   
   var toDoItem: String
@@ -22,6 +21,7 @@ struct ToDo: Codable {
   var repeatCycle: String?
   var nagNumber = 0
   var cloudRecordID: String
+  var notification = false
 }
 
 extension ToDo {

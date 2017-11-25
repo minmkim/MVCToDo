@@ -25,7 +25,6 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
     return context
   }
   
-  
   func returnSavedNote(_ notes: String) {
     self.notes = notes
     print("here3")
@@ -41,6 +40,7 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
   var numberRepeatInt = 0
   var notes = ""
   var context = ""
+  var notification = false
   
   var toDoItem: ToDo?
   
@@ -61,7 +61,7 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
     title = "Edit To Do"
     toDoItem = ItemToEdit
     notes = toDoItem?.notes ?? ""
-    print("here")
+    notification = toDoItem?.notification ?? false
   }
   
   func updateLabels() -> [String] {
@@ -79,6 +79,13 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
       let repeatNumber = editItem.repeatNumber
       let repeatCycle = editItem.repeatCycle ?? ""
       var repeatLabel = ""
+      let temp = editItem.notification
+      var notificationSwitch = ""
+      if temp == true {
+        notificationSwitch = "true"
+      } else {
+        notificationSwitch = "false"
+      }
       
       if repeatNumber == 0 {
         repeatLabel = ""
@@ -113,7 +120,8 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
       labelStrings.append(notes)
       labelStrings.append(repeatLabel)
       labelStrings.append(nagText)
-      return labelStrings //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText]
+      labelStrings.append(notificationSwitch)
+      return labelStrings //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText, notification]
     } else {
       return []
     }
@@ -133,13 +141,14 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
       toDoItem?.repeatNumber = numberRepeatInt
       toDoItem?.nagNumber = nagInt
       toDoItem?.notes = notes
+      toDoItem?.notification = notification
       toDoModelController.editToDoItem(toDoItem!)
     } else {
       if dueDate == "" {
-        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "")
+        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
         toDoModelController.addNewToDoItem(toDo)
       } else {
-        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "")
+        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
         toDoModelController.addNewToDoItem(toDo)
       }
     }
@@ -153,6 +162,10 @@ class AddEditToDoController: SavedNoteDelegate, ChosenContextDelegate {
   func setNotes() {
     print("controller note: \(notes)")
     delegate?.sendNotes(notes)
+  }
+  
+  func setNotification(_ state: Bool) {
+    notification = state
   }
   
   

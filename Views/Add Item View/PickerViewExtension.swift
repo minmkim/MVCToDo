@@ -84,6 +84,7 @@ extension AddItemTableViewController: UIPickerViewDelegate, UIPickerViewDataSour
   
   @objc func timePickerValueChanged(sender:UIDatePicker) {
     dueTimeField.text = controller.formatDateToString(date: sender.date, format: dateAndTime.hourMinute)
+    notificationSwitch.isEnabled = true
   }
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -91,21 +92,6 @@ extension AddItemTableViewController: UIPickerViewDelegate, UIPickerViewDataSour
       toDoItemText.resignFirstResponder()
     }
     return true
-  }
-  
-  //MARK: Stepper
-  func updateNagNumber() {
-    switch nagStepper.value {
-    case 0:
-      nagLabel.text = "None"
-    //   controller.nagInt = nil
-    case 1:
-      nagLabel.text = "Every Minute"
-    //   controller.nagInt = Int(nagStepper.value)
-    default:
-      nagLabel.text = "Every \(Int(nagStepper.value)) Minutes"
-      //   controller.nagInt = Int(nagStepper.value)
-    }
   }
   
 }
