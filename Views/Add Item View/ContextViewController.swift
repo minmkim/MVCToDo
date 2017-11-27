@@ -53,7 +53,6 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
     guard let currentCell = tableView.cellForRow(at: indexPath) else {return}
     guard let contextString = currentCell.textLabel?.text else {return}
     controller.setChosenContext(contextString)
-    print("performing")
     performSegue(withIdentifier: segueIdentifiers.unwindContextSegue, sender: self)
   }
   

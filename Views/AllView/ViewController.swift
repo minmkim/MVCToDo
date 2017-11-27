@@ -17,8 +17,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   func toDoDroppedOnCalendarDate(_ newDate: String) {
     delegate?.sendNewToDoDueDateAfterDropSession(newDate)
   }
-  
-  
+
   
   @IBOutlet weak var addItemButton: UIButton!
   weak var delegate: InformEventTableDelegate?

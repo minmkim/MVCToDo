@@ -83,7 +83,6 @@ class ToDoModelController {
       print("weird error")
     }
     
-    
     if tempToDoItem.notification {
       removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
       makeNewNotificationWithUpdatedDate(toDoItem: tempToDoItem, newDueDate: newDueDate)
@@ -138,6 +137,15 @@ class ToDoModelController {
     guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
       return false}
     let isChecked = toDoList[index].checked
+    
+    if !isChecked {
+      removeNotifications(ID: toDoList[index].cloudRecordID, nagNumber: toDoList[index].nagNumber)
+    } else {
+      if toDoList[index].notification {
+        makeNewNotification(toDoList[index])
+      }
+    }
+    // set new checked
     toDoList[index].checked = !toDoList[index].checked
     saveToDisk()
     return !isChecked

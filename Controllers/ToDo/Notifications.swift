@@ -51,8 +51,7 @@ class NotificationController {
     UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
       let identifier = identifier
       for notification:UNNotificationRequest in notificationRequests {
-        if notification.identifier == identifier {
-          UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.identifier])
+        if notification.identifier == identifier { UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.identifier])
         }
       }
     }

@@ -32,6 +32,7 @@ class ContextController {
   func removeContext(_ index: Int) {
     listOfContext.remove(at: index)
     filteredList!.remove(at: index)
+    saveContext()
   }
   
   func searchResults(_ searchText: String) {
@@ -57,7 +58,6 @@ class ContextController {
   }
   
   func sendContext() {
-    print("sending \(chosenContext)")
     delegate?.sendChosenContext(chosenContext)
   }
   

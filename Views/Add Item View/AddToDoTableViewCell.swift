@@ -53,15 +53,27 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func NotificationPressed(_ sender: Any) {
-    if notificationSwitch.isOn {
-      controller.setNotification(true)
+    let notificationPermission = UserDefaults.standard.bool(forKey: "NotificationPermission")
+    
+    if notificationPermission {
+      if notificationSwitch.isOn {
+        controller.setNotification(true)
+      } else {
+        controller.setNotification(false)
+        controller.nagInt = 0
+      }
+      //update row heights to reveal nag and repeat
+      tableView.beginUpdates()
+      tableView.endUpdates()
     } else {
-      controller.setNotification(false)
-      controller.nagInt = 0
+      notificationSwitch.setOn(false, animated: false)
+      let alertController = UIAlertController(title: "Unable to set Notifications!", message: "Please go to Settings -> Notifications and give notification permission to Due Life", preferredStyle: UIAlertControllerStyle.alert)
+      let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+        print("OK")
+      }
+      alertController.addAction(okAction)
+      self.present(alertController, animated: true, completion: nil)
     }
-    //update row heights to reveal nag and repeat
-    tableView.beginUpdates()
-    tableView.endUpdates()
   }
   
   @IBAction func infoPressed(_ sender: Any) {

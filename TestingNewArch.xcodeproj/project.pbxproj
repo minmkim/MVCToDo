@@ -10,6 +10,14 @@
 		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
 		A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */; };
 		A43FF2A81FC9D55100A5ECB4 /* CalendarDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */; };
+		A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */; };
+		A43FF2AF1FCA035000A5ECB4 /* MainViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */; };
+		A43FF2B11FCA041700A5ECB4 /* MainViewTableDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */; };
+		A43FF2B31FCA051F00A5ECB4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */; };
+		A43FF2B61FCA15EF00A5ECB4 /* ContextItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2B51FCA15EF00A5ECB4 /* ContextItemViewController.swift */; };
+		A43FF2B81FCA160100A5ECB4 /* ContextItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2B71FCA160100A5ECB4 /* ContextItemTableViewCell.swift */; };
+		A43FF2BC1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2BB1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift */; };
+		A43FF2BE1FCC4C9E00A5ECB4 /* ContextItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2BD1FCC4C9E00A5ECB4 /* ContextItemController.swift */; };
 		A45CA2381FC6ABD1004F18A6 /* PickerViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */; };
 		A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2391FC86618004F18A6 /* NotesController.swift */; };
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
@@ -63,6 +71,14 @@
 		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
 		A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDropDelegate.swift; sourceTree = "<group>"; };
 		A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDropDelegate.swift; sourceTree = "<group>"; };
+		A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDisplayTableViewCell.swift; sourceTree = "<group>"; };
+		A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewController.swift; sourceTree = "<group>"; };
+		A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewTableDelegate.swift; sourceTree = "<group>"; };
+		A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		A43FF2B51FCA15EF00A5ECB4 /* ContextItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemViewController.swift; sourceTree = "<group>"; };
+		A43FF2B71FCA160100A5ECB4 /* ContextItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemTableViewCell.swift; sourceTree = "<group>"; };
+		A43FF2BB1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemTableViewDelegate.swift; sourceTree = "<group>"; };
+		A43FF2BD1FCC4C9E00A5ECB4 /* ContextItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemController.swift; sourceTree = "<group>"; };
 		A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerViewExtension.swift; sourceTree = "<group>"; };
 		A45CA2391FC86618004F18A6 /* NotesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		A45CA23B1FC87102004F18A6 /* ContextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextController.swift; sourceTree = "<group>"; };
@@ -149,6 +165,24 @@
 			path = Calendar;
 			sourceTree = "<group>";
 		};
+		A43FF2AD1FCA033900A5ECB4 /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */,
+				A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
+		A43FF2B41FCA15D400A5ECB4 /* ContextItemView */ = {
+			isa = PBXGroup;
+			children = (
+				A43FF2B51FCA15EF00A5ECB4 /* ContextItemViewController.swift */,
+				A43FF2BB1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift */,
+			);
+			path = ContextItemView;
+			sourceTree = "<group>";
+		};
 		A4BA783D1FC02EB5007281F3 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,14 +201,14 @@
 			path = ToDo;
 			sourceTree = "<group>";
 		};
-		A4BA78451FC5DC7E007281F3 /* Main View */ = {
+		A4BA78451FC5DC7E007281F3 /* AllView */ = {
 			isa = PBXGroup;
 			children = (
 				A4DD2C901FB9AECB008CF72E /* ViewController.swift */,
 				A43FF2AA1FC9F7F300A5ECB4 /* Calendar */,
 				A43FF2A91FC9F7ED00A5ECB4 /* Event */,
 			);
-			path = "Main View";
+			path = AllView;
 			sourceTree = "<group>";
 		};
 		A4BA78461FC5DC90007281F3 /* Add Item View */ = {
@@ -188,14 +222,14 @@
 			path = "Add Item View";
 			sourceTree = "<group>";
 		};
-		A4BA78471FC5DCDD007281F3 /* Main View Controller */ = {
+		A4BA78471FC5DCDD007281F3 /* All View Controller */ = {
 			isa = PBXGroup;
 			children = (
 				A4FE91901FC5E0540034A32D /* EventController.swift */,
 				A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */,
 				A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */,
 			);
-			path = "Main View Controller";
+			path = "All View Controller";
 			sourceTree = "<group>";
 		};
 		A4BA78481FC5DCF6007281F3 /* Add Item Controller */ = {
@@ -271,8 +305,10 @@
 				A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */,
 				A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */,
 				A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */,
+				A43FF2B71FCA160100A5ECB4 /* ContextItemTableViewCell.swift */,
 				A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */,
 				A4BFAD2E1FBEC57300F17D37 /* Enum.swift */,
+				A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -280,7 +316,9 @@
 		A4DD2CC91FBB3E7C008CF72E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A4BA78451FC5DC7E007281F3 /* Main View */,
+				A43FF2AD1FCA033900A5ECB4 /* MainView */,
+				A43FF2B41FCA15D400A5ECB4 /* ContextItemView */,
+				A4BA78451FC5DC7E007281F3 /* AllView */,
 				A4BA78461FC5DC90007281F3 /* Add Item View */,
 			);
 			path = Views;
@@ -291,8 +329,10 @@
 			children = (
 				A4BA783E1FC02ECF007281F3 /* ToDo */,
 				A4BA783D1FC02EB5007281F3 /* Calendar */,
-				A4BA78471FC5DCDD007281F3 /* Main View Controller */,
+				A4BA78471FC5DCDD007281F3 /* All View Controller */,
 				A4BA78481FC5DCF6007281F3 /* Add Item Controller */,
+				A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */,
+				A43FF2BD1FCC4C9E00A5ECB4 /* ContextItemController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -442,6 +482,7 @@
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */,
+				A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
 				A45CA23F1FC8C9ED004F18A6 /* Notifications.swift in Sources */,
 				A4DD2CBD1FB9AEE3008CF72E /* CalendarViewController.swift in Sources */,
@@ -449,13 +490,20 @@
 				A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */,
 				A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */,
 				A4DD2CBF1FB9AEE8008CF72E /* EventViewController.swift in Sources */,
+				A43FF2BE1FCC4C9E00A5ECB4 /* ContextItemController.swift in Sources */,
 				A4BFAD271FBEB97800F17D37 /* ContextViewController.swift in Sources */,
+				A43FF2B61FCA15EF00A5ECB4 /* ContextItemViewController.swift in Sources */,
 				A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */,
+				A43FF2AF1FCA035000A5ECB4 /* MainViewViewController.swift in Sources */,
+				A43FF2B81FCA160100A5ECB4 /* ContextItemTableViewCell.swift in Sources */,
 				A4DD2C911FB9AECB008CF72E /* ViewController.swift in Sources */,
 				A4BFAD2F1FBEC57300F17D37 /* Enum.swift in Sources */,
 				A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */,
 				A4FE91911FC5E0540034A32D /* EventController.swift in Sources */,
+				A43FF2BC1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift in Sources */,
+				A43FF2B11FCA041700A5ECB4 /* MainViewTableDelegate.swift in Sources */,
 				A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */,
+				A43FF2B31FCA051F00A5ECB4 /* MainViewController.swift in Sources */,
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,

@@ -16,14 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+    let rootNavigationViewController = window!.rootViewController as? UINavigationController
+    let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
+    
+    rootViewController?.performSegue(withIdentifier: "AllSegue", sender: nil)
     // Override point for customization after application launch.
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
       if granted {
+        UserDefaults.standard.set(true, forKey: "NotificationPermission")
         DispatchQueue.main.async {
           UIApplication.shared.registerForRemoteNotifications()
         }
       } else {
+        UserDefaults.standard.set(false, forKey: "NotificationPermission")
         print("error!")
         // handle the error
       }
