@@ -33,7 +33,12 @@ class CalendarViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     monthLabel.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
-    monthLabel.backgroundColor = UIColor(white: 1, alpha: 0.5)
+    monthLabel.textColor = .white
+    monthLabel.backgroundColor = UIColor(red: 0.604, green: 0.759, blue: 1.0, alpha: 1.0)
+    monthLabel.layer.shadowOffset = CGSize(width: 3, height: 0)
+    monthLabel.layer.shadowColor = UIColor.black.cgColor
+    monthLabel.layer.shadowOpacity = 0.7
+      
     calendarCollectionView.delegate = self
     calendarCollectionView.dataSource = self
     calendarCollectionView.dropDelegate = self

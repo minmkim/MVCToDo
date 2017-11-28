@@ -58,7 +58,7 @@ class CalendarController {
   func updateMonthLabel(IndexArray: [IndexPath]) -> String {
     let sortedArray = IndexArray.sorted(by: {$0[1] < $1[1]})
     if sortedArray != [] {
-      let firstCellIndexRow = sortedArray[0][1]
+      let firstCellIndexRow = (sortedArray[0][1] + 1)
       let monthString = calculateDayOfMonthFromIndexRow(firstCellIndexRow)
       return monthString
     } else {
