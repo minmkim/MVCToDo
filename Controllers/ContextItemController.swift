@@ -61,6 +61,14 @@ class ContextItemController {
     }
   }
   
+  func saveContext() {
+    //save it
+    let encoder = JSONEncoder()
+    if let encoded = try? encoder.encode(listOfContext){
+      UserDefaults.standard.set(encoded, forKey: "contextList")
+    }
+  }
+  
   // MARK: - Formatting Dates
   
   func formatDateToString(date: Date, format: String) -> String {

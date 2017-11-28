@@ -22,6 +22,7 @@
 		A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA2391FC86618004F18A6 /* NotesController.swift */; };
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
 		A45CA23F1FC8C9ED004F18A6 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */; };
+		A45FE8771FCCD70300E27C17 /* AddContextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE8761FCCD70300E27C17 /* AddContextViewController.swift */; };
 		A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */; };
 		A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */; };
 		A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */; };
@@ -84,6 +85,7 @@
 		A45CA23B1FC87102004F18A6 /* ContextController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextController.swift; sourceTree = "<group>"; };
 		A45CA23D1FC8C8C3004F18A6 /* TestingNewArch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestingNewArch.entitlements; sourceTree = "<group>"; };
 		A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		A45FE8761FCCD70300E27C17 /* AddContextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContextViewController.swift; sourceTree = "<group>"; };
 		A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndentedEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			children = (
 				A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */,
 				A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */,
+				A45FE8761FCCD70300E27C17 /* AddContextViewController.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 				A4FE91911FC5E0540034A32D /* EventController.swift in Sources */,
 				A43FF2BC1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift in Sources */,
 				A43FF2B11FCA041700A5ECB4 /* MainViewTableDelegate.swift in Sources */,
+				A45FE8771FCCD70300E27C17 /* AddContextViewController.swift in Sources */,
 				A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */,
 				A43FF2B31FCA051F00A5ECB4 /* MainViewController.swift in Sources */,
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,

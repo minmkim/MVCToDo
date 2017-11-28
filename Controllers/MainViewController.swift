@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 class MainViewController {
   
   var toDoModelController = ToDoModelController()
   var listOfContext = [String]()
   var selectedContextIndex = 0
+  var contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   
   init(){
     setContextList()
@@ -30,11 +32,14 @@ class MainViewController {
   }
   
   func returnCellNumberOfContextString(_ index: Int) -> String {
-    let numberOfContextInt = returnNumberOfItemInContext(index)
-    if numberOfContextInt == 0 {
+    let context = listOfContext[index]
+    let filteredToDoList = toDoModelController.toDoList.filter({$0.context == context})
+    let uncheckedContext = filteredToDoList.filter({$0.checked == false})
+    let uncheckedContextInt = uncheckedContext.count
+    if uncheckedContextInt == 0 {
       return ""
     } else {
-      return String(describing: numberOfContextInt)
+      return String(describing: uncheckedContextInt)
     }
   }
   
@@ -59,6 +64,11 @@ class MainViewController {
     if let encoded = try? encoder.encode(listOfContext){
       UserDefaults.standard.set(encoded, forKey: "contextList")
     }
+  }
+  
+  func returnColor(_ index: Int) -> UIColor {
+    let color = contextColors[index]
+    return color
   }
   
   func startCodableTestContext() -> [String] {

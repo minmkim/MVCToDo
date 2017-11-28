@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension MainViewViewController: UITableViewDelegate, UITableViewDataSource {
+extension MainViewViewController: UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
   func numberOfSections(in tableView: UITableView) -> Int {
     return 4
   }
@@ -27,7 +27,6 @@ extension MainViewViewController: UITableViewDelegate, UITableViewDataSource {
     default:
       return 0
     }
-    
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -53,11 +52,19 @@ extension MainViewViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     mainViewTable.deselectRow(at: indexPath, animated: true)
-    if indexPath.section == 0 {
-      performSegue(withIdentifier: "AllSegue", sender: self)
-    } else if indexPath.section == 2 {
+    switch indexPath.section {
+    case 0:
+      performSegue(withIdentifier: segueIdentifiers.allSegue, sender: self)
+    case 2:
       controller.setIndexPathForContextSelect(indexPath.row)
-      performSegue(withIdentifier: "ContextItemSegue", sender: self)
+      performSegue(withIdentifier: segueIdentifiers.contextItemSegue, sender: self)
+    case 3:
+      contextField.becomeFirstResponder()
+      UIView.animate(withDuration: 0.3) {
+        self.addContextView.frame = CGRect(x: 8, y: ((self.view.frame.height / 2) - 250), width: (self.view.frame.width - 16), height: 200)
+      }
+    default:
+      return
     }
   }
   
@@ -68,6 +75,5 @@ extension MainViewViewController: UITableViewDelegate, UITableViewDataSource {
       return 50.0
     }
   }
-  
   
 }
