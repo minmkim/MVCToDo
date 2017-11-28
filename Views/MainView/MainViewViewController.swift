@@ -8,8 +8,9 @@
 
 import UIKit
 
-class MainViewViewController: UIViewController {
+class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   
+  @IBOutlet weak var contextCollectionView: UICollectionView!
   @IBOutlet weak var mainViewTable: UITableView!
   var controller = MainViewController()
   let addContextView: UIView = {
@@ -17,7 +18,7 @@ class MainViewViewController: UIViewController {
     view.backgroundColor = colors.red
     view.layer.cornerRadius = 22
     view.layer.shadowColor = UIColor.black.cgColor
-    view.layer.shadowOffset = CGSize(width: 0, height: 2)
+    view.layer.shadowOffset = CGSize(width: 0, height: 4)
     view.layer.shadowOpacity = 0.6
     return view
   }()
@@ -31,7 +32,7 @@ class MainViewViewController: UIViewController {
   
   let contextField: UITextField = {
     let textField = UITextField()
-    textField.font = UIFont.systemFont(ofSize: 17)
+    textField.font = UIFont.systemFont(ofSize: 20)
     textField.backgroundColor = .clear
     textField.textColor = .white
     return textField
@@ -39,7 +40,7 @@ class MainViewViewController: UIViewController {
   
   let contextLabel: UILabel = {
     let textLabel = UILabel()
-    textLabel.font = UIFont.systemFont(ofSize: 17)
+    textLabel.font = UIFont.systemFont(ofSize: 20)
     textLabel.text = "Context:"
     textLabel.textColor = .white
     return textLabel
@@ -66,9 +67,7 @@ class MainViewViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    mainViewTable.delegate = self
-    mainViewTable.dataSource = self
-    navigationItem.title = "Due Life"
+    navigationItem.title = "Contexts"
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     navigationItem.backBarButtonItem?.tintColor = .white
     
@@ -97,7 +96,7 @@ class MainViewViewController: UIViewController {
         for _ in 0...5 {
           index += 1
           let circle = UIButton()
-          circle.backgroundColor = self.controller.returnColor(index)
+          circle.backgroundColor = self.controller.contextColors[index]
           circle.heightAnchor.constraint(equalToConstant: 25).isActive = true
           circle.widthAnchor.constraint(equalToConstant: 25).isActive = true
           circle.layer.cornerRadius = 12.5
@@ -109,7 +108,8 @@ class MainViewViewController: UIViewController {
         }
       }
     }
-    
+    contextCollectionView.delegate = self
+    contextCollectionView.dataSource = self
     // Do any additional setup after loading the view.
   }
   
@@ -128,20 +128,39 @@ class MainViewViewController: UIViewController {
   }
   
   @objc func addPressed(sender:UIButton) {
-    UIView.animate(withDuration: 0.3) {
-      self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
+    if contextField.text != "" {
+      UIView.animate(withDuration: 0.3) {
+        self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
+      }
+      view.endEditing(true)
+      if controller.checkIfEditing() {
+        controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
+        let indexPath = controller.returnEditingIndexPath()
+        let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
+        UIView.animate(withDuration: 0.3) {
+          cell.backView.backgroundColor = self.addContextView.backgroundColor
+        }
+        controller.editingContext = nil
+      } else {
+        controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
+        //  let newIndexPath = controller.returnNewIndexPath(contextField.text!)
+        //    contextCollectionView.insertItems(at: [newIndexPath])
+      }
+      controller.setContextList()
+      contextCollectionView.reloadData()
     }
-    view.endEditing(true)
+    
   }
   
   @objc func gestureSwipeDown(sender: UISwipeGestureRecognizer) {
+    if controller.checkIfEditing() {
+      controller.editingContext = nil
+    }
     UIView.animate(withDuration: 0.3) {
       self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
     }
-    addContextView.layer.shadowColor = UIColor.clear.cgColor
     view.endEditing(true)
   }
-  
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
@@ -149,11 +168,17 @@ class MainViewViewController: UIViewController {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    print("did appear")
+    super.viewWillAppear(animated)
+    self.navigationController?.setNavigationBarHidden(true, animated: animated)
     DispatchQueue.main.async() { // update contexts
       self.controller = MainViewController()
-      self.mainViewTable.reloadData()
+      self.contextCollectionView.reloadData()
     }
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    self.navigationController?.setNavigationBarHidden(false, animated: animated)
   }
   
   //this does not work, sends wrote title
@@ -161,7 +186,7 @@ class MainViewViewController: UIViewController {
     if segue.identifier == "ContextItemSegue" {
       let destination = segue.destination as! ContextItemViewController
       let title = controller.returnContextString(controller.selectedContextIndex)
-      print(title)
+    //  navigationController?.navigationBar.barTintColor = .black
       destination.navigationItem.title = title
       destination.controller.title = title
       print(destination.controller)

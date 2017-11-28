@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension MainViewViewController: UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+extension MainViewViewController: UITableViewDelegate, UITableViewDataSource {
   func numberOfSections(in tableView: UITableView) -> Int {
     return 4
   }
@@ -52,6 +52,7 @@ extension MainViewViewController: UITableViewDelegate, UITableViewDataSource, UI
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     mainViewTable.deselectRow(at: indexPath, animated: true)
+    
     switch indexPath.section {
     case 0:
       performSegue(withIdentifier: segueIdentifiers.allSegue, sender: self)

@@ -13,7 +13,7 @@ protocol ChosenContextDelegate: class {
 }
 
 class ContextController {
-  //listOfContext = listToUse
+  var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
   var filteredList: [String]?
   var chosenContext = ""
@@ -21,6 +21,7 @@ class ContextController {
   
   init(){
     startCodableTestContext()
+    makeContextListFromColors()
     filteredList = listOfContext
   }
   
@@ -30,8 +31,10 @@ class ContextController {
   }
   
   func removeContext(_ index: Int) {
+    let context = listOfContext[index]
     listOfContext.remove(at: index)
     filteredList!.remove(at: index)
+    listOfContextAndColors.removeValue(forKey: context)
     saveContext()
   }
   
@@ -51,6 +54,7 @@ class ContextController {
     if context.hasPrefix("Create") {
       chosenContext = String(context.dropFirst(8)) //(Create: ) = 8 char
       listOfContext += ["\(chosenContext)"]
+      listOfContextAndColors["\(chosenContext)"] = 17
       saveContext()
     } else {
       chosenContext = context
@@ -61,21 +65,24 @@ class ContextController {
     delegate?.sendChosenContext(chosenContext)
   }
   
-  
-  func saveContext() {
-    //save it
-    let encoder = JSONEncoder()
-    if let encoded = try? encoder.encode(listOfContext){
-      UserDefaults.standard.set(encoded, forKey: "contextList")
-    }
+  func makeContextListFromColors() {
+    listOfContext = listOfContextAndColors.keys.map({$0})
   }
   
   func startCodableTestContext() {
     if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
       let decoder = JSONDecoder()
-      if let contextList = try? decoder.decode(Array.self, from: memoryList) as [String]{
-        listOfContext = contextList
+      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String: Int]{
+        listOfContextAndColors = contextList
       }
+    }
+  }
+  
+  func saveContext() {
+    //save it
+    let encoder = JSONEncoder()
+    if let encoded = try? encoder.encode(listOfContextAndColors){
+      UserDefaults.standard.set(encoded, forKey: "contextList")
     }
   }
   

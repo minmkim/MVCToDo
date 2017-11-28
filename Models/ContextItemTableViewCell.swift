@@ -17,13 +17,26 @@ class ContextItemTableViewCell: UITableViewCell {
   var toDoItem: ToDo? {
     didSet {
       toDoItemLabel.text = toDoItem?.toDoItem
-      dueDateLabel.text = toDoItem?.dueTime
+      if toDoItem?.dueDate != nil {
+        let date = formatDateToString(date: (toDoItem?.dueDate)!, format: dateAndTime.monthDateYear)
+        dueDateLabel.text = date
+      } else {
+        dueDateLabel.text = ""
+      }
       if !(toDoItem?.checked)! {
         checkMarkButton.setImage(UIImage(named: checkMarkAsset.uncheckedCircle), for: .normal)
       } else {
         checkMarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
       }
     }
+  }
+  
+  func formatDateToString(date: Date, format: String) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = format
+    let result = formatter.string(from: date)
+    return result
   }
   
   override func awakeFromNib() {

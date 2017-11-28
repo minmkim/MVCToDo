@@ -12,9 +12,11 @@ import UIKit
 class MainViewController {
   
   var toDoModelController = ToDoModelController()
-  var listOfContext = [String]()
+  var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
+  var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
   var selectedContextIndex = 0
-  var contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
+  let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
+  var editingContext: IndexPath?
   
   init(){
     setContextList()
@@ -43,42 +45,79 @@ class MainViewController {
     }
   }
   
+  func checkIfEditing() -> Bool {
+    if editingContext != nil {
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  func returnEditingIndexPath() -> IndexPath {
+    return editingContext!
+  }
+  
   func setIndexPathForContextSelect(_ index: Int) {
     selectedContextIndex = index
   }
   
   func returnContextString(_ index: Int) -> String {
+    print(listOfContext)
     return listOfContext[index]
+  }
+  
+  func addContextSavedPressed(color: UIColor, context: String) {
+    let indexOfColor = contextColors.index(of: color)
+    listOfContextAndColors[context] = indexOfColor
+    print(listOfContextAndColors)
+    saveContext()
+  }
+  
+  func returnNewIndexPath(_ context: String) -> IndexPath {
+    setContextList()
+    let row = listOfContext.index(of: context)
+    let indexPath = IndexPath(row: row!, section: 1)
+    return indexPath
   }
   
   func setContextList() {
     var toDoList = toDoModelController.toDoList.flatMap({$0.context})
     let restoreList = startCodableTestContext()
-    toDoList += restoreList
+    let stringRestoreList = makeContextListFromColors(restoreList)
+    toDoList += stringRestoreList
     listOfContext = Array(Set(toDoList))
+    listOfContext = listOfContext.sorted(by: {$0 < $1})
+    listOfContext = listOfContext.filter({$0 != ""})
+  
   }
   
   func saveContext() {
     //save it
     let encoder = JSONEncoder()
-    if let encoded = try? encoder.encode(listOfContext){
+    if let encoded = try? encoder.encode(listOfContextAndColors){
       UserDefaults.standard.set(encoded, forKey: "contextList")
     }
   }
   
-  func returnColor(_ index: Int) -> UIColor {
-    let color = contextColors[index]
+  func returnColor(_ index: String) -> UIColor {
+    print(listOfContextAndColors)
+    guard let colorInt = listOfContextAndColors[index] else {return colors.gray}
+    let color = contextColors[colorInt]
     return color
   }
   
-  func startCodableTestContext() -> [String] {
-    var listOfContexts = [String]()
+  func makeContextListFromColors(_ list: [String:Int]) -> [String] {
+    let newList = list.keys.map({$0})
+    return newList
+  }
+  
+  func startCodableTestContext() -> [String:Int] {
     if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
       let decoder = JSONDecoder()
-      if let contextList = try? decoder.decode(Array.self, from: memoryList) as [String]{
-        listOfContexts = contextList
+      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String:Int]{
+        listOfContextAndColors = contextList
       }
     }
-    return listOfContexts
+    return listOfContextAndColors
   }
 }
