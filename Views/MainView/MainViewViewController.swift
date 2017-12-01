@@ -178,6 +178,11 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       self.controller = MainViewController()
       self.contextCollectionView.reloadData()
     }
+    if themeController.isDarkTheme {
+      contextField.keyboardAppearance = .dark
+    } else {
+      contextField.keyboardAppearance = .light
+    }
     contextCollectionView.backgroundColor = themeController.backgroundColor
     self.view.backgroundColor = themeController.backgroundColor
     if themeController.isDarkTheme {
