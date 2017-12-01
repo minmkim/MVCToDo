@@ -84,7 +84,7 @@
             <objects>
                 <tableViewController id="sMs-Ec-RJE" customClass="AddItemTableViewController" customModule="TestingNewArch" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="ylU-3c-17K">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -865,6 +865,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="alg-Gl-YAb" secondAttribute="bottom" constant="34.329999999999998" id="nTB-Ur-S81"/>
                                                 <constraint firstItem="alg-Gl-YAb" firstAttribute="top" secondItem="50Z-wT-gcd" secondAttribute="topMargin" constant="4" id="piH-h5-lHJ"/>
                                                 <constraint firstItem="alg-Gl-YAb" firstAttribute="leading" secondItem="50Z-wT-gcd" secondAttribute="leadingMargin" id="s1J-76-8lw"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="b9Q-K4-aO1" secondAttribute="bottom" constant="7" id="tZ2-UD-FaW"/>
                                                 <constraint firstAttribute="trailing" secondItem="MhM-ej-0G5" secondAttribute="trailing" constant="10" id="zRe-6w-PZd"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1385,14 +1386,14 @@
                         <viewControllerLayoutGuide type="bottom" id="O0z-60-SkK"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="FXq-MF-1rc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AdJ-Mw-W9k">
-                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="480"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="v9i-L8-oXT">
-                                        <rect key="frame" x="8" y="8" width="359" height="674"/>
+                                        <rect key="frame" x="8" y="8" width="359" height="464"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1473,7 +1474,7 @@
             <objects>
                 <tableViewController id="MkH-eU-mNm" customClass="ContextSearchViewController" customModule="TestingNewArch" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="xfH-nC-zEN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="qfZ-yq-3GX">
@@ -1516,6 +1517,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vCl-xf-e2I"/>
-        <segue reference="KKT-5n-wQv"/>
+        <segue reference="I3k-o4-tjP"/>
     </inferredMetricsTieBreakers>
 </document>

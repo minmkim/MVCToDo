@@ -53,9 +53,9 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     let label = UILabel()
     returnedView.addSubview(label)
     returnedView.backgroundColor = themeController.headerBackgroundColor
-    label.textColor = themeController.mainTextColor
+    label.textColor = .lightGray
     label.text = controller.headerTitleOfSections(index: section)
-    label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
+    label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
     label.translatesAutoresizingMaskIntoConstraints = false
     label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 14).isActive = true
     label.centerYAnchor.constraint(equalTo: returnedView.centerYAnchor).isActive = true

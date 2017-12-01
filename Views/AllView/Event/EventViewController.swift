@@ -76,11 +76,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.dataSource = self
     eventTableView.dragDelegate = self
     eventTableView.dragInteractionEnabled = true
-    let index = controller.scrollToCalendarPressDate(controller.formatDateToString(date: Date(), format: dateAndTime.monthDateYear))
-    if index != -1 {
-      let newIndexPath = IndexPath(row:0, section: index)
-      eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
-    }
+    
 
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
   }
@@ -88,6 +84,13 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   override func viewWillAppear(_ animated: Bool) {
     themeController = ThemeController()
     eventTableView.reloadData()
+    let index = controller.scrollToCalendarPressDate(controller.formatDateToString(date: Date(), format: dateAndTime.monthDateYear))
+    print("index: \(index)")
+    if index != -1 {
+      let newIndexPath = IndexPath(row:0, section: index)
+      print(newIndexPath)
+      eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
+    }
     eventTableView.backgroundColor = themeController.backgroundColor
     footerView.backgroundColor = themeController.backgroundColor
   }

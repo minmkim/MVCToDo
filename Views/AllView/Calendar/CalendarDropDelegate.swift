@@ -19,10 +19,6 @@ extension CalendarViewController: UICollectionViewDropDelegate {
         self.calendarCollectionView.reloadData()
         return
     }
-    //    coordinator.session.loadObjects(ofClass: NSString.self) { items in
-    //      // convert the item provider array to a string array or bail out
-    //      guard let strings = items as? [String] else { return }
-    //    }
     let droppedDateString = controller.convertIndexPathRowToDateString(indexPathCalendar.row)
     delegate?.toDoDroppedOnCalendarDate(droppedDateString)
     calendarCollectionView.reloadData()
@@ -33,15 +29,22 @@ extension CalendarViewController: UICollectionViewDropDelegate {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let previousCell = calendarCollectionView.cellForItem(at: testPath) as! CalendarCollectionViewCell
-        previousCell.backgroundColor = .white
+        previousCell.backgroundColor = themeController.backgroundColor
+        if indexPath.row == 0 {
+          previousCell.dayIndicatorView.backgroundColor = .red
+        } else {
+          previousCell.dayIndicatorView.backgroundColor = themeController.backgroundColor
+        }
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-        cell.backgroundColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
+        cell.backgroundColor = themeController.mainThemeColor
+        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
       }
     } else {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-        cell.backgroundColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
+        cell.backgroundColor = themeController.mainThemeColor
+        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
       }
     }
       return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
