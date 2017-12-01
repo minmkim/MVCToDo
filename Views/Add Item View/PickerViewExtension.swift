@@ -56,6 +56,21 @@ extension AddItemTableViewController: UIPickerViewDelegate, UIPickerViewDataSour
     }
   }
   
+  func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+    var attributedString: NSAttributedString!
+    
+    switch component {
+    case 0:
+      attributedString = NSAttributedString(string: controller.numberRepeat[row], attributes: [NSAttributedStringKey.foregroundColor : themeController.mainTextColor])
+    case 1:
+      attributedString = NSAttributedString(string: controller.repeatingNotifications[row], attributes: [NSAttributedStringKey.foregroundColor : themeController.mainTextColor])
+    default:
+      attributedString = nil
+    }
+    
+    return attributedString
+  }
+  
   // setup date and time picker if coming from editsegue
   func setDatePickerDate() {
     dueDatePicker.datePickerMode = UIDatePickerMode.date

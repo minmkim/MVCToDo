@@ -22,11 +22,11 @@ class NotesController: NotesDelegate {
   }
   
   func setNote() -> String {
-    print(receivedNote)
     return receivedNote
   }
   
   func sendFinishedNote(_ notes: String) {
+    print("sending: \(notes)")
     delegate?.returnSavedNote(notes)
   }
 

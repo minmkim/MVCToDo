@@ -23,11 +23,6 @@ class ContextItemTableViewCell: UITableViewCell {
       } else {
         dueDateLabel.text = ""
       }
-      if !(toDoItem?.checked)! {
-        checkMarkButton.setImage(UIImage(named: checkMarkAsset.uncheckedCircle), for: .normal)
-      } else {
-        checkMarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
-      }
     }
   }
   

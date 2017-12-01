@@ -24,14 +24,16 @@ class AddEditToDoController {
   var notes = ""
   var context = ""
   var notification = false
+  var isChecked = false
   
   var toDoItem: ToDo?
+  var segueIdentity: String? // if coming from contextcontroller
+  var contextString: String? // if need to add context label
   
   let nagListOfContext = ["Minutes"]
   let repeatingNotifications = ["Days", "Weeks", "Months"]
   let numberRepeat = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
   let numberArray = Array(1...60)
-  
   var title: String?
   
   // from adding item
@@ -43,8 +45,13 @@ class AddEditToDoController {
   init(ItemToEdit: ToDo) {
     title = "Edit To Do"
     toDoItem = ItemToEdit
+    nagInt = toDoItem?.nagNumber ?? 0
+    cycleRepeatString = toDoItem?.repeatCycle ?? ""
+    numberRepeatInt = toDoItem?.repeatNumber ?? 0
     notes = toDoItem?.notes ?? ""
+    print("editing: \(notes)")
     notification = toDoItem?.notification ?? false
+    isChecked = toDoItem?.checked ?? false
   }
   
   func updateLabels() -> [String] {
@@ -84,7 +91,7 @@ class AddEditToDoController {
           repeatLabel = "Error"
         }
       } else {
-        repeatLabel = "Every \(repeatNumber) \(repeatCycle))"
+        repeatLabel = "Every \(repeatNumber) \(repeatCycle)"
       }
 
       let nagNumber = editItem.nagNumber
@@ -124,17 +131,22 @@ class AddEditToDoController {
       toDoItem?.repeatNumber = numberRepeatInt
       toDoItem?.nagNumber = nagInt
       toDoItem?.notes = notes
+      print("notes: \(notes)")
       toDoItem?.notification = notification
       toDoModelController.editToDoItem(toDoItem!)
     } else {
       if dueDate == "" {
-        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
+        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
         toDoModelController.addNewToDoItem(toDo)
       } else {
-        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: false, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
+        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
         toDoModelController.addNewToDoItem(toDo)
       }
     }
+  }
+  
+  func setContextField() -> String {
+    return contextString ?? ""
   }
   
   func setTitle() -> String {
@@ -143,7 +155,6 @@ class AddEditToDoController {
   }
   
   func setNotes() {
-    print("controller note: \(notes)")
     delegate?.sendNotes(notes)
   }
   
@@ -195,14 +206,13 @@ class AddEditToDoController {
 
 extension AddEditToDoController: SavedNoteDelegate {
   func returnSavedNote(_ notes: String) {
+    print("received Notes")
     self.notes = notes
-    print(self.notes)
   }
 }
 
 extension AddEditToDoController: ChosenContextDelegate {
   func sendChosenContext(_ context: String) {
-    print("recevied \(context)")
     self.context = context
   }
 }

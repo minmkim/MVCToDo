@@ -25,6 +25,7 @@ class ContextItemController {
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   
   var contextToDoList = [ToDo]()
+  var toDoItem: ToDo?
   
   // MARK: - tableView data
   func returnNumberOfRowsInSection() -> Int {
@@ -32,19 +33,16 @@ class ContextItemController {
   }
   
   func returnToDoItemForCell(_ index: Int) -> ToDo {
-    let toDoItem = contextToDoList[index]
-    return toDoItem
+    let toDo = contextToDoList[index]
+    return toDo
   }
   
   func checkmarkButtonPressedController(_ ID: String) -> String {
     toDoModelController = ToDoModelController()
     let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
-    print(checkmarkIcon)
     if checkmarkIcon == true {
-      print("asset \(checkMarkAsset.checkedCircle)")
       return checkMarkAsset.checkedCircle
     } else {
-      print("asset \(checkMarkAsset.uncheckedCircle)")
       return checkMarkAsset.uncheckedCircle
     }
   }
@@ -55,10 +53,24 @@ class ContextItemController {
     return color
   }
   
+  func setEditingToDo(_ toDo: ToDo) {
+    toDoItem = toDo
+  }
+  
+  func returnEditingToDo() -> ToDo? {
+    return toDoItem
+  }
+  
+  func deleteItem(ID: String) {
+    toDoModelController.deleteToDoItem(ID: ID)
+    guard let index = contextToDoList.index(where: {$0.cloudRecordID == ID}) else {return}
+    contextToDoList.remove(at: index)
+  }
   
   // MARK: - Setting data
   
   func toDoItemsInContext() {
+    toDoModelController = ToDoModelController()
     guard let context = title else {return}
     contextToDoList = toDoModelController.toDoList.filter({$0.context == context})
   }

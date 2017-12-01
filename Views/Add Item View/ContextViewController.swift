@@ -10,7 +10,9 @@ import UIKit
 
 class ContextSearchViewController: UITableViewController, UISearchResultsUpdating {
   
+  @IBOutlet weak var footerView: UIView!
   var controller = ContextController()
+  var themeController = ThemeController()
   let searchController = UISearchController(searchResultsController: nil)
   var newContext = ""
   
@@ -20,7 +22,16 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.dimsBackgroundDuringPresentation = false
     searchController.searchBar.sizeToFit()
+    tableView.backgroundColor = themeController.backgroundColor
+    footerView.backgroundColor = themeController.backgroundColor
     self.tableView.tableHeaderView = searchController.searchBar
+    searchController.searchBar.barTintColor = themeController.backgroundColor
+    searchController.searchBar.tintColor = themeController.mainTextColor
+    if themeController.isDarkTheme {
+      searchController.searchBar.keyboardAppearance = .dark
+    } else {
+      searchController.searchBar.keyboardAppearance = .light
+    }
   }
   
   func updateSearchResults(for searchController: UISearchController) {
@@ -45,6 +56,8 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
     let cell = tableView.dequeueReusableCell(withIdentifier: "contextCell", for: indexPath)
     let context = controller.returnCellLabel(indexPath.row)
     cell.textLabel?.text = context
+    cell.textLabel?.textColor = themeController.mainTextColor
+    cell.backgroundColor = themeController.backgroundColor
     return cell
   }
   

@@ -13,8 +13,10 @@ class NotesViewController: UIViewController, UITextViewDelegate {
   
   @IBOutlet weak var notesTextView: UITextView!
   @IBOutlet weak var bottom: NSLayoutConstraint!
+  @IBOutlet weak var backgroundView: UIView!
   
   var controller = NotesController()
+  var themeController = ThemeController()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -30,6 +32,17 @@ class NotesViewController: UIViewController, UITextViewDelegate {
       self.navigationItem.rightBarButtonItem?.title = "Edit"
       notesTextView.isEditable = false
     }
+    
+    notesTextView.textColor = themeController.mainTextColor
+    notesTextView.backgroundColor = themeController.backgroundColor
+    self.view.backgroundColor = themeController.backgroundColor
+    backgroundView.backgroundColor = themeController.backgroundColor
+    if themeController.isDarkTheme {
+      notesTextView.keyboardAppearance = .dark
+    } else {
+      notesTextView.keyboardAppearance = .light
+    }
+    
   }
   
   @IBAction func savePress(_ sender: Any) {
@@ -44,7 +57,6 @@ class NotesViewController: UIViewController, UITextViewDelegate {
       notesTextView.scrollRangeToVisible(range)
       self.navigationItem.rightBarButtonItem?.title = "Save"
     } else { // save pressed
-      print(notesTextView.text)
       performSegue(withIdentifier: segueIdentifiers.unwindNoteSegue, sender: self)
       print("segue2")
     }

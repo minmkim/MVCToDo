@@ -14,6 +14,7 @@ protocol InformEventTableDelegate: class {
 }
 
 class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate {
+  
   func toDoDroppedOnCalendarDate(_ newDate: String) {
     delegate?.sendNewToDoDueDateAfterDropSession(newDate)
   }
@@ -21,6 +22,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   
   @IBOutlet weak var addItemButton: UIButton!
   weak var delegate: InformEventTableDelegate?
+  var themeController = ThemeController()
   var buttonPressedBool = false // prevent user from pressing additembutton during transitions
   
   override func viewDidLoad() {
@@ -28,7 +30,12 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
-    print(self.view.safeAreaInsets.bottom)
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    themeController = ThemeController()
+    navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
+    navigationController?.navigationBar.tintColor = .white
   }
   
   override func didReceiveMemoryWarning() {
@@ -68,10 +75,13 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       var vc = AddItemTableViewController.init()
       vc = navigation.viewControllers[0] as! AddItemTableViewController
       vc.controller = AddEditToDoController()
+      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
     default:
       return
     }
   }
+  
+  
   
 }
 

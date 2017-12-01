@@ -13,6 +13,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   @IBOutlet weak var contextCollectionView: UICollectionView!
   @IBOutlet weak var mainViewTable: UITableView!
   var controller = MainViewController()
+  var themeController = ThemeController()
   let addContextView: UIView = {
     let view = UIView()
     view.backgroundColor = colors.red
@@ -67,6 +68,8 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.backgroundColor = themeController.backgroundColor
+    contextCollectionView.backgroundColor = themeController.backgroundColor
     navigationItem.title = "Contexts"
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     navigationItem.backBarButtonItem?.tintColor = .white
@@ -169,16 +172,30 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    themeController = ThemeController()
     self.navigationController?.setNavigationBarHidden(true, animated: animated)
     DispatchQueue.main.async() { // update contexts
       self.controller = MainViewController()
       self.contextCollectionView.reloadData()
+    }
+    contextCollectionView.backgroundColor = themeController.backgroundColor
+    self.view.backgroundColor = themeController.backgroundColor
+    if themeController.isDarkTheme {
+      UIApplication.shared.statusBarStyle = .lightContent
+    } else {
+      UIApplication.shared.statusBarStyle = .default
     }
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    UIApplication.shared.statusBarStyle = .lightContent
+  }
+  
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    contextCollectionView.collectionViewLayout.invalidateLayout()
   }
   
   //this does not work, sends wrote title

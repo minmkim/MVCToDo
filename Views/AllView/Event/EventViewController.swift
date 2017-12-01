@@ -9,34 +9,49 @@
 import UIKit
 
 
-class EventViewController: UIViewController, InformEventTableDelegate {
+class EventViewController: UIViewController, InformEventTableDelegate, UpdateTableViewDelegate {
   
   // MARK: Delegate functions
+  // UpdateTableViewDelegate functions
+  func insertRow(_ indexPath: IndexPath) {
+    print("inserted row")
+    eventTableView.insertRows(at: [indexPath], with: .fade)
+  }
+  
+  func deleteRow(_ indexPath: IndexPath) {
+    print("deleted row")
+    eventTableView.deleteRows(at: [indexPath], with: .fade)
+  }
+  
+  func insertSection(_ indexPath: IndexPath) {
+    print("inserted section")
+    eventTableView.insertSections([indexPath.section], with: .fade)
+  }
+  
+  func deleteSection(_ indexPath: IndexPath) {
+    print("deleted section")
+    eventTableView.deleteSections([indexPath.section], with: .fade)
+  }
+  
+  func updateTableView() {
+    print("updated")
+    eventTableView.reloadData()
+  }
+  
+  func beginUpdates() {
+    print("begin")
+    eventTableView.beginUpdates()
+  }
+  
+  func endUpdates() {
+    print("end")
+    eventTableView.endUpdates()
+  }
+
+  // update duedate after drag and drop
   func sendNewToDoDueDateAfterDropSession(_ newDate: String) {
     DispatchQueue.main.async() {
-      self.eventTableView.beginUpdates()
-      let isDueDateDifferent = self.controller.updateDueDateForToDoItem(newDate)
-      guard let originalIndexPath = self.controller.dragIndexPathOrigin else {return}
-      if isDueDateDifferent { //need to check origin before updating controller
-        if self.controller.checkForItemsInDate(section: originalIndexPath.section) {
-          print("deleting section")
-          self.eventTableView.deleteSections([originalIndexPath.section], with: .fade)
-        }
-        print("here2")
-        self.controller.setToDoDates()
-        self.eventTableView.deleteRows(at: [originalIndexPath], with: .fade)
-        let indexPath = self.controller.calculateIndexPath(newDate)
-        
-        if self.controller.rowsPerSection(section: indexPath.section) == 1 {
-          print("inserting section")
-          self.eventTableView.insertSections([indexPath.section], with: .fade)
-        }
-        
-        self.eventTableView.insertRows(at: [indexPath], with: .fade)
-        print("here1")
-        
-      }
-      self.eventTableView.endUpdates()
+      self.controller.updateDueDate(newDate)
     }
   }
   
@@ -49,11 +64,14 @@ class EventViewController: UIViewController, InformEventTableDelegate {
   }
   // end delegate functions
   
+  @IBOutlet weak var footerView: UIView!
   @IBOutlet weak var eventTableView: UITableView!
   var controller = EventController()
+  var themeController = ThemeController()
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    controller.delegate = self
     eventTableView.delegate = self
     eventTableView.dataSource = self
     eventTableView.dragDelegate = self
@@ -63,13 +81,15 @@ class EventViewController: UIViewController, InformEventTableDelegate {
       let newIndexPath = IndexPath(row:0, section: index)
       eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
     }
-    controller.updateEventTableView = { [unowned self] () in
-      DispatchQueue.main.async {
-        self.eventTableView.reloadData()
-      }
-    }
+
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
-    
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    themeController = ThemeController()
+    eventTableView.reloadData()
+    eventTableView.backgroundColor = themeController.backgroundColor
+    footerView.backgroundColor = themeController.backgroundColor
   }
   
   override func didReceiveMemoryWarning() {

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension MainViewViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MainViewViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 3
@@ -89,6 +89,11 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     default:
       return
     }
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    print("size: \(self.view.frame.width - 25)")
+    return CGSize(width: (self.view.frame.width - 25), height: 75.0)
   }
   
   @objc func editColor(sender: UILongPressGestureRecognizer) {

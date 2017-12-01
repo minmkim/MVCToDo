@@ -14,6 +14,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   //MARK: IB
   
+  @IBOutlet var labels: [UILabel]!
   @IBOutlet weak var toDoItemText: UITextField!
   @IBOutlet weak var doneButton: UIBarButtonItem!
   @IBOutlet weak var dueDateField: UITextField!
@@ -32,8 +33,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   // clear buttons in textfield
   @IBAction func repeatClearPress(_ sender: Any) {
     repeatingField.text = ""
-    //  controller.numberRepeatInt = nil
-    // controller.cycleRepeatString = ""
+    controller.numberRepeatInt = 0
+    controller.cycleRepeatString = ""
   }
   @IBAction func dueTimeClearPress(_ sender: Any) {
     dueTimeField.text = ""
@@ -88,8 +89,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func notesPressed(_ sender: Any) {
-    notesButton.backgroundColor = UIColor(red: 0.876, green: 0.876, blue: 0.876, alpha: 1)
-    infoButton.backgroundColor = UIColor.white
+ //   notesButton.backgroundColor = themeController.backgroundColor
+ //   infoButton.backgroundColor = themeController.headerBackgroundColor
   }
   
   @IBAction func cancel() {
@@ -109,7 +110,13 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     if toDoItemText.isFirstResponder {
       toDoItemText.resignFirstResponder()
     }
-    performSegue(withIdentifier: "UnwindFromToDo", sender: self)
+    if controller.segueIdentity == segueIdentifiers.editFromContextSegue {
+      performSegue(withIdentifier: "UnwindToContextToDo", sender: self)
+    } else if controller.segueIdentity == segueIdentifiers.addFromContextSegue {
+      performSegue(withIdentifier: "UnwindToContextToDo", sender: self)
+    } else {
+      performSegue(withIdentifier: "UnwindFromToDo", sender: self)
+    }
   }
   
   // MARK: Variables
@@ -140,13 +147,21 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   let repeatPickerCellIndexPath = IndexPath(row: 8, section: 1)
   let nagFieldIndexPath = IndexPath(row: 9, section: 1)
   var controller: AddEditToDoController!
+  var themeController = ThemeController()
 
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.title = controller.setTitle()
     notificationSwitch.isEnabled = false
     updateLabels()
-    
+    themeing()
+    // if coming from context field, context should same context
+    if contextField.text == "" {
+      let context = controller.setContextField()
+      if context != "" {
+        contextField.text = context
+      }
+    }
     toDoItemText.delegate = self
     repeatingField.isUserInteractionEnabled = false
     dueDateField.isUserInteractionEnabled = false
@@ -158,13 +173,45 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     
      // color of the back button
     self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-    infoButton.backgroundColor = UIColor(red: 0.876, green: 0.876, blue: 0.876, alpha: 1)
-    notesButton.backgroundColor = UIColor.white
   }  // end viewdidload
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+  }
+  
+  func themeing() {
+    for label in labels {
+      label.textColor = themeController.mainTextColor
+    }
+    if themeController.isDarkTheme {
+       toDoItemText.keyboardAppearance = .dark
+    } else {
+      toDoItemText.keyboardAppearance = .light
+    }
+    toDoItemText.textColor = themeController.mainTextColor
+    contextField.textColor = themeController.mainTextColor
+    dueDateField.textColor = themeController.mainTextColor
+    dueTimeField.textColor = themeController.mainTextColor
+    repeatingField.textColor = themeController.mainTextColor
+    nagLabel.textColor = themeController.mainTextColor
+    self.tableView.backgroundColor = themeController.backgroundColor
+    infoButton.backgroundColor = themeController.backgroundColor
+    notesButton.backgroundColor = themeController.headerBackgroundColor
+    if navigationController?.navigationBar.barTintColor != .black && themeController.mainThemeColor != navigationController?.navigationBar.barTintColor {
+      infoButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      notesButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+    } else {
+      infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      notesButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+    }
+    dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
+    dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
+    toDoItemText.attributedPlaceholder = NSAttributedString(string: "To Do", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    contextField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    dueDateField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    dueTimeField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    repeatingField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
   }
   
   func updateLabels() {
@@ -191,7 +238,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       }
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-      self.navigationController?.navigationBar.tintColor = .black
+      self.navigationController?.navigationBar.tintColor = .white
       
       let time = DispatchTime.now() + 0.2
       DispatchQueue.main.asyncAfter(deadline: time) {
@@ -201,12 +248,16 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
   }
   
+  override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    cell.backgroundColor = themeController.backgroundColor
+  }
+  
   //MARK: Stepper
   func updateNagNumber() {
     switch nagStepper.value {
     case 0:
       nagLabel.text = "None"
-    //   controller.nagInt = nil
+       controller.nagInt = 0
     case 1:
       nagLabel.text = "Every Minute"
       controller.nagInt = Int(nagStepper.value)
@@ -230,8 +281,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   // MARK: tableView
   
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    
-    //  setTheme()
     switch (indexPath.section, indexPath.row) {
     case (buttonIndexPath.section, buttonIndexPath.row):
       return 30.0
@@ -362,8 +411,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func unwindWithNotes(sender: UIStoryboardSegue) {
-    notesButton.backgroundColor = UIColor.white
-    infoButton.backgroundColor = UIColor(red: 0.876, green: 0.876, blue: 0.876, alpha: 1)
+    notesButton.backgroundColor = themeController.headerBackgroundColor
+    infoButton.backgroundColor = themeController.backgroundColor
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

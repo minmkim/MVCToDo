@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
+    UINavigationBar.appearance().tintColor = .white
+    UINavigationBar.appearance().barStyle = .black
     let rootNavigationViewController = window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
     
@@ -36,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
     }
     UNUserNotificationCenter.current().delegate = self
-   // UIApplication.shared.statusBarStyle = .lightContent
+   //
     
     return true
   }

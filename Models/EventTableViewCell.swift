@@ -15,14 +15,16 @@ class EventTableViewCell: UITableViewCell {
       toDoLabel.text = toDoItem?.toDoItem
       contextLabel.text = toDoItem?.context
       dueLabel.text = toDoItem?.dueTime
-      if !(toDoItem?.checked)! {
-        checkmarkButton.setImage(UIImage(named: checkMarkAsset.uncheckedCircle), for: .normal)
+      if toDoItem?.repeatCycle != "" && (toDoItem?.notification)! && toDoItem?.checked == false {
+        repeatCycleImage.isHidden = false
+        repeatCycleImage.image = UIImage(named: checkMarkAsset.repeatArrows)
       } else {
-        checkmarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+        repeatCycleImage.isHidden = true
       }
     }
   }
   
+  @IBOutlet weak var repeatCycleImage: UIImageView!
   @IBOutlet weak var toDoLabel: UILabel!
   @IBOutlet weak var contextLabel: UILabel!
   @IBOutlet weak var dueLabel: UILabel!

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
+		A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */; };
+		A42CB4961FD086AA00C10976 /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4951FD086AA00C10976 /* IAPViewController.swift */; };
+		A42CB49A1FD0893900C10976 /* ThemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4991FD0893900C10976 /* ThemeController.swift */; };
 		A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */; };
 		A43FF2A81FC9D55100A5ECB4 /* CalendarDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */; };
 		A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */; };
@@ -71,11 +74,13 @@
 
 /* Begin PBXFileReference section */
 		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
+		A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		A42CB4951FD086AA00C10976 /* IAPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
+		A42CB4991FD0893900C10976 /* ThemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeController.swift; sourceTree = "<group>"; };
 		A43FF2A51FC9D53A00A5ECB4 /* EventDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDropDelegate.swift; sourceTree = "<group>"; };
 		A43FF2A71FC9D55100A5ECB4 /* CalendarDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDropDelegate.swift; sourceTree = "<group>"; };
 		A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDisplayTableViewCell.swift; sourceTree = "<group>"; };
 		A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewController.swift; sourceTree = "<group>"; };
-		A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewTableDelegate.swift; sourceTree = "<group>"; };
 		A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A43FF2B51FCA15EF00A5ECB4 /* ContextItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemViewController.swift; sourceTree = "<group>"; };
 		A43FF2B71FCA160100A5ECB4 /* ContextItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemTableViewCell.swift; sourceTree = "<group>"; };
@@ -150,6 +155,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A42CB4921FD0867F00C10976 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */,
+				A42CB4951FD086AA00C10976 /* IAPViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A42CB4971FD0891600C10976 /* Main View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */,
+				A43FF2BD1FCC4C9E00A5ECB4 /* ContextItemController.swift */,
+			);
+			path = "Main View Controller";
+			sourceTree = "<group>";
+		};
+		A42CB4981FD0892900C10976 /* Theme Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A42CB4991FD0893900C10976 /* ThemeController.swift */,
+			);
+			path = "Theme Controller";
+			sourceTree = "<group>";
+		};
 		A43FF2A91FC9F7ED00A5ECB4 /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,7 +206,6 @@
 			children = (
 				A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */,
 				A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */,
-				A43FF2B01FCA041700A5ECB4 /* MainViewTableDelegate.swift */,
 				A45FE8761FCCD70300E27C17 /* AddContextViewController.swift */,
 			);
 			path = MainView;
@@ -328,6 +358,7 @@
 				A43FF2B41FCA15D400A5ECB4 /* ContextItemView */,
 				A4BA78451FC5DC7E007281F3 /* AllView */,
 				A4BA78461FC5DC90007281F3 /* Add Item View */,
+				A42CB4921FD0867F00C10976 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -335,12 +366,12 @@
 		A4DD2CCA1FBB3E89008CF72E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A42CB4981FD0892900C10976 /* Theme Controller */,
 				A4BA783E1FC02ECF007281F3 /* ToDo */,
+				A42CB4971FD0891600C10976 /* Main View Controller */,
 				A4BA783D1FC02EB5007281F3 /* Calendar */,
 				A4BA78471FC5DCDD007281F3 /* All View Controller */,
 				A4BA78481FC5DCF6007281F3 /* Add Item Controller */,
-				A43FF2B21FCA051F00A5ECB4 /* MainViewController.swift */,
-				A43FF2BD1FCC4C9E00A5ECB4 /* ContextItemController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -490,6 +521,7 @@
 				A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */,
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
+				A42CB49A1FD0893900C10976 /* ThemeController.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */,
 				A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
@@ -498,6 +530,7 @@
 				A4DD2CCC1FBB3EA1008CF72E /* ToDoModelController.swift in Sources */,
 				A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */,
 				A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */,
+				A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */,
 				A4DD2CBF1FB9AEE8008CF72E /* EventViewController.swift in Sources */,
 				A43FF2BE1FCC4C9E00A5ECB4 /* ContextItemController.swift in Sources */,
 				A4BFAD271FBEB97800F17D37 /* ContextViewController.swift in Sources */,
@@ -510,6 +543,7 @@
 				A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */,
 				A4FE91911FC5E0540034A32D /* EventController.swift in Sources */,
 				A43FF2BC1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift in Sources */,
+				A42CB4961FD086AA00C10976 /* IAPViewController.swift in Sources */,
 				A45FE8771FCCD70300E27C17 /* AddContextViewController.swift in Sources */,
 				A43FF2A61FC9D53A00A5ECB4 /* EventDropDelegate.swift in Sources */,
 				A43FF2B31FCA051F00A5ECB4 /* MainViewController.swift in Sources */,

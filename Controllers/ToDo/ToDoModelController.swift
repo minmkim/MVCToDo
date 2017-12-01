@@ -10,12 +10,10 @@ import Foundation
 
 class ToDoModelController {
   
-  var updatedEventController: (()->())?
   var toDoList = [ToDo]() {
     didSet {
       let defaultDate = formatStringToDate(date: "Mar 14, 1984", format: dateAndTime.monthDateYear)
       toDoList.sort( by: {!$0.checked == !$1.checked ? ($0.dueDate ?? defaultDate).compare($1.dueDate ?? defaultDate) == .orderedAscending : !$0.checked && $1.checked })
-      self.updatedEventController?()
     }
   }
   lazy var notificationController: NotificationController = {
@@ -39,11 +37,8 @@ class ToDoModelController {
     newItem.cloudRecordID = uniqueReference
     toDoList.append(newItem)
     saveToDisk()
-    print(newItem)
     if newItem.notification {
       let formattedDate = notificationController.formatDateAndTime(dueDate: newItem.dueDate!, dueTime: newItem.dueTime!)
-      
-      print("This is the formattedDate: \(formattedDate)")
       if newItem.nagNumber != 0 { // if nag
         notificationController.makeNewNagNotification(title: newItem.toDoItem, date: formattedDate, identifier: newItem.cloudRecordID, nagFrequency: newItem.nagNumber)
       } else { // if no nag
@@ -137,20 +132,43 @@ class ToDoModelController {
     guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
       return false}
     let isChecked = toDoList[index].checked
-    
-    if !isChecked {
-      removeNotifications(ID: toDoList[index].cloudRecordID, nagNumber: toDoList[index].nagNumber)
-    } else {
+    if !isChecked { // if unchecked
+      if toDoList[index].notification {
+        removeNotifications(ID: toDoList[index].cloudRecordID, nagNumber: toDoList[index].nagNumber)
+        if toDoList[index].repeatCycle == "" {
+          toDoList[index].checked = !toDoList[index].checked
+          saveToDisk()
+          return !isChecked
+        } else {
+          return isChecked
+        }
+      } else {
+        toDoList[index].checked = !toDoList[index].checked
+        saveToDisk()
+        return !isChecked
+      }
+      
+    } else { // if already checked
       if toDoList[index].notification {
         makeNewNotification(toDoList[index])
       }
+      toDoList[index].checked = !toDoList[index].checked
+      saveToDisk()
+      return !isChecked
     }
-    // set new checked
-    toDoList[index].checked = !toDoList[index].checked
-    saveToDisk()
-    return !isChecked
   }
   
+  func checkRepeatNotification(_ ID: String) -> Bool {
+    guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
+      return false}
+    var isRepeat: Bool
+    if toDoList[index].repeatCycle != nil && toDoList[index].repeatCycle != "" {
+      isRepeat = true
+    } else {
+      isRepeat = false
+    }
+    return isRepeat
+  }
   // MARK: Date Formatting Functions
   
   func calculateDate(days: Int, date: Date, format: String) -> Date {

@@ -27,14 +27,21 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     cell.toDoItem = controller.cellLabelStrings(indexPath: indexPath)
     cell.checkmarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
+    cell.backgroundColor = themeController.backgroundColor
+    cell.toDoLabel.textColor = themeController.mainTextColor
+    if cell.toDoItem?.checked ?? false {
+      cell.checkmarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+    } else {
+      cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+    }
     return cell
   }
   
-  @objc func checkmarkButtonPress(sender:UIButton) {
+  @objc func checkmarkButtonPress(sender: UIButton) {
     let generator = UISelectionFeedbackGenerator()
+    let peek = SystemSoundID(1519)
     guard let cellID = sender.title(for: .normal) else {return}
     let image = controller.checkmarkButtonPressedController(cellID)
-    let peek = SystemSoundID(1519)
     generator.prepare()
     AudioServicesPlaySystemSound(peek)
     generator.selectionChanged()
@@ -43,11 +50,10 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 17))
-    returnedView.backgroundColor = .groupTableViewBackground
-    
     let label = UILabel()
     returnedView.addSubview(label)
-    label.textColor = .black
+    returnedView.backgroundColor = themeController.headerBackgroundColor
+    label.textColor = themeController.mainTextColor
     label.text = controller.headerTitleOfSections(index: section)
     label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -73,14 +79,8 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     if editingStyle == .delete {
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
       guard let cloudID = cell.toDoItem?.cloudRecordID else {return}
-      controller.deleteItem(ID: cloudID)
-      
       eventTableView.beginUpdates()
-      eventTableView.deleteRows(at: [indexPath], with: .fade)
-      if controller.checkForItemsInDate(section: indexPath.section) {
-        controller.setToDoDates()
-        eventTableView.deleteSections([indexPath.section], with: .fade)
-      }
+      controller.deleteItem(ID: cloudID, indexPath: indexPath)
       eventTableView.endUpdates()
     }
   }

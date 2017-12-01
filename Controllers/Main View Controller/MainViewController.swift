@@ -62,14 +62,12 @@ class MainViewController {
   }
   
   func returnContextString(_ index: Int) -> String {
-    print(listOfContext)
     return listOfContext[index]
   }
   
   func addContextSavedPressed(color: UIColor, context: String) {
     let indexOfColor = contextColors.index(of: color)
     listOfContextAndColors[context] = indexOfColor
-    print(listOfContextAndColors)
     saveContext()
   }
   
@@ -100,7 +98,6 @@ class MainViewController {
   }
   
   func returnColor(_ index: String) -> UIColor {
-    print(listOfContextAndColors)
     guard let colorInt = listOfContextAndColors[index] else {return colors.gray}
     let color = contextColors[colorInt]
     return color
