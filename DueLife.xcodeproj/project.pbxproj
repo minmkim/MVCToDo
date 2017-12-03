@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BF51FD3496B00F67853 /* TodayViewController.swift */; };
+		A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BFA1FD34A0100F67853 /* TodayController.swift */; };
+		A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BFC1FD34A5A00F67853 /* TodayView + tableview delegates.swift */; };
 		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
 		A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */; };
 		A42CB4961FD086AA00C10976 /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4951FD086AA00C10976 /* IAPViewController.swift */; };
@@ -73,6 +76,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A4147BF51FD3496B00F67853 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodayViewController.swift; path = Views/TodayView/TodayViewController.swift; sourceTree = SOURCE_ROOT; };
+		A4147BFA1FD34A0100F67853 /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
+		A4147BFC1FD34A5A00F67853 /* TodayView + tableview delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayView + tableview delegates.swift"; sourceTree = "<group>"; };
 		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
 		A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		A42CB4951FD086AA00C10976 /* IAPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
@@ -155,6 +161,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A4147BF71FD349DB00F67853 /* TodayView */ = {
+			isa = PBXGroup;
+			children = (
+				A4147BF51FD3496B00F67853 /* TodayViewController.swift */,
+				A4147BFC1FD34A5A00F67853 /* TodayView + tableview delegates.swift */,
+			);
+			path = TodayView;
+			sourceTree = "<group>";
+		};
+		A4147BF91FD349F700F67853 /* Today Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A4147BFA1FD34A0100F67853 /* TodayController.swift */,
+			);
+			path = "Today Controller";
+			sourceTree = "<group>";
+		};
 		A42CB4921FD0867F00C10976 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -354,6 +377,7 @@
 		A4DD2CC91FBB3E7C008CF72E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A4147BF71FD349DB00F67853 /* TodayView */,
 				A43FF2AD1FCA033900A5ECB4 /* MainView */,
 				A43FF2B41FCA15D400A5ECB4 /* ContextItemView */,
 				A4BA78451FC5DC7E007281F3 /* AllView */,
@@ -366,6 +390,7 @@
 		A4DD2CCA1FBB3E89008CF72E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A4147BF91FD349F700F67853 /* Today Controller */,
 				A42CB4981FD0892900C10976 /* Theme Controller */,
 				A4BA783E1FC02ECF007281F3 /* ToDo */,
 				A42CB4971FD0891600C10976 /* Main View Controller */,
@@ -463,7 +488,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A4DD2C861FB9AECB008CF72E /* Build configuration list for PBXProject "Il" */;
+			buildConfigurationList = A4DD2C861FB9AECB008CF72E /* Build configuration list for PBXProject "DueLife" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -523,6 +548,8 @@
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
 				A42CB49A1FD0893900C10976 /* ThemeController.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */,
+				A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */,
+				A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */,
 				A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
 				A45CA23F1FC8C9ED004F18A6 /* Notifications.swift in Sources */,
@@ -550,6 +577,7 @@
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,
 				A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */,
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
+				A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,
 				A4DD2CC71FBB3C30008CF72E /* CloudKitModel.swift in Sources */,
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
@@ -820,7 +848,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A4DD2C861FB9AECB008CF72E /* Build configuration list for PBXProject "Il" */ = {
+		A4DD2C861FB9AECB008CF72E /* Build configuration list for PBXProject "DueLife" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A4DD2CB11FB9AECC008CF72E /* Debug */,

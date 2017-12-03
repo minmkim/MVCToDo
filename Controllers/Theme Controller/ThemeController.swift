@@ -20,6 +20,8 @@ class ThemeController {
         needShadow = false
         navigationBarColor = .black
         uncheckedCheckmarkIcon = checkMarkAsset.darkUncheckedCircle
+        checkedCheckmarkIcon = checkMarkAsset.darkCheckedCircle
+        addCircle = checkMarkAsset.darkAddCircle
       } else {
         backgroundColor = .white
         mainTextColor = .black
@@ -27,6 +29,8 @@ class ThemeController {
         needShadow = true
         navigationBarColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
         uncheckedCheckmarkIcon = checkMarkAsset.uncheckedCircle
+        checkedCheckmarkIcon = checkMarkAsset.checkedCircle
+        addCircle = checkMarkAsset.addCircle
       }
     }
   }
@@ -39,6 +43,8 @@ class ThemeController {
   var needShadow = true
   var navigationBarColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
   var uncheckedCheckmarkIcon = checkMarkAsset.uncheckedCircle
+  var checkedCheckmarkIcon = checkMarkAsset.checkedCircle
+  var addCircle = checkMarkAsset.addCircle
   
   init() {
     isDarkTheme = UserDefaults.standard.bool(forKey: "DarkTheme")
@@ -49,6 +55,8 @@ class ThemeController {
       needShadow = false
       navigationBarColor = .black
       uncheckedCheckmarkIcon = checkMarkAsset.darkUncheckedCircle
+      checkedCheckmarkIcon = checkMarkAsset.darkCheckedCircle
+      addCircle = checkMarkAsset.darkAddCircle
     } else {
       backgroundColor = .white
       mainTextColor = .black
@@ -56,9 +64,10 @@ class ThemeController {
       needShadow = true
       navigationBarColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
       uncheckedCheckmarkIcon = checkMarkAsset.uncheckedCircle
+      checkedCheckmarkIcon = checkMarkAsset.checkedCircle
+      addCircle = checkMarkAsset.addCircle
     }
   }
   
- 
-  
+
 }

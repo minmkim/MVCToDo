@@ -13,7 +13,7 @@ class MainViewController {
   
   var toDoModelController = ToDoModelController()
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
-  var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
+  var listOfContext = ["Inbox", "Home", "Work", "Personal"]
   var selectedContextIndex = 0
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var editingContext: IndexPath?

@@ -36,6 +36,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     themeController = ThemeController()
     navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
     navigationController?.navigationBar.tintColor = .white
+    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
   }
   
   override func didReceiveMemoryWarning() {

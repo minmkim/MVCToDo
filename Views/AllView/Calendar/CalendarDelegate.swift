@@ -49,11 +49,12 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
       cell.numberOfMonthLabel.textColor = .white
     default:
       cell.dayIndicatorView.backgroundColor = themeController.backgroundColor
-      if themeController.needShadow {
-        cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
-      } else {
-        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
-      }
+      cell.dayIndicatorView.layer.shadowColor = UIColor.clear.cgColor
+//      if themeController.needShadow {
+//        cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
+//      } else {
+//        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
+//      }
       cell.numberOfMonthLabel.textColor = themeController.mainTextColor
     }
     

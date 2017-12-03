@@ -30,7 +30,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     cell.backgroundColor = themeController.backgroundColor
     cell.toDoLabel.textColor = themeController.mainTextColor
     if cell.toDoItem?.checked ?? false {
-      cell.checkmarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+      cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
       cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
     }

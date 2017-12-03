@@ -38,6 +38,10 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.reloadData()
   }
   
+  func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath) {
+    eventTableView.moveRow(at: originIndex, to: destinationIndex)
+  }
+  
   func beginUpdates() {
     print("begin")
     eventTableView.beginUpdates()
@@ -59,7 +63,15 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     let index = controller.scrollToCalendarPressDate(Date)
     if index != -1 {
       let newIndexPath = IndexPath(row:0, section: index)
+      if eventTableView.numberOfRows(inSection: index) == 0 && eventTableView.numberOfRows(inSection: (index + 1)) != 0 {
+        let indexPath = IndexPath(row:0, section: index + 1)
+        eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+      } else if eventTableView.numberOfRows(inSection: index) == 0 && eventTableView.numberOfRows(inSection: (index - 1)) != 0 {
+        let indexPath = IndexPath(row:0, section: index - 1)
+        eventTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+      } else {
       eventTableView.scrollToRow(at: newIndexPath, at: .top, animated: true)
+      }
     }
   }
   // end delegate functions
@@ -77,7 +89,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.dataSource = self
     eventTableView.dragDelegate = self
     eventTableView.dragInteractionEnabled = true
-    
+    eventTableView.dropDelegate = self
 
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
   }

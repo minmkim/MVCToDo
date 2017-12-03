@@ -12,6 +12,7 @@ import UIKit
 class ContextItemController {
   
   var toDoModelController = ToDoModelController()
+  var themeController = ThemeController()
 
   var title: String? {
     didSet {
@@ -41,9 +42,9 @@ class ContextItemController {
     toDoModelController = ToDoModelController()
     let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
     if checkmarkIcon == true {
-      return checkMarkAsset.checkedCircle
+      return themeController.checkedCheckmarkIcon
     } else {
-      return checkMarkAsset.uncheckedCircle
+      return themeController.uncheckedCheckmarkIcon
     }
   }
   

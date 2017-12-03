@@ -28,7 +28,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     cell.checkMarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
     cell.checkMarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     if cell.toDoItem?.checked ?? false {
-      cell.checkMarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
       cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
     }

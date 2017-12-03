@@ -14,6 +14,7 @@ protocol UpdateTableViewDelegate: class {
   func deleteRow(_ indexPath: IndexPath)
   func insertSection(_ indexPath: IndexPath)
   func deleteSection(_ indexPath: IndexPath)
+  func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath)
   func beginUpdates()
   func endUpdates()
 }
@@ -164,10 +165,10 @@ class EventController {
     let repeatNotification = checkRepeatNotification(ID)
     let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
     if checkmarkIcon == true {
-      return checkMarkAsset.checkedCircle
+      return themeController.checkedCheckmarkIcon
     } else {
       if repeatNotification {
-        guard let toDoIndex = toDoModelController.toDoList.index(where: {$0.cloudRecordID == ID}) else {return checkMarkAsset.checkedCircle}
+        guard let toDoIndex = toDoModelController.toDoList.index(where: {$0.cloudRecordID == ID}) else {return themeController.checkedCheckmarkIcon}
         let toDoItem = toDoModelController.toDoList[toDoIndex]
         if toDoItem.notification {
           updateTableView(toDoItem)
@@ -281,6 +282,32 @@ class EventController {
       delegate?.insertRow(indexPath)
     }
     delegate?.endUpdates()
+  }
+  
+  func updateDueDateWithDropInTableView(_ endIndexPath: IndexPath) {
+    guard let originIndex = dragIndexPathOrigin else {return}
+    guard var toDoItem = dragAndDropToDo else {return}
+    let endIndex = endIndexPath
+    let numberOfItemsInOrigin = rowsPerSection(section: (originIndex.section))
+    let newDueDate = toDoDatesDate[endIndex.section]
+    toDoItem.dueDate = newDueDate
+    toDoModelController.editToDoItem(toDoItem)
+    DispatchQueue.main.async {
+      self.delegate?.beginUpdates()
+      if numberOfItemsInOrigin > 1 {
+        print("updating from here")
+        self.toDoModelController = ToDoModelController()
+        self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
+        // delegate?.updateTableView()
+      } else {
+        print("updating from here2")
+        //self.delegate?.deleteSection(originIndex)
+    //    self.setToDoDates()
+        self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
+        
+      }
+      self.delegate?.endUpdates()
+    }
   }
   
   // TODO: finish this function to update todoitem

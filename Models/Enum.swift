@@ -28,12 +28,16 @@ enum segueIdentifiers {
   static let contextItemSegue = "ContextItemSegue"
   static let addFromContextSegue = "AddFromContextSegue"
   static let editFromContextSegue = "EditFromContextItemSegue"
+  static let todayViewSegue = "TodayViewSegue"
 }
 
 enum checkMarkAsset {
   static let uncheckedCircle = "BlankCircle"
   static let darkUncheckedCircle = "DarkBlankCircle"
   static let checkedCircle = "CheckedCircle"
+  static let darkCheckedCircle = "DarkCheckedCircle"
+  static let darkAddCircle = "DarkAddCircle"
+  static let addCircle = "AddCircle"
   static let repeatArrows = "RepeatArrows"
 }
 

@@ -21,3 +21,20 @@ extension EventViewController: UITableViewDragDelegate {
   }
 }
 
+extension EventViewController: UITableViewDropDelegate {
+  func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+    guard let indexPathEvent = coordinator.destinationIndexPath else {return}
+    controller.updateDueDateWithDropInTableView(indexPathEvent)
+  }
+  
+  func tableView(_ tableView: UITableView, canHandle session: UIDropSession) -> Bool {
+    return session.canLoadObjects(ofClass: NSString.self)
+  }
+  
+  func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+    
+    return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+  }
+  
+  
+}
