@@ -37,6 +37,7 @@ class TodayViewController: UIViewController {
     todayTableView.delegate = self
     todayTableView.dataSource = self
       footerView.backgroundColor = themeController.backgroundColor
+    view.backgroundColor = themeController.backgroundColor
     todayTableView.backgroundColor = themeController.backgroundColor
     navigationController?.navigationBar.barTintColor = themeController.mainThemeColor
         // Do any additional setup after loading the view.

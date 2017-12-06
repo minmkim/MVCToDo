@@ -105,8 +105,7 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    print("size: \(self.view.frame.width - 25)")
-    return CGSize(width: (self.view.frame.width - 25), height: 75.0)
+    return CGSize(width: (contextCollectionView.frame.width - 25), height: 75.0)
   }
   
   @objc func editColor(sender: UILongPressGestureRecognizer) {

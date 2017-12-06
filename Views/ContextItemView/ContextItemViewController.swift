@@ -27,6 +27,7 @@ class ContextItemViewController: UIViewController {
     let color = controller.returnNavigationBarColor()
     navigationController?.navigationBar.barTintColor = color
     contextItemTableView.backgroundColor = themeController.backgroundColor
+    view.backgroundColor = themeController.backgroundColor
     footerView.backgroundColor = themeController.backgroundColor
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
