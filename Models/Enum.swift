@@ -23,12 +23,16 @@ enum segueIdentifiers {
   static let editToDoSegue = "EditToDoSegue"
   static let noteSegue = "NoteSegue"
   static let unwindNoteSegue = "UnwindWithNotesSegue"
-  static let unwindContextSegue = "unwindSegueWithContext"
+  static let unwindContextSegue = "UnwindSegueWithContext"
+  static let unwindParentSegue = "UnwindWithParent"
+  static let unwindToTodayView = "UnwindToTodayView"
   static let allSegue = "AllSegue"
   static let contextItemSegue = "ContextItemSegue"
   static let addFromContextSegue = "AddFromContextSegue"
   static let editFromContextSegue = "EditFromContextItemSegue"
   static let todayViewSegue = "TodayViewSegue"
+  static let editFromTodaySegue = "EditFromTodaySegue"
+  static let addFromTodaySegue = "AddFromTodaySegue"
 }
 
 enum checkMarkAsset {

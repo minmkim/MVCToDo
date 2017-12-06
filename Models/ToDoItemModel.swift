@@ -22,6 +22,7 @@ struct ToDo: Codable {
   var nagNumber = 0
   var cloudRecordID: String
   var notification = false
+  var contextSection: String
 }
 
 extension ToDo {
@@ -29,7 +30,7 @@ extension ToDo {
   init?(toDoItem: String, cloudRecordID: String) {
     self.toDoItem = toDoItem
     self.cloudRecordID = cloudRecordID
-    
+    self.contextSection = ""
   }
   
   init?(remoteRecord: CKRecord) {
@@ -61,5 +62,6 @@ extension ToDo {
     self.repeatCycle = repeatCycle
     self.nagNumber = nagNumber
     self.cloudRecordID = cloudRecordID
+    self.contextSection = ""
   }
 }

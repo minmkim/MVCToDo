@@ -29,6 +29,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var repeatPicker: UIPickerView!
   @IBOutlet weak var dueDatePicker: UIDatePicker!
   @IBOutlet weak var notificationSwitch: UISwitch!
+  @IBOutlet weak var parentField: UITextField!
   
   // clear buttons in textfield
   @IBAction func repeatClearPress(_ sender: Any) {
@@ -114,6 +115,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       performSegue(withIdentifier: "UnwindToContextToDo", sender: self)
     } else if controller.segueIdentity == segueIdentifiers.addFromContextSegue {
       performSegue(withIdentifier: "UnwindToContextToDo", sender: self)
+    } else if controller.segueIdentity == segueIdentifiers.addFromTodaySegue || controller.segueIdentity == segueIdentifiers.editFromTodaySegue {
+      performSegue(withIdentifier: segueIdentifiers.unwindToTodayView, sender: self)
     } else {
       performSegue(withIdentifier: "UnwindFromToDo", sender: self)
     }
@@ -141,11 +144,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   let buttonIndexPath = IndexPath(row: 0, section:1)
-  let dueDatePickerCellIndexPath = IndexPath(row: 3, section: 1)
-  let dueTimePickerCellIndexPath = IndexPath(row: 5, section: 1)
-  let repeatFieldIndexPath = IndexPath(row: 7, section: 1)
-  let repeatPickerCellIndexPath = IndexPath(row: 8, section: 1)
-  let nagFieldIndexPath = IndexPath(row: 9, section: 1)
+  let parentFieldIndexPath = IndexPath(row: 2, section: 1)
+  let dueDatePickerCellIndexPath = IndexPath(row: 4, section: 1)
+  let dueTimePickerCellIndexPath = IndexPath(row: 6, section: 1)
+  let repeatFieldIndexPath = IndexPath(row: 8, section: 1)
+  let repeatPickerCellIndexPath = IndexPath(row: 9, section: 1)
+  let nagFieldIndexPath = IndexPath(row: 10, section: 1)
   var controller: AddEditToDoController!
   var themeController = ThemeController()
 
@@ -161,6 +165,10 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       if context != "" {
         contextField.text = context
       }
+    }
+    if dueDateField.text == "" {
+      let dateString = controller.returnTodayDate()
+      dueDateField.text = dateString
     }
     toDoItemText.delegate = self
     repeatingField.isUserInteractionEnabled = false
@@ -191,6 +199,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
     toDoItemText.textColor = themeController.mainTextColor
     contextField.textColor = themeController.mainTextColor
+    parentField.textColor = themeController.mainTextColor
     dueDateField.textColor = themeController.mainTextColor
     dueTimeField.textColor = themeController.mainTextColor
     repeatingField.textColor = themeController.mainTextColor
@@ -209,6 +218,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
     toDoItemText.attributedPlaceholder = NSAttributedString(string: "To Do", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     contextField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    parentField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     dueDateField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     dueTimeField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     repeatingField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
@@ -216,7 +226,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   func updateLabels() {
     let labelStrings = controller.updateLabels()
-    //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText, notification]
+    //[todoitem, context, duedate, duetime, parent, repeatLabel, nagText, notification]
     if labelStrings != [] {
       self.navigationController?.navigationBar.tintColor = .white
       DispatchQueue.main.async {
@@ -224,17 +234,18 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         self.contextField.text = labelStrings[1]
         self.dueDateField.text = labelStrings[2]
         self.dueTimeField.text = labelStrings[3]
+        self.parentField.text = labelStrings[4]
         self.repeatingField.text = labelStrings[5]
         self.nagLabel.text = labelStrings[6]
         print("notification: \(labelStrings[7])")
         if labelStrings[7] == "true" {
           self.notificationSwitch.isOn = true
           print(self.notificationSwitch.isOn)
-          self.tableView.reloadData()
         }
         if self.dueTimeField.text != "" {
           self.notificationSwitch.isEnabled = true
         }
+        self.tableView.reloadData()
       }
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
@@ -284,6 +295,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     switch (indexPath.section, indexPath.row) {
     case (buttonIndexPath.section, buttonIndexPath.row):
       return 30.0
+    case (parentFieldIndexPath.section, parentFieldIndexPath.row):
+      if contextField.text != "" {
+        return 44.0
+      } else {
+        return 0.0
+      }
     case (dueDatePickerCellIndexPath.section, dueDatePickerCellIndexPath.row):
       if isDueDatePickerShown {
         return 216.0
@@ -328,6 +345,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     print(nagStepper.isUserInteractionEnabled)
     tableView.deselectRow(at: indexPath, animated: true)
     switch (indexPath.section, indexPath.row) {
+    case (0, 0):
+      let cell = tableView.cellForRow(at: indexPath)
+      cell?.selectionStyle = UITableViewCellSelectionStyle.none
     case (dueDatePickerCellIndexPath.section, dueDatePickerCellIndexPath.row - 1):
       if isDueDatePickerShown { // close picker if picker was already open
         isDueDatePickerShown = false
@@ -408,6 +428,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   // MARK: segue
   @IBAction func unwindWithContex(sender: UIStoryboardSegue) {
     contextField.text = controller.updateContextField()
+    if contextField.text == "" {
+      parentField.text = ""
+    }
+    // update height for parent row
+    tableView.beginUpdates()
+    tableView.endUpdates()
   }
   
   @IBAction func unwindWithNotes(sender: UIStoryboardSegue) {
@@ -415,11 +441,18 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     infoButton.backgroundColor = themeController.backgroundColor
   }
   
+  @IBAction func unwindWithParent(sender: UIStoryboardSegue) {
+    parentField.text = controller.updateParentField()
+  }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.noteSegue {
       let controller = segue.destination as! NotesViewController
       self.controller.delegate = controller.controller
       self.controller.setNotes()
+    } else if segue.identifier == "ParentSegue" {
+      let controller = segue.destination as! ParentViewController
+      controller.controller = ParentController(context: contextField.text ?? "")
     }
   }
   

@@ -51,7 +51,7 @@ class ContextController {
   }
   
   func setChosenContext(_ context: String) {
-    if context.hasPrefix("Create") {
+    if context.hasPrefix("Create: ") {
       chosenContext = String(context.dropFirst(8)) //(Create: ) = 8 char
       listOfContext += ["\(chosenContext)"]
       listOfContextAndColors["\(chosenContext)"] = 17

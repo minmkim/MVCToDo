@@ -18,7 +18,7 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     switch section {
     case 0:
-      return 1
+      return 2
     case 1:
       let numberOfItems = controller.numberOfContext()
       return numberOfItems
@@ -42,10 +42,18 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     
     switch indexPath.section {
     case 0:
-      cell.contextItemLabel.text = "All"
-      cell.numberOfContextLabel.text = ""
-      cell.backView.backgroundColor =  controller.contextColors[indexPath.row]
-      return cell
+      if indexPath.row == 0 {
+        cell.contextItemLabel.text = "All"
+        cell.numberOfContextLabel.text = ""
+        cell.backView.backgroundColor =  controller.contextColors[indexPath.row]
+        return cell
+      } else {
+        cell.contextItemLabel.text = "Today"
+        cell.numberOfContextLabel.text = ""
+        cell.backView.backgroundColor =  controller.contextColors[indexPath.row]
+        return cell
+      }
+      
     case 1:
       cell.contextItemLabel.text = controller.returnContextString(indexPath.row)
       cell.numberOfContextLabel.text = controller.returnCellNumberOfContextString(indexPath.row)
@@ -75,7 +83,12 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     }
     switch indexPath.section {
     case 0:
-      performSegue(withIdentifier: segueIdentifiers.allSegue, sender: self)
+      if indexPath.row == 0 {
+        performSegue(withIdentifier: segueIdentifiers.allSegue, sender: self)
+      } else {
+        performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: self)
+      }
+      
     case 1:
       controller.setIndexPathForContextSelect(indexPath.row)
       performSegue(withIdentifier: segueIdentifiers.contextItemSegue, sender: self)

@@ -29,6 +29,8 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     cell.backgroundColor = themeController.backgroundColor
     cell.toDoLabel.textColor = themeController.mainTextColor
+    cell.contextColor.backgroundColor = controller.returnContextColor(cell.toDoItem?.context ?? "")
+    cell.contextColor.layer.cornerRadius = 3.0
     if cell.toDoItem?.checked ?? false {
       cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
@@ -48,18 +50,31 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     sender.setImage(UIImage(named: image), for: .normal)
   }
   
+  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return 32
+  }
+  
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 17))
+    let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 36))
     let label = UILabel()
+    let separator = UIView()
+    separator.backgroundColor = .groupTableViewBackground
+    returnedView.addSubview(separator)
     returnedView.addSubview(label)
-    returnedView.backgroundColor = themeController.headerBackgroundColor
+    returnedView.backgroundColor = themeController.backgroundColor
     label.textColor = .lightGray
     label.text = controller.headerTitleOfSections(index: section)
-    label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
+    label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 14).isActive = true
+    label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 18).isActive = true
     label.centerYAnchor.constraint(equalTo: returnedView.centerYAnchor).isActive = true
     label.heightAnchor.constraint(equalToConstant: 17).isActive = true
+    separator.translatesAutoresizingMaskIntoConstraints = false
+    separator.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 16).isActive = true
+    separator.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 5).isActive = true
+    separator.heightAnchor.constraint(equalToConstant: 2.0).isActive = true
+    separator.widthAnchor.constraint(equalToConstant: (returnedView.frame.width - 32)).isActive = true
+
     
     if controller.checkIfToday(label.text ?? "") {
       let todayLabel = UILabel()

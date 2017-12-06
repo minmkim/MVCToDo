@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol UpdateTableViewDelegate: class {
   func updateTableView()
@@ -23,7 +24,8 @@ class EventController {
   
   lazy var toDoModelController = ToDoModelController()
   var themeController = ThemeController()
-  
+  var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
+  let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var delegate: UpdateTableViewDelegate?
   var toDoDatesDate = [Date]() {
     didSet {
@@ -36,6 +38,7 @@ class EventController {
   init() {
     toDoModelController = ToDoModelController()
     setToDoDates()
+    startCodableTestContext()
   }
   
   var toDoDates = [Date]()
@@ -68,6 +71,12 @@ class EventController {
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == date} )
     let rowsPerSection = listOfToDoForDate.count
     return rowsPerSection
+  }
+  
+  func returnContextColor(_ context: String) -> UIColor {
+    guard let colorInt = listOfContextAndColors[context] else {return .clear}
+    let color = contextColors[colorInt]
+    return color
   }
   
   func headerTitleOfSections(index: Int) -> String {
@@ -354,6 +363,15 @@ class EventController {
     formatter.dateFormat = format
     let result = formatter.string(from: date)
     return result
+  }
+  
+  func startCodableTestContext() {
+    if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
+      let decoder = JSONDecoder()
+      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String: Int]{
+        listOfContextAndColors = contextList
+      }
+    }
   }
   
 }

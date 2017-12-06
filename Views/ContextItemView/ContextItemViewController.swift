@@ -20,6 +20,10 @@ class ContextItemViewController: UIViewController {
     super.viewDidLoad()
     contextItemTableView.delegate = self
     contextItemTableView.dataSource = self
+    contextItemTableView.dragDelegate = self
+    contextItemTableView.dragInteractionEnabled = true
+    contextItemTableView.dropDelegate = self
+    controller.delegate = self
     let color = controller.returnNavigationBarColor()
     navigationController?.navigationBar.barTintColor = color
     contextItemTableView.backgroundColor = themeController.backgroundColor
@@ -73,16 +77,41 @@ class ContextItemViewController: UIViewController {
 
   @IBAction func unwindToContextToDo(sender: UIStoryboardSegue) {
     controller.toDoItemsInContext()
+    controller.returnContextHeaders()
     contextItemTableView.reloadData()
   }
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+}
 
+extension ContextItemViewController: UpdateContextItemTableViewDelegate {
+  func deleteRow(_ indexPath: IndexPath) {
+    print("delete row")
+    contextItemTableView.deleteRows(at: [indexPath], with: .fade)
+  }
+  func deleteSection(_ indexPath: IndexPath) {
+    print("delete section")
+    contextItemTableView.deleteSections([indexPath.section], with: .fade)
+  }
+  func beginUpdate() {
+    print("update")
+    contextItemTableView.beginUpdates()
+  }
+  func endUpdate() {
+    print("end update")
+    contextItemTableView.endUpdates()
+  }
+  func insertSection(_ indexPath: IndexPath) {
+    contextItemTableView.insertSections([indexPath.section], with: .fade)
+  }
+  func insertRow(_ indexPath: IndexPath) {
+    contextItemTableView.insertRows(at: [indexPath], with: .fade)
+  }
+  func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath) {
+    print("moved")
+    contextItemTableView.moveRow(at: originIndex, to: destinationIndex)
+  }
+  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+    let cell = contextItemTableView.cellForRow(at: originIndex) as! ContextItemTableViewCell
+    cell.toDoItem = updatedToDo
+  }
 }

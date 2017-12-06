@@ -10,6 +10,9 @@
 		A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BF51FD3496B00F67853 /* TodayViewController.swift */; };
 		A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BFA1FD34A0100F67853 /* TodayController.swift */; };
 		A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4147BFC1FD34A5A00F67853 /* TodayView + tableview delegates.swift */; };
+		A421913B1FD63F8600F893AE /* ParentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A421913A1FD63F8600F893AE /* ParentController.swift */; };
+		A421913D1FD6413D00F893AE /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A421913C1FD6413D00F893AE /* ParentViewController.swift */; };
+		A421913F1FD71DDB00F893AE /* ContextItemView + DragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A421913E1FD71DDB00F893AE /* ContextItemView + DragAndDrop.swift */; };
 		A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */; };
 		A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */; };
 		A42CB4961FD086AA00C10976 /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CB4951FD086AA00C10976 /* IAPViewController.swift */; };
@@ -79,6 +82,9 @@
 		A4147BF51FD3496B00F67853 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodayViewController.swift; path = Views/TodayView/TodayViewController.swift; sourceTree = SOURCE_ROOT; };
 		A4147BFA1FD34A0100F67853 /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
 		A4147BFC1FD34A5A00F67853 /* TodayView + tableview delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayView + tableview delegates.swift"; sourceTree = "<group>"; };
+		A421913A1FD63F8600F893AE /* ParentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentController.swift; sourceTree = "<group>"; };
+		A421913C1FD6413D00F893AE /* ParentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
+		A421913E1FD71DDB00F893AE /* ContextItemView + DragAndDrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContextItemView + DragAndDrop.swift"; sourceTree = "<group>"; };
 		A422DFCD1FC9079200B52728 /* HapticFeedbackVariableChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedbackVariableChange.swift; sourceTree = "<group>"; };
 		A42CB4931FD0869700C10976 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		A42CB4951FD086AA00C10976 /* IAPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
@@ -239,6 +245,7 @@
 			children = (
 				A43FF2B51FCA15EF00A5ECB4 /* ContextItemViewController.swift */,
 				A43FF2BB1FCA16AB00A5ECB4 /* ContextItemTableViewDelegate.swift */,
+				A421913E1FD71DDB00F893AE /* ContextItemView + DragAndDrop.swift */,
 			);
 			path = ContextItemView;
 			sourceTree = "<group>";
@@ -278,6 +285,7 @@
 				A45CA2371FC6ABD1004F18A6 /* PickerViewExtension.swift */,
 				A4BFAD281FBEBB0400F17D37 /* AddNotesViewController.swift */,
 				A4BFAD261FBEB97800F17D37 /* ContextViewController.swift */,
+				A421913C1FD6413D00F893AE /* ParentViewController.swift */,
 			);
 			path = "Add Item View";
 			sourceTree = "<group>";
@@ -298,6 +306,7 @@
 				A4BFAD231FBEB8A000F17D37 /* AddToDoController.swift */,
 				A45CA2391FC86618004F18A6 /* NotesController.swift */,
 				A45CA23B1FC87102004F18A6 /* ContextController.swift */,
+				A421913A1FD63F8600F893AE /* ParentController.swift */,
 			);
 			path = "Add Item Controller";
 			sourceTree = "<group>";
@@ -542,6 +551,7 @@
 			files = (
 				A45CA2381FC6ABD1004F18A6 /* PickerViewExtension.swift in Sources */,
 				A43FF2A81FC9D55100A5ECB4 /* CalendarDropDelegate.swift in Sources */,
+				A421913F1FD71DDB00F893AE /* ContextItemView + DragAndDrop.swift in Sources */,
 				A45FE8791FCD961900E27C17 /* MainViewViewController + collection.swift in Sources */,
 				A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */,
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
@@ -551,6 +561,7 @@
 				A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */,
 				A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */,
 				A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */,
+				A421913B1FD63F8600F893AE /* ParentController.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
 				A45CA23F1FC8C9ED004F18A6 /* Notifications.swift in Sources */,
 				A4DD2CBD1FB9AEE3008CF72E /* CalendarViewController.swift in Sources */,
@@ -583,6 +594,7 @@
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
 				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,
 				A4BFAD291FBEBB0400F17D37 /* AddNotesViewController.swift in Sources */,
+				A421913D1FD6413D00F893AE /* ParentViewController.swift in Sources */,
 				A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

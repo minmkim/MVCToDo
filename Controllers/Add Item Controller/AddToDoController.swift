@@ -25,10 +25,12 @@ class AddEditToDoController {
   var context = ""
   var notification = false
   var isChecked = false
+  var parent = ""
   
   var toDoItem: ToDo?
   var segueIdentity: String? // if coming from contextcontroller
   var contextString: String? // if need to add context label
+  var todayDate = false
   
   let nagListOfContext = ["Minutes"]
   let repeatingNotifications = ["Days", "Weeks", "Months"]
@@ -52,6 +54,7 @@ class AddEditToDoController {
     print("editing: \(notes)")
     notification = toDoItem?.notification ?? false
     isChecked = toDoItem?.checked ?? false
+    parent = toDoItem?.contextSection ?? ""
   }
   
   func updateLabels() -> [String] {
@@ -59,7 +62,7 @@ class AddEditToDoController {
       var labelStrings = [String]()
       let toDoItem = editItem.toDoItem
       let context = editItem.context ?? ""
-      let notes = editItem.notes ?? ""
+      let parent = editItem.contextSection
       let dueDate = editItem.dueDate ?? nil
       var formattedDueDate = ""
       if dueDate != nil {
@@ -107,11 +110,11 @@ class AddEditToDoController {
       labelStrings.append(context)
       labelStrings.append(formattedDueDate)
       labelStrings.append(dueTime)
-      labelStrings.append(notes)
+      labelStrings.append(parent)
       labelStrings.append(repeatLabel)
       labelStrings.append(nagText)
       labelStrings.append(notificationSwitch)
-      return labelStrings //[todoitem, context, duedate, duetime, notes, repeatLabel, nagText, notification]
+      return labelStrings //[todoitem, context, duedate, duetime, parent, repeatLabel, nagText, notification]
     } else {
       return []
     }
@@ -133,13 +136,14 @@ class AddEditToDoController {
       toDoItem?.notes = notes
       print("notes: \(notes)")
       toDoItem?.notification = notification
+      toDoItem?.contextSection = parent
       toDoModelController.editToDoItem(toDoItem!)
     } else {
       if dueDate == "" {
-        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
+        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification, contextSection: parent)
         toDoModelController.addNewToDoItem(toDo)
       } else {
-        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification)
+        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification, contextSection: parent)
         toDoModelController.addNewToDoItem(toDo)
       }
     }
@@ -147,6 +151,15 @@ class AddEditToDoController {
   
   func setContextField() -> String {
     return contextString ?? ""
+  }
+  
+  func returnTodayDate() -> String {
+    var dateString = ""
+    if todayDate {
+      let date = Date()
+      dateString = formatDateToString(date: date, format: dateAndTime.monthDateYear)
+    }
+    return dateString
   }
   
   func setTitle() -> String {
@@ -164,6 +177,11 @@ class AddEditToDoController {
   
   func updateContextField() -> String {
     return context
+  }
+  
+  func updateParentField() -> String {
+    print("setting: \(parent)")
+    return parent
   }
   
   
@@ -206,13 +224,24 @@ class AddEditToDoController {
 
 extension AddEditToDoController: SavedNoteDelegate {
   func returnSavedNote(_ notes: String) {
-    print("received Notes")
     self.notes = notes
   }
 }
 
 extension AddEditToDoController: ChosenContextDelegate {
   func sendChosenContext(_ context: String) {
-    self.context = context
+    if context == "None" {
+      self.context = ""
+      self.parent = ""
+    } else {
+      self.context = context
+    }
+  }
+}
+
+extension AddEditToDoController: ChosenParentDelegate {
+  func returnChosenParent(_ parent: String) {
+    print("received: \(parent)")
+    self.parent = parent
   }
 }

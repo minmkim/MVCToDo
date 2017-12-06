@@ -13,16 +13,22 @@ import AudioToolbox.AudioServices
 extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource {
   
   func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+    let numberOfSections = controller.returnNumberOfSections()
+    return numberOfSections
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return controller.returnNumberOfRowsInSection()
+    return controller.returnNumberOfRowsInSection(section)
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = contextItemTableView.dequeueReusableCell(withIdentifier: "ContextItem", for: indexPath) as! ContextItemTableViewCell
-    let toDoItem = controller.returnToDoItemForCell(indexPath.row)
+    let toDoItem = controller.returnToDoItemForCell(indexPath)
+    if toDoItem.contextSection != "" {
+      cell.layoutMargins = UIEdgeInsetsMake(0, 30, 0, 0)
+    } else {
+      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
+    }
     cell.toDoItem = toDoItem
     cell.toDoItemLabel.textColor = themeController.mainTextColor
     cell.checkMarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
@@ -59,12 +65,35 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     if editingStyle == .delete {
       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
       guard let cloudID = cell.toDoItem?.cloudRecordID else {return}
-      controller.deleteItem(ID: cloudID)
-      
-      contextItemTableView.beginUpdates()
-      contextItemTableView.deleteRows(at: [indexPath], with: .fade)
-      contextItemTableView.endUpdates()
+      controller.deleteItem(ID: cloudID, index: indexPath)
     }
+  }
+  
+  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return controller.returnContextHeaderHeight(section)
+  }
+  
+  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 48))
+    let label = UILabel()
+    let separator = UIView()
+    separator.backgroundColor = .groupTableViewBackground
+    returnedView.addSubview(separator)
+    returnedView.addSubview(label)
+    returnedView.backgroundColor = themeController.backgroundColor
+    label.textColor = navigationController?.navigationBar.barTintColor
+    label.text = controller.returnContextHeader(section)
+    label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 18).isActive = true
+    label.bottomAnchor.constraint(equalTo: returnedView.bottomAnchor, constant: -6).isActive = true
+    label.heightAnchor.constraint(equalToConstant: 24).isActive = true
+    separator.translatesAutoresizingMaskIntoConstraints = false
+    separator.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 16).isActive = true
+    separator.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 6).isActive = true
+    separator.heightAnchor.constraint(equalToConstant: 2.0).isActive = true
+    separator.widthAnchor.constraint(equalToConstant: (returnedView.frame.width - 32)).isActive = true
+    return returnedView
   }
   
 }

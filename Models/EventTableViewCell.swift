@@ -13,7 +13,11 @@ class EventTableViewCell: UITableViewCell {
   var toDoItem: ToDo? {
     didSet {
       toDoLabel.text = toDoItem?.toDoItem
-      contextLabel.text = toDoItem?.context
+      if toDoItem?.contextSection != "" {
+        contextLabel.text = "\(toDoItem?.context ?? ""): \(toDoItem?.contextSection ?? "")"
+      } else {
+        contextLabel.text = toDoItem?.context
+      }
       dueLabel.text = toDoItem?.dueTime
       if toDoItem?.repeatCycle != "" && (toDoItem?.notification)! && toDoItem?.checked == false {
         repeatCycleImage.isHidden = false
@@ -21,9 +25,17 @@ class EventTableViewCell: UITableViewCell {
       } else {
         repeatCycleImage.isHidden = true
       }
+      if toDoItem?.notes != "" {
+        noteImage.isHidden = false
+        noteImage.image = UIImage(named: "NoteIcon")
+      } else {
+        noteImage.isHidden = true
+      }
     }
   }
   
+  @IBOutlet weak var contextColor: UIView!
+  @IBOutlet weak var noteImage: UIImageView!
   @IBOutlet weak var repeatCycleImage: UIImageView!
   @IBOutlet weak var toDoLabel: UILabel!
   @IBOutlet weak var contextLabel: UILabel!
