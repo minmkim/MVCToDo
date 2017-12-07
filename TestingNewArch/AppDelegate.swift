@@ -37,8 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
     }
     UNUserNotificationCenter.current().delegate = self
-   //
-    
     return true
   }
 
@@ -58,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationDidBecomeActive(_ application: UIApplication) {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
   }
 
   func applicationWillTerminate(_ application: UIApplication) {
@@ -69,26 +68,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
   
-  /*  public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-   print(response.notification.request.content.categoryIdentifier)
-   } */
-  
   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-    
     completionHandler([.alert, .sound, .badge])
   }
   
-  
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
     switch response.actionIdentifier {
-    case "Complete" :
-      //checkmarkButton.setImage(UIImage(named: "checkCircle"), for: UIControlState.normal)
-      //item.checked = true
+    case "Complete":
+      let identifierString = response.notification.request.identifier
+      let ID = String(identifierString.dropLast())
+      let toDoModelController = ToDoModelController()
+      toDoModelController.checkmarkButtonPressedModel(ID)
       print("Complete")
+      print("here123")
+    case "Postpone One Hour":
+      print("one hour")
+      let identifierString = response.notification.request.identifier
+      let ID = String(identifierString.dropLast())
+      let toDoModelController = ToDoModelController()
+      toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
+      print("done")
+    case "Postpone One Day":
+      print("one day")
+      let identifierString = response.notification.request.identifier
+      let ID = String(identifierString.dropLast())
+      let toDoModelController = ToDoModelController()
+      toDoModelController.postponeNotifications(ID: ID, numberHours: 24)
     default: print("Unknown Action")
     }
   }
-  
-  
 }
 

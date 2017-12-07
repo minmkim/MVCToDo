@@ -21,9 +21,9 @@ class ToDoModelController {
   }()
   
   init() {
-    let toDo1 = ToDo(toDoItem: "Welcome", dueDate: formatStringToDate(date: "Dec 17, 1990", format: dateAndTime.monthDateYear), dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo1", notification: false, contextSection: "Testing")
-    let toDo2 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: formatStringToDate(date: "Apr 22, 2017", format: dateAndTime.monthDateYear), dueTime: "10:30 AM", checked: true, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo2", notification: false, contextSection: "Testing 2")
-    let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo3", notification: false, contextSection: "Testing")
+    let toDo1 = ToDo(toDoItem: "Welcome", dueDate: formatStringToDate(date: "Dec 17, 1990", format: dateAndTime.monthDateYear), dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo1", notification: false, contextSection: "")
+    let toDo2 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: formatStringToDate(date: "Apr 22, 2017", format: dateAndTime.monthDateYear), dueTime: "10:30 AM", checked: true, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo2", notification: false, contextSection: "")
+    let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo3", notification: false, contextSection: "")
     let toDo4 = ToDo(toDoItem: "Swipe this away to delete", dueDate: Date(), dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo4", notification: false, contextSection: "")
     let toDo5 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo5", notification: false, contextSection: "")
     
@@ -100,6 +100,7 @@ class ToDoModelController {
   }
   
   func removeNotifications(ID: String, nagNumber: Int) {
+    print("removing: \(nagNumber)")
     if nagNumber != 0 {
       notificationController.removeNagNotification(identifier: ID)
     } else {
@@ -109,7 +110,7 @@ class ToDoModelController {
   
   func makeNewNotification(_ toDoItem: ToDo) {
     let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
-    
+    print("makeNewNotification: \(toDoItem.nagNumber)")
     if toDoItem.nagNumber != 0 { // if nag
       notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
     } else { // if no nag
@@ -127,6 +128,8 @@ class ToDoModelController {
       notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
     }
   }
+  
+  
   
   func checkmarkButtonPressedModel(_ ID: String) -> Bool {
     guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
@@ -169,6 +172,23 @@ class ToDoModelController {
     }
     return isRepeat
   }
+  
+  func postponeNotifications(ID: String, numberHours: Int) {
+    guard let index = toDoList.index(where: {$0.cloudRecordID == ID}) else {
+      print("error here1")
+      return
+    }
+    let toDoItem = toDoList[index]
+    let newDateAndtime = calculateTimeAndDate(hours: numberHours)
+    print(toDoItem.nagNumber)
+    removeNotifications(ID: ID, nagNumber: toDoItem.nagNumber)
+    
+    if toDoItem.nagNumber != 0 { // if nag
+      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+    } else { // if no nag
+      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID)
+    }
+  }
   // MARK: Date Formatting Functions
   
   func calculateDate(days: Int, date: Date, format: String) -> Date {
@@ -178,6 +198,15 @@ class ToDoModelController {
     formatter.locale = Locale(identifier: "en_US_POSIX")
     let newDay = calendar.date(byAdding: .day, value: days, to: date)
     return newDay ?? Date()
+  }
+  
+  func calculateTimeAndDate(hours: Int) -> Date {
+    let formatter = DateFormatter()
+    let calendar = Calendar.current
+    formatter.dateFormat = "MMM dd, yyyy hh:mm a"
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    guard let newDay = calendar.date(byAdding: .hour, value: hours, to: Date()) else {return Date()}
+    return newDay
   }
   
   func formatStringToDate(date: String, format: String) -> Date {

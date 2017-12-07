@@ -95,6 +95,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   }
   
   override func viewWillAppear(_ animated: Bool) {
+    print("did appear")
     themeController = ThemeController()
     eventTableView.reloadData()
     eventTableView.backgroundColor = themeController.backgroundColor

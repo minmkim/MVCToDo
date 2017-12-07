@@ -12,12 +12,29 @@ import UserNotifications
 
 class NotificationController {
   
+  let center = UNUserNotificationCenter.current()
+  let completeAction = UNNotificationAction(identifier: "Complete", title: "Complete", options: [])
+  let ignoreAction = UNNotificationAction(identifier: "Ignore", title: "Ignore", options: [])
+  let postponeHourAction = UNNotificationAction(identifier: "Postpone One Hour", title: "Postpone One Hour", options: [])
+  let postponeDayAction = UNNotificationAction(identifier: "Postpone One Day", title: "Postpone One Day", options: [])
+  
   func makeNewNotification(title: String, date: Date, identifier: String) {
+    var ID = ""
+    if identifier.count != 36 {
+      print("not 36")
+      ID = ("\(identifier)0")
+    } else {
+      ID = identifier
+    }
     let center = UNUserNotificationCenter.current()
     let content = UNMutableNotificationContent()
     content.title = title
     content.launchImageName = "AppIcon"
     content.sound = UNNotificationSound.default()
+    let category = UNNotificationCategory(identifier: "UYLReminderCategory",
+                                          actions: [completeAction,postponeHourAction, postponeDayAction, ignoreAction],
+                                          intentIdentifiers: [], options: [])
+    center.setNotificationCategories([category])
     content.categoryIdentifier = "UYLReminderCategory"
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -36,7 +53,7 @@ class NotificationController {
   func makeNewNagNotification(title: String, date: Date, identifier: String, nagFrequency: Int) {
     for i in 0...4 { // make 5 notifications
       let tempCalculatedDateString = calculateDateMinutesAndFormatDateToString(minutes: (i * nagFrequency), date: date, format: "MMM dd, yyyy hh:mm a")
-      makeNewNotification(title: title, date: tempCalculatedDateString, identifier: ("\(i)\(identifier)"))
+      makeNewNotification(title: title, date: tempCalculatedDateString, identifier: ("\(identifier)\(i)"))
     }
   }
   
@@ -57,9 +74,11 @@ class NotificationController {
     }
   }
   
+  
+  
   func removeNagNotification(identifier: String) {
     for i in 0...4 {
-      removeNotification(identifier: ("\(i)\(identifier)"))
+      removeNotification(identifier: ("\(identifier)\(i)"))
     }
   }
   
@@ -69,7 +88,6 @@ class NotificationController {
     formatter.dateFormat = format
     formatter.locale = Locale(identifier: "en_US_POSIX")
     let newDay = calendar.date(byAdding: .minute, value: minutes, to: date)
- //   let result = formatter.date(from: newDay!)
     return newDay ?? Date()
   }
   
