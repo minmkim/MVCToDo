@@ -163,7 +163,7 @@ class AddEditToDoController {
   }
   
   func setTitle() -> String {
-    guard let titleString = title else {return "Error"}
+    guard let titleString = title else {return "Add To Do"}
     return titleString
   }
   

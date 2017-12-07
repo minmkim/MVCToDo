@@ -14,13 +14,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
+  func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+    switch shortcutItem.type {
+    case "com.minkim.DueLife.addNewToDo":
+      self.window!.rootViewController?.dismiss(animated: false, completion: nil)
+      
+      let rootNavigationViewController = window!.rootViewController as? UINavigationController
+      rootNavigationViewController?.popToRootViewController(animated: false)
+      let firstVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AllViewController") as! ViewController
+      let newVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddToDo") as! AddItemTableViewController
+      rootNavigationViewController?.pushViewController(firstVC, animated: false)
+      rootNavigationViewController?.pushViewController(newVC, animated: false)
+    case "com.minkim.DueLife.today":
+      self.window!.rootViewController?.dismiss(animated: false, completion: nil)
+      
+      let rootNavigationViewController = window!.rootViewController as? UINavigationController
+      rootNavigationViewController?.popToRootViewController(animated: false)
+      let newVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TodayView") as! TodayViewController
+      rootNavigationViewController?.pushViewController(newVC, animated: false)
+    case "com.minkim.DueLife.context":
+      self.window!.rootViewController?.dismiss(animated: false, completion: nil)
+      
+      let rootNavigationViewController = window!.rootViewController as? UINavigationController
+      rootNavigationViewController?.popToRootViewController(animated: false)
+    default:
+      print("unknown shortcut")
+    }
+  
+    
+    
+  }
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     UINavigationBar.appearance().tintColor = .white
     UINavigationBar.appearance().barStyle = .black
     let rootNavigationViewController = window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
-    
     rootViewController?.performSegue(withIdentifier: "AllSegue", sender: nil)
     // Override point for customization after application launch.
     let center = UNUserNotificationCenter.current()

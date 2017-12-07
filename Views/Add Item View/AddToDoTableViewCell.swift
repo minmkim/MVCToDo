@@ -100,6 +100,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       toDoItemText.resignFirstResponder()
     }
     if self.navigationItem.title == "Add To Do" {
+      if controller.segueIdentity == nil {
+        performSegue(withIdentifier: "UnwindToCancel", sender: self)
+      }
       navigationController?.dismiss(animated: true)
     } else {
       navigationController?.popViewController(animated: true)
@@ -150,7 +153,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   let repeatFieldIndexPath = IndexPath(row: 8, section: 1)
   let repeatPickerCellIndexPath = IndexPath(row: 9, section: 1)
   let nagFieldIndexPath = IndexPath(row: 10, section: 1)
-  var controller: AddEditToDoController!
+  var controller = AddEditToDoController()
   var themeController = ThemeController()
 
   override func viewDidLoad() {
