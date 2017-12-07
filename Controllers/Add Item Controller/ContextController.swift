@@ -17,7 +17,7 @@ class ContextController {
   var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
   var filteredList: [String]?
   var chosenContext = ""
-  var delegate: ChosenContextDelegate?
+  weak var delegate: ChosenContextDelegate?
   
   init(){
     startCodableTestContext()

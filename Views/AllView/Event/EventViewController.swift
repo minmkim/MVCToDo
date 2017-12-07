@@ -51,6 +51,11 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     print("end")
     eventTableView.endUpdates()
   }
+  
+  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+    guard let cell = eventTableView.cellForRow(at: originIndex) as? EventTableViewCell else {return}
+    cell.toDoItem = updatedToDo
+  }
 
   // update duedate after drag and drop
   func sendNewToDoDueDateAfterDropSession(_ newDate: String) {

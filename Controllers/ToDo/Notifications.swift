@@ -21,7 +21,6 @@ class NotificationController {
   func makeNewNotification(title: String, date: Date, identifier: String) {
     var ID = ""
     if identifier.count != 36 {
-      print("not 36")
       ID = ("\(identifier)0")
     } else {
       ID = identifier
@@ -41,8 +40,8 @@ class NotificationController {
     dateFormatter.dateFormat = "MMM dd, yyyy hh:mm a"
     let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
     let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-    let identifier = identifier
-    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+    let notificationIdentifier = ID
+    let request = UNNotificationRequest(identifier: notificationIdentifier, content: content, trigger: trigger)
     center.add(request, withCompletionHandler: { (error) in
       if error != nil {
         print(error ?? "Error")
@@ -66,9 +65,15 @@ class NotificationController {
   
   func removeNotification(identifier: String) {
     UNUserNotificationCenter.current().getPendingNotificationRequests { (notificationRequests) in
-      let identifier = identifier
+      var ID = ""
+      if identifier.count != 36 {
+        ID = ("\(identifier)0")
+      } else {
+        ID = identifier
+      }
+      
       for notification:UNNotificationRequest in notificationRequests {
-        if notification.identifier == identifier { UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.identifier])
+        if notification.identifier == ID { UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notification.identifier])
         }
       }
     }

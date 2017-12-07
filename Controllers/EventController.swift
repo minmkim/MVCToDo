@@ -18,6 +18,7 @@ protocol UpdateTableViewDelegate: class {
   func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath)
   func beginUpdates()
   func endUpdates()
+  func updateCell(originIndex: IndexPath, updatedToDo: ToDo)
 }
 
 class EventController {
@@ -26,7 +27,7 @@ class EventController {
   var themeController = ThemeController()
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
-  var delegate: UpdateTableViewDelegate?
+  weak var delegate: UpdateTableViewDelegate?
   var toDoDatesDate = [Date]() {
     didSet {
       toDoDatesDate.sort(by: { $0.compare($1) == .orderedAscending })
@@ -303,15 +304,12 @@ class EventController {
     toDoModelController.editToDoItem(toDoItem)
     DispatchQueue.main.async {
       self.delegate?.beginUpdates()
+      self.delegate?.updateCell(originIndex: originIndex, updatedToDo: toDoItem)
       if numberOfItemsInOrigin > 1 {
-        print("updating from here")
         self.toDoModelController = ToDoModelController()
         self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
         // delegate?.updateTableView()
       } else {
-        print("updating from here2")
-        //self.delegate?.deleteSection(originIndex)
-    //    self.setToDoDates()
         self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
         
       }

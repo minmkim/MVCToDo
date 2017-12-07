@@ -16,7 +16,7 @@ class ParentController {
   lazy var toDoModelController = ToDoModelController()
   var filteredList: [String]?
   var listOfParents = [String]()
-  var delegate: ChosenParentDelegate?
+  weak var delegate: ChosenParentDelegate?
   var chosenParent = ""
   
   init(context: String) {

@@ -24,7 +24,7 @@ class ContextItemController {
   
   var toDoModelController = ToDoModelController()
   var themeController = ThemeController()
-  var delegate: UpdateContextItemTableViewDelegate?
+  weak var delegate: UpdateContextItemTableViewDelegate?
   
   //drag and drop var
   var dragAndDropToDo: ToDo?

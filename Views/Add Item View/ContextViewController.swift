@@ -11,7 +11,7 @@ import UIKit
 class ContextSearchViewController: UITableViewController, UISearchResultsUpdating {
   
   @IBOutlet weak var footerView: UIView!
-  var controller = ContextController()
+  lazy var controller = ContextController()
   var themeController = ThemeController()
   let searchController = UISearchController(searchResultsController: nil)
   var newContext = ""

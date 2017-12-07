@@ -36,6 +36,4 @@ extension ContextItemViewController: UITableViewDropDelegate {
     return UITableViewDropProposal(operation: .move, intent: .automatic)
   }
   
-  
 }
-

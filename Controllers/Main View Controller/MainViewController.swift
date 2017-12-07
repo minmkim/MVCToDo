@@ -45,6 +45,22 @@ class MainViewController {
     }
   }
   
+  func returnCellNumberOfToday() -> String {
+    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.checked == false})
+    let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
+    let date: Date = Date()
+    let cal: Calendar = Calendar(identifier: .gregorian)
+    
+    let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+    
+    let overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
+    let todayItems = uncheckedListOfToDo.filter({
+      formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear) == formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
+    })
+    let count = todayItems.count + overDueItems.count
+    return String(count)
+  }
+  
   func checkIfEditing() -> Bool {
     if editingContext != nil {
       return true
@@ -117,4 +133,13 @@ class MainViewController {
     }
     return listOfContextAndColors
   }
+  
+  func formatDateToString(date: Date, format: String) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = format
+    let result = formatter.string(from: date)
+    return result
+  }
+  
 }

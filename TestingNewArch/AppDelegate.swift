@@ -40,8 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     default:
       print("unknown shortcut")
     }
-  
-    
     
   }
 
@@ -108,17 +106,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
       let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
       toDoModelController.checkmarkButtonPressedModel(ID)
-      print("Complete")
-      print("here123")
     case "Postpone One Hour":
-      print("one hour")
       let identifierString = response.notification.request.identifier
       let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
       toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
-      print("done")
     case "Postpone One Day":
-      print("one day")
       let identifierString = response.notification.request.identifier
       let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
@@ -127,4 +120,3 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
   }
 }
-
