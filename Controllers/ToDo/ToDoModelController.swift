@@ -8,7 +8,11 @@
 
 import Foundation
 
+
 class ToDoModelController {
+  lazy var cloudKitController: CloudKitController = {
+    CloudKitController()
+  }()
   
   var toDoList = [ToDo]() {
     didSet {
@@ -16,6 +20,7 @@ class ToDoModelController {
       toDoList.sort( by: {!$0.checked == !$1.checked ? ($0.dueDate ?? defaultDate).compare($1.dueDate ?? defaultDate) == .orderedAscending : !$0.checked && $1.checked })
     }
   }
+  
   lazy var notificationController: NotificationController = {
     NotificationController()
   }()
@@ -36,6 +41,7 @@ class ToDoModelController {
     var newItem = toDoItem
     newItem.cloudRecordID = uniqueReference
     toDoList.append(newItem)
+    //cloudKitController.saveToCloud(item: newItem)
     saveToDisk()
     if newItem.notification {
       let formattedDate = notificationController.formatDateAndTime(dueDate: newItem.dueDate!, dueTime: newItem.dueTime!)
@@ -57,7 +63,7 @@ class ToDoModelController {
     toDoList.remove(at: index)
     toDoList.append(toDoItem)
     saveToDisk()
-    
+    //cloudKitController.editToCloud(item: toDoItem)
     if toDoItem.notification {
       makeNewNotification(toDoItem)
     }
@@ -100,7 +106,6 @@ class ToDoModelController {
   }
   
   func removeNotifications(ID: String, nagNumber: Int) {
-    print("removing: \(nagNumber)")
     if nagNumber != 0 {
       notificationController.removeNagNotification(identifier: ID)
     } else {
@@ -110,7 +115,6 @@ class ToDoModelController {
   
   func makeNewNotification(_ toDoItem: ToDo) {
     let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
-    print("makeNewNotification: \(toDoItem.nagNumber)")
     if toDoItem.nagNumber != 0 { // if nag
       notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
     } else { // if no nag
@@ -132,6 +136,8 @@ class ToDoModelController {
   
   
   func checkmarkButtonPressedModel(_ ID: String) -> Bool {
+    print(ID)
+    print(toDoList)
     guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
       return false}
     let isChecked = toDoList[index].checked
@@ -174,6 +180,8 @@ class ToDoModelController {
   }
   
   func postponeNotifications(ID: String, numberHours: Int) {
+    print(ID)
+    print(toDoList)
     guard let index = toDoList.index(where: {$0.cloudRecordID == ID}) else {
       print("error here1")
       return

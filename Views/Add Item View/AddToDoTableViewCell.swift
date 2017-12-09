@@ -15,6 +15,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   //MARK: IB
   
   @IBOutlet var labels: [UILabel]!
+  @IBOutlet weak var toDoView: UIView!
   @IBOutlet weak var toDoItemText: UITextField!
   @IBOutlet weak var doneButton: UIBarButtonItem!
   @IBOutlet weak var dueDateField: UITextField!
@@ -121,6 +122,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else if controller.segueIdentity == segueIdentifiers.addFromTodaySegue || controller.segueIdentity == segueIdentifiers.editFromTodaySegue {
       performSegue(withIdentifier: segueIdentifiers.unwindToTodayView, sender: self)
     } else {
+      print("unwind4")
       performSegue(withIdentifier: "UnwindFromToDo", sender: self)
     }
   }
@@ -197,9 +199,15 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
     if themeController.isDarkTheme {
        toDoItemText.keyboardAppearance = .dark
+      infoButton.backgroundColor = UIColor(red: 0.137, green: 0.137, blue: 0.137, alpha: 1)
+      notesButton.backgroundColor = .black
     } else {
       toDoItemText.keyboardAppearance = .light
+      infoButton.backgroundColor = .white
+      notesButton.backgroundColor = .groupTableViewBackground
     }
+    
+    
     toDoItemText.textColor = themeController.mainTextColor
     contextField.textColor = themeController.mainTextColor
     parentField.textColor = themeController.mainTextColor
@@ -207,15 +215,20 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     dueTimeField.textColor = themeController.mainTextColor
     repeatingField.textColor = themeController.mainTextColor
     nagLabel.textColor = themeController.mainTextColor
-    self.tableView.backgroundColor = themeController.backgroundColor
-    infoButton.backgroundColor = themeController.backgroundColor
-    notesButton.backgroundColor = themeController.headerBackgroundColor
+    
+    self.tableView.backgroundColor = themeController.addBackgroundColor
     if navigationController?.navigationBar.barTintColor != .black && themeController.mainThemeColor != navigationController?.navigationBar.barTintColor {
       infoButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
       notesButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      nagStepper.tintColor = navigationController?.navigationBar.barTintColor
+      notificationSwitch.tintColor = navigationController?.navigationBar.barTintColor
+      notificationSwitch.onTintColor = navigationController?.navigationBar.barTintColor
     } else {
       infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
       notesButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      nagStepper.tintColor = themeController.mainThemeColor
+      notificationSwitch.tintColor = themeController.mainThemeColor
+      notificationSwitch.onTintColor = themeController.mainThemeColor
     }
     dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
     dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
@@ -240,7 +253,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         self.parentField.text = labelStrings[4]
         self.repeatingField.text = labelStrings[5]
         self.nagLabel.text = labelStrings[6]
-        print("notification: \(labelStrings[7])")
         if labelStrings[7] == "true" {
           self.notificationSwitch.isOn = true
           print(self.notificationSwitch.isOn)
@@ -263,7 +275,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    cell.backgroundColor = themeController.backgroundColor
+    cell.backgroundColor = themeController.addTextFieldColor
   }
   
   //MARK: Stepper
@@ -440,8 +452,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func unwindWithNotes(sender: UIStoryboardSegue) {
-    notesButton.backgroundColor = themeController.headerBackgroundColor
-    infoButton.backgroundColor = themeController.backgroundColor
+//    notesButton.backgroundColor = themeController.headerBackgroundColor
+//    infoButton.backgroundColor = themeController.backgroundColor
   }
   
   @IBAction func unwindWithParent(sender: UIStoryboardSegue) {

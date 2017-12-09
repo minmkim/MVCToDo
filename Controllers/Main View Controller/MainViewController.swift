@@ -20,7 +20,7 @@ class MainViewController {
   
   init(){
     setContextList()
-    listOfContext = listOfContext.filter( {$0 != "None"} )
+    
   }
   
   func numberOfContext() -> Int {
@@ -102,7 +102,7 @@ class MainViewController {
     listOfContext = Array(Set(toDoList))
     listOfContext = listOfContext.sorted(by: {$0 < $1})
     listOfContext = listOfContext.filter({$0 != ""})
-  
+    listOfContext = listOfContext.filter( {$0 != "None"} )
   }
   
   func saveContext() {

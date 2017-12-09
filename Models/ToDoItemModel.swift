@@ -16,7 +16,7 @@ struct ToDo: Codable {
   var dueTime: String?
   var checked = false
   var context: String?
-  var notes: String?
+  var notes = ""
   var repeatNumber = 0
   var repeatCycle: String?
   var nagNumber = 0
@@ -26,12 +26,6 @@ struct ToDo: Codable {
 }
 
 extension ToDo {
-  
-  init?(toDoItem: String, cloudRecordID: String) {
-    self.toDoItem = toDoItem
-    self.cloudRecordID = cloudRecordID
-    self.contextSection = ""
-  }
   
   init?(remoteRecord: CKRecord) {
     guard let toDoItem = remoteRecord.object(forKey: toDoCloud.toDoItem) as? String,
@@ -43,7 +37,9 @@ extension ToDo {
       let repeatNumber = remoteRecord.object(forKey: toDoCloud.repeatNumber) as? Int,
       let repeatCycle = remoteRecord.object(forKey: toDoCloud.repeatCycle) as? String,
       let nagNumber = remoteRecord.object(forKey: toDoCloud.nagNumber) as? Int,
-      let cloudRecordID = remoteRecord.object(forKey: toDoCloud.cloudRecordID) as? String
+      let cloudRecordID = remoteRecord.object(forKey: toDoCloud.cloudRecordID) as? String,
+      let notification = remoteRecord.object(forKey: toDoCloud.notification) as? String,
+      let contextSection = remoteRecord.object(forKey: toDoCloud.contextSection) as? String
       else {
         return nil
     }
@@ -62,6 +58,11 @@ extension ToDo {
     self.repeatCycle = repeatCycle
     self.nagNumber = nagNumber
     self.cloudRecordID = cloudRecordID
-    self.contextSection = ""
+    if notification == "true" {
+      self.notification = true
+    } else {
+      self.notification = false
+    }
+    self.contextSection = contextSection
   }
 }

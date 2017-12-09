@@ -58,6 +58,7 @@
 		A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */; };
 		A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */; };
 		A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */; };
+		A4F9B09E1FDA2C0A00E98E1F /* CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */; };
 		A4FE91911FC5E0540034A32D /* EventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FE91901FC5E0540034A32D /* EventController.swift */; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,7 @@
 		A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CalendarCollectionViewCell.swift; path = Models/Cells/CalendarCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
+		A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		A4FE91901FC5E0540034A32D /* EventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventController.swift; path = Controllers/EventController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -278,6 +280,7 @@
 			children = (
 				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
 				A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */,
+				A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */,
 			);
 			path = ToDo;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				A4DD2CA21FB9AECC008CF72E /* TestingNewArchTests */,
 				A4DD2CAD1FB9AECC008CF72E /* TestingNewArchUITests */,
 				A4DD2C8C1FB9AECB008CF72E /* Products */,
+				A4F9B09F1FDA32F200E98E1F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -418,6 +422,13 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		A4F9B09F1FDA32F200E98E1F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -490,6 +501,9 @@
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
 							};
 						};
 					};
@@ -597,6 +611,7 @@
 				A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */,
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
 				A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */,
+				A4F9B09E1FDA2C0A00E98E1F /* CloudKit.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,
 				A4DD2CC71FBB3C30008CF72E /* CloudKitModel.swift in Sources */,
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,

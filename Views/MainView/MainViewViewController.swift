@@ -137,7 +137,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   @objc func addPressed(sender:UIButton) {
     if contextField.text != "" {
       UIView.animate(withDuration: 0.3) {
-        self.addContextView.frame = CGRect(x: 0.0, y: self.contextCollectionView.frame.height, width: self.contextCollectionView.frame.width, height: 200)
+        self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
       }
       view.endEditing(true)
       if controller.checkIfEditing() {

@@ -20,7 +20,9 @@ class NotificationController {
   
   func makeNewNotification(title: String, date: Date, identifier: String) {
     var ID = ""
-    if identifier.count != 36 {
+    print(identifier)
+    print(identifier.count)
+    if identifier.count != 37 {
       ID = ("\(identifier)0")
     } else {
       ID = identifier

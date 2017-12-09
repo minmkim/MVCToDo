@@ -22,9 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let rootNavigationViewController = window!.rootViewController as? UINavigationController
       rootNavigationViewController?.popToRootViewController(animated: false)
       let firstVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AllViewController") as! ViewController
-      let newVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddToDo") as! AddItemTableViewController
       rootNavigationViewController?.pushViewController(firstVC, animated: false)
-      rootNavigationViewController?.pushViewController(newVC, animated: false)
+      firstVC.performSegue(withIdentifier: segueIdentifiers.addToDoSegue, sender: nil)
     case "com.minkim.DueLife.today":
       self.window!.rootViewController?.dismiss(animated: false, completion: nil)
       
@@ -100,20 +99,26 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
   }
   
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    let identifierString = response.notification.request.identifier
+    var ID = ""
+    print(identifierString)
+    print(identifierString.count)
+    if identifierString.count == 37 {
+      print("here1")
+      ID = String(identifierString.dropLast())
+    } else {
+      print("here2")
+      ID = identifierString
+    }
+    print(ID)
     switch response.actionIdentifier {
     case "Complete":
-      let identifierString = response.notification.request.identifier
-      let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
       toDoModelController.checkmarkButtonPressedModel(ID)
     case "Postpone One Hour":
-      let identifierString = response.notification.request.identifier
-      let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
       toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
     case "Postpone One Day":
-      let identifierString = response.notification.request.identifier
-      let ID = String(identifierString.dropLast())
       let toDoModelController = ToDoModelController()
       toDoModelController.postponeNotifications(ID: ID, numberHours: 24)
     default: print("Unknown Action")

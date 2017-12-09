@@ -19,6 +19,8 @@ enum toDoCloud {
   static let repeatCycle = "repeatCycle"
   static let nagNumber = "nagNumber"
   static let cloudRecordID = "cloudRecordID"
+  static let contextSection = "contextSection"
+  static let notification = "notification"
 }
 
 enum toDoRecord {
