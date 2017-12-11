@@ -20,7 +20,6 @@ class MainViewController {
   
   init(){
     setContextList()
-    
   }
   
   func numberOfContext() -> Int {
@@ -94,6 +93,7 @@ class MainViewController {
     return indexPath
   }
   
+  
   func setContextList() {
     var toDoList = toDoModelController.toDoList.flatMap({$0.context})
     let restoreList = startCodableTestContext()
@@ -101,8 +101,9 @@ class MainViewController {
     toDoList += stringRestoreList
     listOfContext = Array(Set(toDoList))
     listOfContext = listOfContext.sorted(by: {$0 < $1})
-    listOfContext = listOfContext.filter({$0 != ""})
     listOfContext = listOfContext.filter( {$0 != "None"} )
+    listOfContext = listOfContext.filter( {$0 != "Today"} )
+    listOfContext = listOfContext.filter( {$0 != ""} )
   }
   
   func saveContext() {

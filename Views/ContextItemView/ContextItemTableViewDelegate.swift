@@ -92,7 +92,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     separator.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 16).isActive = true
     separator.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 6).isActive = true
     separator.heightAnchor.constraint(equalToConstant: 2.0).isActive = true
-    separator.widthAnchor.constraint(equalToConstant: (returnedView.frame.width - 32)).isActive = true
+    separator.trailingAnchor.constraint(equalTo: returnedView.trailingAnchor, constant: -16).isActive = true
     return returnedView
   }
   

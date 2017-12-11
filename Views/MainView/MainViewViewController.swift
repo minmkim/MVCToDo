@@ -14,6 +14,8 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   @IBOutlet weak var mainViewTable: UITableView!
   var controller = MainViewController()
   var themeController = ThemeController()
+  var allViewController: ViewController?
+  
   let addContextView: UIView = {
     let view = UIView()
     view.backgroundColor = colors.red
@@ -115,6 +117,10 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         }
       }
     }
+    DispatchQueue.global().async {
+      let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      self.allViewController = storyboard.instantiateViewController(withIdentifier: "AllViewController") as? ViewController
+    }
     contextCollectionView.delegate = self
     contextCollectionView.dataSource = self
     // Do any additional setup after loading the view.
@@ -212,10 +218,13 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     if segue.identifier == "ContextItemSegue" {
       let destination = segue.destination as! ContextItemViewController
       let title = controller.returnContextString(controller.selectedContextIndex)
-    //  navigationController?.navigationBar.barTintColor = .black
       destination.navigationItem.title = title
       destination.controller.title = title
-      print(destination.controller)
+    } else if segue.identifier == segueIdentifiers.todayViewSegue {
+       let destination = segue.destination as! TodayViewController
+      navigationController?.navigationBar.barTintColor = controller.returnColor("Today")
+    } else if segue.identifier == segueIdentifiers.allSegue {
+      UIApplication.shared.statusBarStyle = .lightContent
     }
   }
   
@@ -229,12 +238,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     contextLabel.translatesAutoresizingMaskIntoConstraints = false
     contextLabel.centerYAnchor.constraint(equalTo: contextField.centerYAnchor).isActive = true
     contextLabel.leadingAnchor.constraint(equalTo: addContextView.leadingAnchor, constant: 16.0).isActive = true
-    contextLabel.widthAnchor.constraint(equalToConstant: contextLabel.intrinsicContentSize.width).isActive = true
+    contextLabel.widthAnchor.constraint(lessThanOrEqualToConstant: contextLabel.intrinsicContentSize.width).isActive = true
     
     contextField.translatesAutoresizingMaskIntoConstraints = false
     contextField.topAnchor.constraint(equalTo: addContextView.topAnchor, constant: 12.0).isActive = true
     contextField.leadingAnchor.constraint(equalTo: contextLabel.trailingAnchor, constant: 8.0).isActive = true
-    contextField.trailingAnchor.constraint(equalTo: addContextView.trailingAnchor, constant: -8.0).isActive = true
+    contextField.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -8.0).isActive = true
     contextField.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
     
     viewForStack.translatesAutoresizingMaskIntoConstraints = false

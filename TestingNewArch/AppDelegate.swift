@@ -47,8 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UINavigationBar.appearance().barStyle = .black
     let rootNavigationViewController = window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
+    rootViewController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     rootViewController?.performSegue(withIdentifier: "AllSegue", sender: nil)
-    // Override point for customization after application launch.
+
+
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
       if granted {

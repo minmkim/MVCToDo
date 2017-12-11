@@ -39,7 +39,9 @@ class TodayViewController: UIViewController {
       footerView.backgroundColor = themeController.backgroundColor
     view.backgroundColor = themeController.backgroundColor
     todayTableView.backgroundColor = themeController.backgroundColor
-    navigationController?.navigationBar.barTintColor = themeController.mainThemeColor
+    addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
+    addItemButton.layer.shadowOpacity = 0.7
+    addItemButton.layer.shadowColor = UIColor.black.cgColor
         // Do any additional setup after loading the view.
     }
 

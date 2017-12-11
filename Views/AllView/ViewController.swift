@@ -86,7 +86,5 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   @IBAction func unwindToCancelAdd(sender: UIStoryboardSegue) {
   }
   
-  
-  
 }
 

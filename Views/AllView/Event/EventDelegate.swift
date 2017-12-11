@@ -73,7 +73,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     separator.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 16).isActive = true
     separator.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 5).isActive = true
     separator.heightAnchor.constraint(equalToConstant: 2.0).isActive = true
-    separator.widthAnchor.constraint(equalToConstant: (returnedView.frame.width - 32)).isActive = true
+    separator.trailingAnchor.constraint(equalTo: returnedView.trailingAnchor, constant: -16).isActive = true
 
     
     if controller.checkIfToday(label.text ?? "") {
@@ -83,7 +83,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
       todayLabel.text = "Today"
       todayLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
       todayLabel.translatesAutoresizingMaskIntoConstraints = false
-      todayLabel.trailingAnchor.constraint(equalTo: returnedView.trailingAnchor, constant: -14).isActive = true
+      todayLabel.trailingAnchor.constraint(equalTo: returnedView.trailingAnchor, constant: -16).isActive = true
       todayLabel.centerYAnchor.constraint(equalTo: returnedView.centerYAnchor).isActive = true
       todayLabel.heightAnchor.constraint(equalToConstant: 17).isActive = true
     }
