@@ -71,6 +71,20 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     }
   }
   
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    if (shownIndexes.contains(indexPath) == false) {
+      shownIndexes.append(indexPath)
+      cell.alpha = 0.0
+      let transform = CATransform3DTranslate(CATransform3DIdentity, 0, 80, 0)
+      cell.layer.transform = transform
+      
+      UIView.animate(withDuration: 0.1, delay: 0.05*Double(shownIndexes.count), options: [.curveEaseInOut], animations:  {
+        cell.alpha = 1.0
+        cell.layer.transform = CATransform3DIdentity
+      }, completion: nil)
+    }
+  }
+  
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 48.0
   }

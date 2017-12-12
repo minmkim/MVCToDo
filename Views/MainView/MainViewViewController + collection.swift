@@ -74,30 +74,21 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     case 0:
       if indexPath.row == 0 {
         let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-        let fakeHeader = UIView()
-        fakeHeader.frame = size
-        fakeHeader.layer.cornerRadius = 22
-        fakeHeader.backgroundColor = cell.backView.backgroundColor
+        guard let color = cell.backView.backgroundColor else {return}
+        let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
+        let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
+        let fakeBody = returnTemporaryBody()
         self.view.addSubview(fakeHeader)
         self.view.bringSubview(toFront: fakeHeader)
-        
-        let fakeLabel = UILabel()
-        //fakeLabel.text = cell.contextItemLabel.text
-        fakeLabel.text = "Due Life"
         self.view.addSubview(fakeLabel)
-        fakeLabel.frame = CGRect(x: (size.minX + 20), y: (size.minY + 8), width: size.maxX - 30, height: 40)
-        fakeLabel.font = .systemFont(ofSize: 34, weight: UIFont.Weight.bold)
-        fakeLabel.textColor = .white
-        
-        let fakeBody = UIView()
-        fakeBody.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
-        fakeBody.backgroundColor = themeController.backgroundColor
         self.view.addSubview(fakeBody)
         self.view.bringSubview(toFront: fakeBody)
+        
         let width = self.view.frame.width
         var headerHeight: Double = 0.0
         var labelHeight: Double = 0.0
-        if self.view.frame.height == 812 {
+        
+        if self.view.frame.height == 812 { //iPhone x
           headerHeight = 141.0
           labelHeight = 92.0
         } else {
@@ -141,29 +132,21 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
         
       } else {
         let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-        let fakeHeader = UIView()
-        fakeHeader.frame = size
-        fakeHeader.layer.cornerRadius = 22
-        fakeHeader.backgroundColor = cell.backView.backgroundColor
+        guard let color = cell.backView.backgroundColor else {return}
+        let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
+        let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
+        let fakeBody = returnTemporaryBody()
         self.view.addSubview(fakeHeader)
         self.view.bringSubview(toFront: fakeHeader)
-        
-        let fakeLabel = UILabel()
-        fakeLabel.text = cell.contextItemLabel.text
         self.view.addSubview(fakeLabel)
-        fakeLabel.frame = CGRect(x: (size.minX + 20), y: (size.minY + 8), width: size.maxX - 30, height: 40)
-        fakeLabel.font = .systemFont(ofSize: 34, weight: UIFont.Weight.bold)
-        fakeLabel.textColor = .white
-        
-        let fakeBody = UIView()
-        fakeBody.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
-        fakeBody.backgroundColor = themeController.backgroundColor
         self.view.addSubview(fakeBody)
         self.view.bringSubview(toFront: fakeBody)
+        
         let width = self.view.frame.width
         var headerHeight: Double = 0.0
         var labelHeight: Double = 0.0
-        if self.view.frame.height == 812 {
+        
+        if self.view.frame.height == 812 { //iPhone x
           headerHeight = 141.0
           labelHeight = 92.0
         } else {
@@ -198,30 +181,19 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     case 1:
       controller.setIndexPathForContextSelect(indexPath.row)
       let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-      let fakeHeader = UIView()
-      fakeHeader.frame = size
-      fakeHeader.layer.cornerRadius = 22
-      fakeHeader.backgroundColor = cell.backView.backgroundColor
+      guard let color = cell.backView.backgroundColor else {return}
+      let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
+      let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
+      let fakeBody = returnTemporaryBody()
       self.view.addSubview(fakeHeader)
       self.view.bringSubview(toFront: fakeHeader)
-      
-      let fakeLabel = UILabel()
-      fakeLabel.text = cell.contextItemLabel.text
       self.view.addSubview(fakeLabel)
-      fakeLabel.frame = CGRect(x: Double(size.minX + 20), y: Double(size.minY + 8), width: Double(self.view.frame.width - 31.5), height: Double(40))
-      fakeLabel.font = .systemFont(ofSize: 34, weight: UIFont.Weight.bold)
-      fakeLabel.textColor = .white
-      
-      let fakeBody = UIView()
-      fakeBody.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
-      fakeBody.backgroundColor = themeController.backgroundColor
       self.view.addSubview(fakeBody)
       self.view.bringSubview(toFront: fakeBody)
-      let width = self.view.frame.width
-      
       var headerHeight: Double = 0.0
       var labelHeight: Double = 0.0
-      if self.view.frame.height == 812 {
+      
+      if self.view.frame.height == 812 { //iPhone x
         headerHeight = 141.0
         labelHeight = 92.0
       } else {
@@ -234,12 +206,13 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
       cell.backView.backgroundColor = self.themeController.backgroundColor
       cell.backView.layer.shadowColor = self.themeController.backgroundColor.cgColor
       cell.contextItemLabel.textColor = self.themeController.backgroundColor
+      
       UIView.animate(withDuration: 0.3, animations: {
         UIApplication.shared.statusBarStyle = .lightContent
         fakeLabel.frame = CGRect(x: 15.667, y: labelHeight, width: Double(self.view.frame.width - 34), height: 40.0)
-        fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double(width), height: headerHeight)
+        fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double( self.view.frame.width), height: headerHeight)
         fakeHeader.layer.cornerRadius = 0
-        fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double(width), height: Double(self.view.frame.height))
+        fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double( self.view.frame.width), height: Double(self.view.frame.height))
         
       }) { (_) in
         cell.backView.backgroundColor = originalColor
@@ -281,6 +254,30 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     UIView.animate(withDuration: 0.3) {
       self.addContextView.frame = CGRect(x: 8, y: ((self.view.frame.height / 2) - 250), width: (self.view.frame.width - 16), height: 200)
     }
+  }
+  
+  func returnTemporaryHeaderView(frameSize: CGRect, color: UIColor) -> UIView {
+    let fakeHeader = UIView()
+    fakeHeader.frame = frameSize
+    fakeHeader.layer.cornerRadius = 22
+    fakeHeader.backgroundColor = color
+    return fakeHeader
+  }
+  
+  func returnTemporaryContextLabel(frameSize: CGRect, contextString: String) -> UILabel {
+    let fakeLabel = UILabel()
+    fakeLabel.text = contextString
+    fakeLabel.frame = CGRect(x: Double(frameSize.minX + 20), y: Double(frameSize.minY + 8), width: Double(self.view.frame.width - 31.5), height: Double(40))
+    fakeLabel.font = .systemFont(ofSize: 34, weight: UIFont.Weight.bold)
+    fakeLabel.textColor = .white
+    return fakeLabel
+  }
+  
+  func returnTemporaryBody() -> UIView {
+    let fakeBody = UIView()
+    fakeBody.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
+    fakeBody.backgroundColor = themeController.backgroundColor
+    return fakeBody
   }
   
 }

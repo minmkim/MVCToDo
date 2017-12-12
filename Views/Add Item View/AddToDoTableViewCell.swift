@@ -17,7 +17,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet var labels: [UILabel]!
   @IBOutlet weak var toDoView: UIView!
   @IBOutlet weak var toDoItemText: UITextField!
-  @IBOutlet weak var doneButton: UIBarButtonItem!
   @IBOutlet weak var dueDateField: UITextField!
   @IBOutlet weak var dueTimeField: UITextField!
   @IBOutlet weak var contextField: UITextField!
@@ -31,6 +30,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var dueDatePicker: UIDatePicker!
   @IBOutlet weak var notificationSwitch: UISwitch!
   @IBOutlet weak var parentField: UITextField!
+  @IBOutlet weak var todayButton: UIButton!
+  @IBOutlet weak var tomorrowButton: UIButton!
+  @IBOutlet weak var customButton: UIButton!
+  @IBOutlet weak var saveButton: UIButton!
+  @IBOutlet weak var cancelButton: UIButton!
   
   // clear buttons in textfield
   @IBAction func repeatClearPress(_ sender: Any) {
@@ -55,6 +59,25 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
   }
   
+  @IBAction func todayButtonPressed(_ sender: Any) {
+    dueDateField.text = controller.formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
+    
+  }
+  @IBAction func tomorrowButtonPressed(_ sender: Any) {
+    dueDateField.text = controller.calculateDateAndFormatDateToString(days: 1, date: Date(), format: dateAndTime.monthDateYear)
+  }
+  @IBAction func customButtonPressed(_ sender: Any) {
+    isDueDatePickerShown = true
+    tableView.beginUpdates()
+    tableView.endUpdates()
+  }
+  @IBAction func saveButtonPressed(_ sender: Any) {
+    done()
+  }
+  
+  @IBAction func cancelButtonPressed(_ sender: Any) {
+    cancel()
+  }
   @IBAction func NotificationPressed(_ sender: Any) {
     let notificationPermission = UserDefaults.standard.bool(forKey: "NotificationPermission")
     
@@ -110,7 +133,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
   }
   
-  @IBAction func done() {
+  func done() {
     controller.savePressed(toDo: toDoItemText.text!, context: contextField.text ?? "", dueDate: dueDateField.text ?? "", dueTime: dueTimeField.text ?? "")
     if toDoItemText.isFirstResponder {
       toDoItemText.resignFirstResponder()
@@ -128,6 +151,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   // MARK: Variables
+  var isDueDatePressed = false
+  
   var isDueTimePickerShown: Bool = false {
     didSet {
       setTimePickerTime()
@@ -183,9 +208,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     repeatPicker.delegate = self
     repeatPicker.dataSource = self
     dueTimeField.delegate = self
-    
      // color of the back button
-    self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    //self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+    self.navigationItem.setLeftBarButton(nil, animated: true)
   }  // end viewdidload
   
   override func didReceiveMemoryWarning() {
@@ -206,8 +231,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       infoButton.backgroundColor = .white
       notesButton.backgroundColor = .groupTableViewBackground
     }
-    
-    
     toDoItemText.textColor = themeController.mainTextColor
     contextField.textColor = themeController.mainTextColor
     parentField.textColor = themeController.mainTextColor
@@ -223,12 +246,22 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       nagStepper.tintColor = navigationController?.navigationBar.barTintColor
       notificationSwitch.tintColor = navigationController?.navigationBar.barTintColor
       notificationSwitch.onTintColor = navigationController?.navigationBar.barTintColor
+      todayButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      tomorrowButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      customButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      saveButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      cancelButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
     } else {
       infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
       notesButton.setTitleColor(themeController.mainThemeColor, for: .normal)
       nagStepper.tintColor = themeController.mainThemeColor
       notificationSwitch.tintColor = themeController.mainThemeColor
       notificationSwitch.onTintColor = themeController.mainThemeColor
+      todayButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      tomorrowButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      customButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      saveButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      cancelButton.setTitleColor(themeController.mainThemeColor, for: .normal)
     }
     dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
     dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
@@ -270,7 +303,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       DispatchQueue.main.asyncAfter(deadline: time) {
         self.toDoItemText.becomeFirstResponder()
       }
-      doneButton.isEnabled = false
+      saveButton.isEnabled = false
     }
   }
   
@@ -297,9 +330,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     let value = NSString(string: toDoItemText.text!).replacingCharacters(in: range, with: string)
     // if value.characters.count > 0 {
     if value.count > 0 {
-      self.doneButton.isEnabled = true
+      self.saveButton.isEnabled = true
     } else {
-      self.doneButton.isEnabled = false
+      self.saveButton.isEnabled = false
     }
     return true
   }
@@ -317,8 +350,10 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         return 0.0
       }
     case (dueDatePickerCellIndexPath.section, dueDatePickerCellIndexPath.row):
-      if isDueDatePickerShown {
-        return 216.0
+      if isDueDatePressed == true && isDueDatePickerShown == false {
+        return 30.0
+      } else if isDueDatePressed && isDueDatePickerShown {
+        return 246.0
       } else {
         return 0.0
       }
@@ -366,18 +401,24 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     case (dueDatePickerCellIndexPath.section, dueDatePickerCellIndexPath.row - 1):
       if isDueDatePickerShown { // close picker if picker was already open
         isDueDatePickerShown = false
+        isDueDatePressed = false
+      } else if isDueDatePressed {
+        isDueDatePickerShown = false
+        isDueDatePressed = false
       } else if isDueTimePickerShown { // if dueTimePicker was open, close it and open dueDatePicker
+        isDueDatePressed = true
         isDueTimePickerShown = false
-        isDueDatePickerShown = true
+        isDueDatePickerShown = false
         isrepeatPickerShown = false
         toDoItemText.resignFirstResponder()
       } else if isrepeatPickerShown { // if repeatPicker was open, close it and open dueDatePicker
-        isDueDatePickerShown = true
+        isDueDatePressed = true
+        isDueDatePickerShown = false
         isDueTimePickerShown = false
         isrepeatPickerShown = false
         toDoItemText.resignFirstResponder()
       } else { // if nothing open, open dueDatePicker
-        isDueDatePickerShown = true
+        isDueDatePressed = true
         toDoItemText.resignFirstResponder()
       }
       
@@ -388,12 +429,20 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       if dueDateField.text != "" {
         if isDueTimePickerShown {
           isDueTimePickerShown = false
-        } else if isDueDatePickerShown {
+        } else if isDueDatePressed {
+          isDueDatePressed = false
+          isDueDatePickerShown = false
+          isDueTimePickerShown = true
+          isrepeatPickerShown = false
+          toDoItemText.resignFirstResponder()
+        }else if isDueDatePickerShown {
+          isDueDatePressed = false
           isDueDatePickerShown = false
           isDueTimePickerShown = true
           isrepeatPickerShown = false
           toDoItemText.resignFirstResponder()
         } else if isrepeatPickerShown {
+          isDueDatePressed = false
           isDueTimePickerShown = true
           isDueDatePickerShown = false
           isrepeatPickerShown = false
@@ -411,12 +460,20 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       if dueTimeField.text != "" {
         if isrepeatPickerShown {
           isrepeatPickerShown = false
-        } else if isDueTimePickerShown {
+        } else if isDueDatePressed {
+          isDueDatePressed = false
+          isDueTimePickerShown = false
+          isDueDatePickerShown = false
+          isrepeatPickerShown = true
+          toDoItemText.resignFirstResponder()
+        }else if isDueTimePickerShown {
+          isDueDatePressed = false
           isDueTimePickerShown = false
           isDueDatePickerShown = false
           isrepeatPickerShown = true
           toDoItemText.resignFirstResponder()
         } else if isDueDatePickerShown {
+          isDueDatePressed = false
           isDueDatePickerShown = false
           isDueTimePickerShown = false
           isrepeatPickerShown = true
@@ -435,6 +492,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       } else {
         nagStepper.isUserInteractionEnabled = true
       }
+    case (1, 11):
+      let cell = tableView.cellForRow(at: indexPath)
+      cell?.selectionStyle = UITableViewCellSelectionStyle.none
     default:
       break
     }

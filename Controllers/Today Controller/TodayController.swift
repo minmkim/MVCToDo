@@ -105,9 +105,6 @@ class TodayController {
     toDoModelController.deleteToDoItem(ID: ID)
     delegate?.beginUpdate()
     delegate?.deleteRows(index)
-    if newList.count == 0 {
-      delegate?.deleteSection(index)
-    }
     delegate?.endUpdate()
   }
 

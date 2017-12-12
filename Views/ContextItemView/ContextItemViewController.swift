@@ -14,6 +14,7 @@ class ContextItemViewController: UIViewController {
   @IBOutlet weak var footerView: UIView!
   var controller = ContextItemController()
   var themeController = ThemeController()
+  var shownIndexes : [IndexPath] = []
   
   @IBOutlet weak var addItemButton: UIButton!
   override func viewDidLoad() {
@@ -32,9 +33,6 @@ class ContextItemViewController: UIViewController {
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
     addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
   }
   

@@ -86,6 +86,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   var didInitialScroll = false
   var controller = EventController()
   var themeController = ThemeController()
+  var shownIndexes : [IndexPath] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -95,7 +96,6 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.dragDelegate = self
     eventTableView.dragInteractionEnabled = true
     eventTableView.dropDelegate = self
-
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
   }
   
@@ -104,10 +104,6 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.reloadData()
     eventTableView.backgroundColor = themeController.backgroundColor
     footerView.backgroundColor = themeController.backgroundColor
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    print("did appear")
   }
   
   override func viewDidLayoutSubviews() {

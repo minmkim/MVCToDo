@@ -50,6 +50,20 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     sender.setImage(UIImage(named: image), for: .normal)
   }
   
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    if (shownIndexes.contains(indexPath) == false) {
+      shownIndexes.append(indexPath)
+      cell.alpha = 0.0
+      let transform = CATransform3DTranslate(CATransform3DIdentity, 0, 80, 0)
+      cell.layer.transform = transform
+      
+      UIView.animate(withDuration: 0.2, delay: 0.05*Double(shownIndexes.count), options: [.curveEaseInOut], animations:  {
+        cell.alpha = 1.0
+        cell.layer.transform = CATransform3DIdentity
+      }, completion: nil)
+    }
+  }
+  
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 32
   }

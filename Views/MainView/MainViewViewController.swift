@@ -236,9 +236,10 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     addButton.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
     
     contextLabel.translatesAutoresizingMaskIntoConstraints = false
-    contextLabel.centerYAnchor.constraint(equalTo: contextField.centerYAnchor).isActive = true
+    contextLabel.topAnchor.constraint(equalTo: addContextView.topAnchor, constant: 12.0).isActive = true
     contextLabel.leadingAnchor.constraint(equalTo: addContextView.leadingAnchor, constant: 16.0).isActive = true
     contextLabel.widthAnchor.constraint(lessThanOrEqualToConstant: contextLabel.intrinsicContentSize.width).isActive = true
+    contextLabel.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
     
     contextField.translatesAutoresizingMaskIntoConstraints = false
     contextField.topAnchor.constraint(equalTo: addContextView.topAnchor, constant: 12.0).isActive = true

@@ -13,6 +13,7 @@ class ContextItemTableViewCell: UITableViewCell {
   @IBOutlet weak var toDoItemLabel: UILabel!
   @IBOutlet weak var dueDateLabel: UILabel!
   @IBOutlet weak var checkMarkButton: UIButton!
+  @IBOutlet weak var noteImage: UIImageView!
   
   var toDoItem: ToDo? {
     didSet {
@@ -22,6 +23,12 @@ class ContextItemTableViewCell: UITableViewCell {
         dueDateLabel.text = date
       } else {
         dueDateLabel.text = ""
+      }
+      if toDoItem?.notes != "" {
+        noteImage.isHidden = false
+        noteImage.image = UIImage(named: "NoteIcon")
+      } else {
+        noteImage.isHidden = true
       }
     }
   }

@@ -16,6 +16,7 @@ class TodayViewController: UIViewController {
   var themeController = ThemeController()
   @IBOutlet weak var footerView: UIView!
   @IBOutlet weak var todayTableView: UITableView!
+  var shownIndexes : [IndexPath] = []
   
   @IBAction func addItemButtonPressed(_ sender: Any) {
     let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -52,6 +53,7 @@ class TodayViewController: UIViewController {
   
   @IBAction func unwindToTodayView(sender: UIStoryboardSegue) {
     todayController = TodayController()
+    todayController.delegate = self
     todayTableView.reloadData()
   }
 

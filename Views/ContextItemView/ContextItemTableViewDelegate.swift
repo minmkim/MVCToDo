@@ -24,11 +24,11 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = contextItemTableView.dequeueReusableCell(withIdentifier: "ContextItem", for: indexPath) as! ContextItemTableViewCell
     let toDoItem = controller.returnToDoItemForCell(indexPath)
-    if toDoItem.contextSection != "" {
-      cell.layoutMargins = UIEdgeInsetsMake(0, 30, 0, 0)
-    } else {
-      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
-    }
+//    if toDoItem.contextSection != "" {
+//      cell.layoutMargins = UIEdgeInsetsMake(0, 30, 0, 0)
+//    } else {
+//      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
+//    }
     cell.toDoItem = toDoItem
     cell.toDoItemLabel.textColor = themeController.mainTextColor
     cell.checkMarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
@@ -59,6 +59,20 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     guard let toDoItem = cell.toDoItem else {return}
     controller.setEditingToDo(toDoItem)
     performSegue(withIdentifier: segueIdentifiers.editFromContextSegue, sender: self)
+  }
+  
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    if (shownIndexes.contains(indexPath) == false) {
+      shownIndexes.append(indexPath)
+      cell.alpha = 0.0
+      let transform = CATransform3DTranslate(CATransform3DIdentity, 0, 80, 0)
+      cell.layer.transform = transform
+      
+      UIView.animate(withDuration: 0.2, delay: 0.05*Double(shownIndexes.count), options: [.curveEaseInOut], animations:  {
+        cell.alpha = 1.0
+        cell.layer.transform = CATransform3DIdentity
+      }, completion: nil)
+    }
   }
   
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
