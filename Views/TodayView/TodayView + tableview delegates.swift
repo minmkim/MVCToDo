@@ -24,12 +24,12 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     cell.toDoLabel.textColor = themeController.mainTextColor
     cell.contextColor.backgroundColor = todayController.returnContextColor(cell.toDoItem?.context ?? "")
     cell.contextColor.layer.cornerRadius = 3.0
-    if cell.toDoItem?.checked ?? false {
+    if cell.toDoItem?.isChecked ?? false {
       cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
       cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
     }
-    cell.checkmarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
+    cell.checkmarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     cell.backgroundColor = themeController.backgroundColor
     
@@ -66,7 +66,7 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = todayTableView.cellForRow(at: indexPath) as! EventTableViewCell
-      guard let cloudID = cell.toDoItem?.cloudRecordID else {return}
+      guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
       todayController.deleteItem(ID: cloudID, index: indexPath)
     }
   }

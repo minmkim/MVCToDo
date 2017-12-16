@@ -14,7 +14,7 @@ extension ContextItemViewController: UITableViewDragDelegate {
     guard let toDoItem = cell.toDoItem else {return [UIDragItem]()}
     controller.dragAndDropInitiated(toDoItem)
     controller.returnDragIndexPath(indexPath)
-    guard let data = (toDoItem.cloudRecordID).data(using: .utf8) else { return [] }
+    guard let data = (toDoItem.calendarRecordID).data(using: .utf8) else { return [] }
     let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
     _ = UIDragItem(itemProvider: itemProvider)
     return [UIDragItem(itemProvider: itemProvider)]

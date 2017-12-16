@@ -31,9 +31,9 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
 //    }
     cell.toDoItem = toDoItem
     cell.toDoItemLabel.textColor = themeController.mainTextColor
-    cell.checkMarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
+    cell.checkMarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkMarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
-    if cell.toDoItem?.checked ?? false {
+    if cell.toDoItem?.isChecked ?? false {
       cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
       cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
@@ -78,7 +78,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
-      guard let cloudID = cell.toDoItem?.cloudRecordID else {return}
+      guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
       controller.deleteItem(ID: cloudID, index: indexPath)
     }
   }

@@ -25,13 +25,13 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
     cell.toDoItem = controller.cellLabelStrings(indexPath: indexPath)
-    cell.checkmarkButton.setTitle(cell.toDoItem?.cloudRecordID, for: .normal)
+    cell.checkmarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     cell.backgroundColor = themeController.backgroundColor
     cell.toDoLabel.textColor = themeController.mainTextColor
     cell.contextColor.backgroundColor = controller.returnContextColor(cell.toDoItem?.context ?? "")
     cell.contextColor.layer.cornerRadius = 3.0
-    if cell.toDoItem?.checked ?? false {
+    if cell.toDoItem?.isChecked ?? false {
       cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
       cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
@@ -48,20 +48,6 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     AudioServicesPlaySystemSound(peek)
     generator.selectionChanged()
     sender.setImage(UIImage(named: image), for: .normal)
-  }
-  
-  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    if (shownIndexes.contains(indexPath) == false) {
-      shownIndexes.append(indexPath)
-      cell.alpha = 0.0
-      let transform = CATransform3DTranslate(CATransform3DIdentity, 0, 80, 0)
-      cell.layer.transform = transform
-      
-      UIView.animate(withDuration: 0.2, delay: 0.05*Double(shownIndexes.count), options: [.curveEaseInOut], animations:  {
-        cell.alpha = 1.0
-        cell.layer.transform = CATransform3DIdentity
-      }, completion: nil)
-    }
   }
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -107,7 +93,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
-      guard let cloudID = cell.toDoItem?.cloudRecordID else {return}
+      guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
       eventTableView.beginUpdates()
       controller.deleteItem(ID: cloudID, indexPath: indexPath)
       eventTableView.endUpdates()

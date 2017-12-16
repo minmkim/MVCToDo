@@ -11,16 +11,28 @@ import UIKit
 
 class MainViewController {
   
-  var toDoModelController = ToDoModelController()
+  var toDoModelController: ToDoModelController! {
+    didSet {
+      print("set here")
+     // setContextList()
+    }
+  }
+  
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["Inbox", "Home", "Work", "Personal"]
   var selectedContextIndex = 0
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var editingContext: IndexPath?
   
-  init(){
+  init() {
+    //setContextList()
+  }
+  
+  init(controller: ToDoModelController) {
+    toDoModelController = controller
     setContextList()
   }
+  
   
   func numberOfContext() -> Int {
     return listOfContext.count
@@ -35,7 +47,7 @@ class MainViewController {
   func returnCellNumberOfContextString(_ index: Int) -> String {
     let context = listOfContext[index]
     let filteredToDoList = toDoModelController.toDoList.filter({$0.context == context})
-    let uncheckedContext = filteredToDoList.filter({$0.checked == false})
+    let uncheckedContext = filteredToDoList.filter({$0.isChecked == false})
     let uncheckedContextInt = uncheckedContext.count
     if uncheckedContextInt == 0 {
       return ""
@@ -45,7 +57,7 @@ class MainViewController {
   }
   
   func returnCellNumberOfToday() -> String {
-    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.checked == false})
+    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
     let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
     let date: Date = Date()
     let cal: Calendar = Calendar(identifier: .gregorian)

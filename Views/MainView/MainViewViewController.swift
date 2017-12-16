@@ -13,9 +13,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   @IBOutlet weak var contextCollectionView: UICollectionView!
   @IBOutlet weak var mainViewTable: UITableView!
   var controller = MainViewController()
+//  lazy var controller: MainViewController = {
+//     MainViewController()
+//  }()
   var themeController = ThemeController()
-  var allViewController: ViewController?
-  
+//  var allViewController: ViewController?
+//  
   let addContextView: UIView = {
     let view = UIView()
     view.backgroundColor = colors.red
@@ -117,10 +120,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         }
       }
     }
-    DispatchQueue.global().async {
-      let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      self.allViewController = storyboard.instantiateViewController(withIdentifier: "AllViewController") as? ViewController
-    }
+//    DispatchQueue.global().async {
+//      let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//      self.allViewController = storyboard.instantiateViewController(withIdentifier: "AllViewController") as? ViewController
+//      self.allViewController?.toDoModelController = self.controller.toDoModelController
+//      self.allViewController?.passToDoModelDelegate = self
+//    }
     contextCollectionView.delegate = self
     contextCollectionView.dataSource = self
     // Do any additional setup after loading the view.
@@ -185,7 +190,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     themeController = ThemeController()
     self.navigationController?.setNavigationBarHidden(true, animated: animated)
     DispatchQueue.main.async() { // update contexts
-      self.controller = MainViewController()
+   //   self.controller = MainViewController()
       self.contextCollectionView.reloadData()
     }
     if themeController.isDarkTheme {
@@ -224,7 +229,16 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
        let destination = segue.destination as! TodayViewController
       navigationController?.navigationBar.barTintColor = controller.returnColor("Today")
     } else if segue.identifier == segueIdentifiers.allSegue {
+      let destination = segue.destination as! ViewController
+      destination.passToDoModelDelegate = self
+      if self.controller.toDoModelController != nil {
+        destination.toDoModelController = self.controller.toDoModelController
+      } else {
+        print("forced here")
+        destination.toDoModelController = ToDoModelController()
+      }
       UIApplication.shared.statusBarStyle = .lightContent
+      
     }
   }
   
@@ -260,4 +274,15 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     verticalStackView.bottomAnchor.constraint(equalTo: viewForStack.bottomAnchor, constant: -8.0).isActive = true
   }
   
+  @IBAction func unwindToMainViewFromAll(sender: UIStoryboardSegue) {
+    print("unwind")
+  }
+  
+}
+
+extension MainViewViewController: PassToDoModelToMainDelegate {
+  func returnToDoModel(_ controller: ToDoModelController) {
+    print("delegated")
+    self.controller = MainViewController(controller: controller)
+  }
 }

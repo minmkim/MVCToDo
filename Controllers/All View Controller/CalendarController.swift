@@ -10,9 +10,6 @@ import Foundation
 
 class CalendarController {
   
-  let eventController = EventController()
-  let ModelController = ToDoModelController()
-  
   func calculateDayNumberForCell(indexPathRow: Int) -> String {
     let index = indexPathRow - 100 //start calendar 100 days prior
     let calendar = Calendar.current

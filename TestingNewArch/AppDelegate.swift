@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import EventKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -45,11 +46,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     UINavigationBar.appearance().tintColor = .white
     UINavigationBar.appearance().barStyle = .black
-    let rootNavigationViewController = window!.rootViewController as? UINavigationController
-    let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
-    rootViewController?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-    rootViewController?.performSegue(withIdentifier: "AllSegue", sender: nil)
 
+ //   let controller = MainViewController()
+    let rootNavigationViewController = window!.rootViewController as? UINavigationController
+    let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
+   // rootViewController.controller.toDoModelController = ToDoModelController()
+    rootViewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
+    rootViewController.controller.toDoModelController = nil
+    let eventStore = EKEventStore()
+    eventStore.requestAccess(to: EKEntityType.reminder, completion:
+      {(granted, error) in
+        if error != nil {
+          print("error: \(String(describing: error?.localizedDescription))")
+          print("Access to store not granted")
+          UserDefaults.standard.set(false, forKey: "ReminderPermission")
+        } else {
+          UserDefaults.standard.set(true, forKey: "ReminderPermission")
+        }
+    })
 
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in

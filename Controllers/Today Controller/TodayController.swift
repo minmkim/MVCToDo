@@ -31,7 +31,7 @@ class TodayController {
   
   init() {
     startCodableTestContext()
-    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.checked == false})
+    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
     let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
     let date: Date = Date()
     let cal: Calendar = Calendar(identifier: .gregorian)
@@ -40,9 +40,7 @@ class TodayController {
     
     overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
     overDueItems = overDueItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
-    todayItems = uncheckedListOfToDo.filter({
-      formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear) == formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
-    })
+    todayItems = uncheckedListOfToDo.filter({ $0.dueDate == Date()})
     todayItems = todayItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
     listOfContext = [overDueItems, todayItems]
   }
@@ -100,7 +98,7 @@ class TodayController {
   
   func deleteItem(ID: String, index: IndexPath) {
     let list = listOfContext[index.section]
-    let newList = list.filter({$0.cloudRecordID != ID})
+    let newList = list.filter({$0.calendarRecordID != ID})
     listOfContext[index.section] = newList
     toDoModelController.deleteToDoItem(ID: ID)
     delegate?.beginUpdate()

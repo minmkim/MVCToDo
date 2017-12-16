@@ -13,31 +13,51 @@ protocol InformEventTableDelegate: class {
   func sendNewToDoDueDateAfterDropSession(_ newDate: String)
 }
 
+protocol PassToDoModelToMainDelegate: class {
+  func returnToDoModel(_ controller: ToDoModelController)
+}
+
+
 class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate {
   
   func toDoDroppedOnCalendarDate(_ newDate: String) {
     delegate?.sendNewToDoDueDateAfterDropSession(newDate)
   }
-
   
-  @IBOutlet weak var addItemButton: UIButton!
+  weak var passToDoModelDelegate: PassToDoModelToMainDelegate?
+  
+  @IBOutlet weak var calendarContainer: UIView!
+  var toDoModelController: ToDoModelController!
+  @IBOutlet weak var eventContainer: UIView!
   weak var delegate: InformEventTableDelegate?
   var themeController = ThemeController()
   var buttonPressedBool = false // prevent user from pressing additembutton during transitions
+//
+//  var eventViewcontroller: EventViewController!
+//  var calendarViewController: CalendarViewController?
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    if isMovingFromParentViewController {
+      passToDoModelDelegate?.returnToDoModel(toDoModelController)
+    }
+    
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
-    addItemButton.layer.shadowOpacity = 0.7
-    addItemButton.layer.shadowColor = UIColor.black.cgColor
   }
   
   override func viewWillAppear(_ animated: Bool) {
     themeController = ThemeController()
     navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
     navigationController?.navigationBar.tintColor = .white
-    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
     view.backgroundColor = themeController.backgroundColor
+  }
+  
+  private func addContentController(_ child: UIViewController, to container: UIView) {
+    addChildViewController(child)
+    container.addSubview(child.view)
+    child.didMove(toParentViewController: self)
   }
   
   override func didReceiveMemoryWarning() {
@@ -49,42 +69,34 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     delegate?.sendCalendarPressInformation(Date) // send data to delegate to eventcontroller
   }
   
-  @IBAction func buttonPress(_ sender: Any) {
-    let generator = UIImpactFeedbackGenerator(style: .heavy)
-    generator.impactOccurred()
-    UIView.animate(withDuration: 0.2, animations: {
-      let rotateTransform = CGAffineTransform(rotationAngle: .pi)
-      self.addItemButton.transform = rotateTransform
-    }) { (_) in
-      
-      self.addItemButton.transform = CGAffineTransform.identity
-    }
-    DispatchQueue.main.async {
-      self.performSegue(withIdentifier: segueIdentifiers.addToDoSegue, sender: self)
-    }
-  }
-  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     switch segue.identifier {
     case segueIdentifiers.calendarSegue?:
       let controller = segue.destination as! CalendarViewController
       controller.delegate = self // A receives notifications from B
     case segueIdentifiers.eventSegue?:
-      let controller = segue.destination as! EventViewController
-      self.delegate = controller as InformEventTableDelegate // sending information from A to C
-    case segueIdentifiers.addToDoSegue?:
-      let navigation: UINavigationController = segue.destination as! UINavigationController
-      var vc = AddItemTableViewController.init()
-      vc = navigation.viewControllers[0] as! AddItemTableViewController
-      vc.controller = AddEditToDoController()
-      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
+      let destination = segue.destination as! EventViewController
+      
+      self.delegate = destination as InformEventTableDelegate // sending information from A to C
+      destination.controller.toDoModelController = toDoModelController
+      destination.controller.toDoModelController.updateView()
+
     default:
       return
     }
   }
   
-  @IBAction func unwindToCancelAdd(sender: UIStoryboardSegue) {
+  private func buildFromStoryboard<T>(_ name: String) -> T {
+    print("adding2")
+    let storyboard = UIStoryboard(name: name, bundle: nil)
+    let identifier = String(describing: T.self)
+    guard let viewController = storyboard.instantiateViewController(withIdentifier: identifier) as? T else {
+      fatalError("Missing \(identifier) in Storyboard")
+    }
+    print("adding3")
+    return viewController
   }
   
 }
+
 

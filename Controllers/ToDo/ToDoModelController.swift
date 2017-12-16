@@ -7,72 +7,63 @@
 //
 
 import Foundation
+import EventKit
 
+protocol CompletedDataLoadDelegate: class {
+  func setData()
+}
 
 class ToDoModelController {
-  lazy var cloudKitController: CloudKitController = {
-    CloudKitController()
-  }()
   
-  var toDoList = [ToDo]() {
-    didSet {
-      let defaultDate = formatStringToDate(date: "Mar 14, 1984", format: dateAndTime.monthDateYear)
-      toDoList.sort( by: {!$0.checked == !$1.checked ? ($0.dueDate ?? defaultDate).compare($1.dueDate ?? defaultDate) == .orderedAscending : !$0.checked && $1.checked })
-    }
-  }
+  var remindersController: RemindersController!
   
-  lazy var notificationController: NotificationController = {
-    NotificationController()
-  }()
+  var toDoList = [ToDo]()
+  weak var delegate: CompletedDataLoadDelegate?
   
   init() {
-    let toDo1 = ToDo(toDoItem: "Welcome", dueDate: formatStringToDate(date: "Dec 17, 1990", format: dateAndTime.monthDateYear), dueTime: "12:16 PM", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo1", notification: false, contextSection: "")
-    let toDo2 = ToDo(toDoItem: "I hope you enjoy this app!", dueDate: formatStringToDate(date: "Apr 22, 2017", format: dateAndTime.monthDateYear), dueTime: "10:30 AM", checked: true, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo2", notification: false, contextSection: "")
-    let toDo3 = ToDo(toDoItem: "Try dragging and dropping this item to another date on the calendar", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo3", notification: false, contextSection: "")
-    let toDo4 = ToDo(toDoItem: "Swipe this away to delete", dueDate: Date(), dueTime: "", checked: false, context: "Personal", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo4", notification: false, contextSection: "")
-    let toDo5 = ToDo(toDoItem: "Press the orange circle to complete", dueDate: Date(), dueTime: "", checked: false, context: "Home", notes: "", repeatNumber: 0, repeatCycle: "", nagNumber: 0, cloudRecordID: "toDo5", notification: false, contextSection: "")
-    
-    toDoList = [toDo1, toDo2, toDo3, toDo4, toDo5]
-    loadFromDisk()
-  }
-  
-  func addNewToDoItem(_ toDoItem: ToDo) {
-    let uniqueReference = NSUUID().uuidString
-    var newItem = toDoItem
-    newItem.cloudRecordID = uniqueReference
-    toDoList.append(newItem)
-    //cloudKitController.saveToCloud(item: newItem)
-    saveToDisk()
-    if newItem.notification {
-      let formattedDate = notificationController.formatDateAndTime(dueDate: newItem.dueDate!, dueTime: newItem.dueTime!)
-      if newItem.nagNumber != 0 { // if nag
-        notificationController.makeNewNagNotification(title: newItem.toDoItem, date: formattedDate, identifier: newItem.cloudRecordID, nagFrequency: newItem.nagNumber)
-      } else { // if no nag
-        notificationController.makeNewNotification(title: newItem.toDoItem, date: formattedDate, identifier: newItem.cloudRecordID)
+    remindersController = RemindersController()
+    remindersController.delegate = self
+    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
+      
+      for calendar in (self.remindersController.calendars) {
+        for reminder in calendarReminderdictionary[calendar]! {
+          var time: String?
+          if reminder.dueDateComponents?.date != nil {
+            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
+            if time == "12:00 AM" {
+              time = ""
+            }
+          }
+          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
+          self.toDoList.append(toDo5)
+        }
       }
     }
   }
   
+  func updateView() {
+    delegate?.setData()
+  }
+  
+  func addNewToDoItem(_ toDoItem: ToDo) {
+    remindersController.setNewReminder(toDoItem: toDoItem)
+    toDoList.append(toDoItem)
+    saveToDisk()
+  }
+  
   func editToDoItem(_ toDoItem: ToDo) {
-    guard let index = toDoList.index(where: {$0.cloudRecordID == toDoItem.cloudRecordID}) else {return}
-    let tempToDoItem = toDoList[index]
-    if tempToDoItem.notification {
-      removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
-    }
-    
+    remindersController.editReminder(toDoItem: toDoItem)
+    guard let index = toDoList.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID}) else {return}
     toDoList.remove(at: index)
     toDoList.append(toDoItem)
     saveToDisk()
-    //cloudKitController.editToCloud(item: toDoItem)
-    if toDoItem.notification {
-      makeNewNotification(toDoItem)
-    }
   }
   
   func editToDoItemAfterDragAndDrop(ToDo: ToDo, newDueDate: String) -> Bool {
-    guard let index = toDoList.index(where: {$0.cloudRecordID == ToDo.cloudRecordID}) else {return false}
+    guard let index = toDoList.index(where: {$0.calendarRecordID == ToDo.calendarRecordID}) else {return false}
     var tempToDoItem = toDoList[index]
     var isDueDateDifferent = true
+    // need to fix formatting here
     if let originalDueDate = tempToDoItem.dueDate {
       let stringOriginalDueDate = formatDateToString(date: originalDueDate, format: dateAndTime.monthDateYear)
       if stringOriginalDueDate == newDueDate {
@@ -84,11 +75,8 @@ class ToDoModelController {
       print("weird error")
     }
     
-    if tempToDoItem.notification {
-      removeNotifications(ID: tempToDoItem.cloudRecordID, nagNumber: tempToDoItem.nagNumber)
-      makeNewNotificationWithUpdatedDate(toDoItem: tempToDoItem, newDueDate: newDueDate)
-    }
     toDoList.remove(at: index)
+    // may need to fix formatting here
     tempToDoItem.dueDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
     toDoList.append(tempToDoItem)
     saveToDisk()
@@ -96,63 +84,59 @@ class ToDoModelController {
   }
   
   func deleteToDoItem(ID: String) {
-    guard let index = toDoList.index(where: {$0.cloudRecordID == ID}) else {return}
+    guard let index = toDoList.index(where: {$0.calendarRecordID == ID}) else {return}
     let toDoItem = toDoList[index]
-    if toDoItem.notification {
-      removeNotifications(ID: toDoItem.cloudRecordID, nagNumber: toDoItem.nagNumber)
-    }
+    remindersController.removeReminder(toDoItem: toDoItem)
     toDoList.remove(at: index)
     saveToDisk()
   }
   
   func removeNotifications(ID: String, nagNumber: Int) {
-    if nagNumber != 0 {
-      notificationController.removeNagNotification(identifier: ID)
-    } else {
-      notificationController.removeNotification(identifier: ID)
-    }
+//    if nagNumber != 0 {
+//      notificationController.removeNagNotification(identifier: ID)
+//    } else {
+//      notificationController.removeNotification(identifier: ID)
+//    }
   }
   
   func makeNewNotification(_ toDoItem: ToDo) {
-    let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
-    if toDoItem.nagNumber != 0 { // if nag
-      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
-    } else { // if no nag
-      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
-    }
+//    let formattedDate = notificationController.formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
+//    if toDoItem.nagNumber != 0 { // if nag
+//      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+//    } else { // if no nag
+//      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
+//    }
   }
   
   func makeNewNotificationWithUpdatedDate(toDoItem: ToDo, newDueDate: String) {
-    let formattedNewDueDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
-    let formattedDate = notificationController.formatDateAndTime(dueDate: formattedNewDueDate, dueTime: toDoItem.dueTime!)
-    
-    if toDoItem.nagNumber != 0 { // if nag
-      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
-    } else { // if no nag
-      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
-    }
+//    let formattedNewDueDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
+//    let formattedDate = notificationController.formatDateAndTime(dueDate: formattedNewDueDate, dueTime: toDoItem.dueTime!)
+//
+//    if toDoItem.nagNumber != 0 { // if nag
+//      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+//    } else { // if no nag
+//      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: formattedDate, identifier: toDoItem.cloudRecordID)
+//    }
   }
   
   
   
   func checkmarkButtonPressedModel(_ ID: String) -> Bool {
-    print(ID)
-    print(toDoList)
-    guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
+    guard let index = toDoList.index(where: {$0.calendarRecordID == ID} ) else {print("no index found for checkmark")
       return false}
-    let isChecked = toDoList[index].checked
+    let isChecked = toDoList[index].isChecked
     if !isChecked { // if unchecked
       if toDoList[index].notification {
-        removeNotifications(ID: toDoList[index].cloudRecordID, nagNumber: toDoList[index].nagNumber)
+//        removeNotifications(ID: toDoList[index].calendarRecordID, nagNumber: toDoList[index].nagNumber)
         if toDoList[index].repeatCycle == "" {
-          toDoList[index].checked = !toDoList[index].checked
+          toDoList[index].isChecked = !toDoList[index].isChecked
           saveToDisk()
           return !isChecked
         } else {
           return isChecked
         }
       } else {
-        toDoList[index].checked = !toDoList[index].checked
+        toDoList[index].isChecked = !toDoList[index].isChecked
         saveToDisk()
         return !isChecked
       }
@@ -161,14 +145,14 @@ class ToDoModelController {
       if toDoList[index].notification {
         makeNewNotification(toDoList[index])
       }
-      toDoList[index].checked = !toDoList[index].checked
+      toDoList[index].isChecked = !toDoList[index].isChecked
       saveToDisk()
       return !isChecked
     }
   }
   
   func checkRepeatNotification(_ ID: String) -> Bool {
-    guard let index = toDoList.index(where: {$0.cloudRecordID == ID} ) else {print("no index found for checkmark")
+    guard let index = toDoList.index(where: {$0.calendarRecordID == ID} ) else {print("no index found for checkmark")
       return false}
     var isRepeat: Bool
     if toDoList[index].repeatCycle != nil && toDoList[index].repeatCycle != "" {
@@ -182,20 +166,19 @@ class ToDoModelController {
   func postponeNotifications(ID: String, numberHours: Int) {
     print(ID)
     print(toDoList)
-    guard let index = toDoList.index(where: {$0.cloudRecordID == ID}) else {
+    guard let index = toDoList.index(where: {$0.calendarRecordID == ID}) else {
       print("error here1")
       return
     }
     let toDoItem = toDoList[index]
     let newDateAndtime = calculateTimeAndDate(hours: numberHours)
-    print(toDoItem.nagNumber)
-    removeNotifications(ID: ID, nagNumber: toDoItem.nagNumber)
+    //removeNotifications(ID: ID, nagNumber: toDoItem.nagNumber)
     
-    if toDoItem.nagNumber != 0 { // if nag
-      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
-    } else { // if no nag
-      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID)
-    }
+//    if toDoItem.nagNumber != 0 { // if nag
+//      notificationController.makeNewNagNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID, nagFrequency: toDoItem.nagNumber)
+//    } else { // if no nag
+//      notificationController.makeNewNotification(title: toDoItem.toDoItem, date: newDateAndtime, identifier: toDoItem.cloudRecordID)
+//    }
   }
   // MARK: Date Formatting Functions
   
@@ -257,5 +240,35 @@ class ToDoModelController {
       toDoList = decodedNotes
     }
   }
+  func setData(_ reminder: EKReminder) -> String {
+    let item = reminder.notes!.dropLast(6)
+    guard let rangeOfZero = item.range(of: "{!}@#{[", options: .backwards) else {return ""}
+      // Get the characters after the last 0
+    let suffix = String(describing: item.suffix(from: rangeOfZero.upperBound)) // "984"
+      return suffix
+  }
   
+  
+}
+
+extension ToDoModelController: RemindersUpdatedDelegate {
+  func updateData() {
+    toDoList = [ToDo]()
+    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
+      for calendar in (self.remindersController.calendars) {
+        for reminder in calendarReminderdictionary[calendar]! {
+          var time: String?
+          if reminder.dueDateComponents?.date != nil {
+            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
+            if time == "12:00 AM" {
+              time = ""
+            }
+          }
+          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
+          self.toDoList.append(toDo5)
+        }
+      }
+      self.delegate?.setData()
+    }
+  }
 }

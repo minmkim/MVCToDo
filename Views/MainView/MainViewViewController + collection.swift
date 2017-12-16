@@ -117,7 +117,9 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
           
         }) { (_) in
           DispatchQueue.main.async {
-            self.navigationController?.pushViewController(self.allViewController!, animated: false)
+//            self.navigationController?.pushViewController(self.allViewController!, animated: false)
+            self.performSegue(withIdentifier: segueIdentifiers.allSegue, sender: nil)
+            self.controller.toDoModelController = nil
           }
           cell.backView.backgroundColor = originalColor
           cell.backView.layer.shadowColor = originalShadow

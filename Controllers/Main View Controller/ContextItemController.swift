@@ -50,7 +50,7 @@ class ContextItemController {
   
   
   func returnContextHeaders() {
-    listOfContextHeaders = contextToDoList.flatMap( {$0.contextSection} )
+    listOfContextHeaders = contextToDoList.flatMap( {$0.contextParent} )
     listOfContextHeaders = Array(Set(listOfContextHeaders))
     if listOfContextHeaders.count == 0 {
       listOfContextHeaders.insert("", at: 0)
@@ -61,7 +61,7 @@ class ContextItemController {
   
   func createContextListUnderHeader() {
     for context in listOfContextHeaders {
-      let listOfContextsWithHeader = contextToDoList.filter({$0.contextSection == context})
+      let listOfContextsWithHeader = contextToDoList.filter({$0.contextParent == context})
       dictionaryOfContexts[context] = listOfContextsWithHeader
     }
   }
@@ -127,12 +127,12 @@ class ContextItemController {
   }
   
   func deleteItem(ID: String, index: IndexPath) {
-    guard let toDoIndex = contextToDoList.index(where: {$0.cloudRecordID == ID}) else {return}
+    guard let toDoIndex = contextToDoList.index(where: {$0.calendarRecordID == ID}) else {return}
     contextToDoList.remove(at: toDoIndex)
     toDoModelController.deleteToDoItem(ID: ID)
     let parent = listOfContextHeaders[index.section]
     let contextList = dictionaryOfContexts[parent]
-    guard let filteredContextList = contextList?.filter( {$0.cloudRecordID != ID}) else {return}
+    guard let filteredContextList = contextList?.filter( {$0.calendarRecordID != ID}) else {return}
     dictionaryOfContexts[parent] = filteredContextList
     if filteredContextList.count == 0 {
       dictionaryOfContexts[parent] = nil
@@ -154,7 +154,7 @@ class ContextItemController {
   
   func toDoItemsInContext() {
     toDoModelController = ToDoModelController()
-    let uncheckedList = toDoModelController.toDoList.filter({$0.checked == false})
+    let uncheckedList = toDoModelController.toDoList.filter({$0.isChecked == false})
     guard let context = title else {return}
     contextToDoList = uncheckedList.filter({$0.context == context})
   }
@@ -178,7 +178,7 @@ class ContextItemController {
     guard let originIndex = dragIndexPathOrigin else {return}
     let newParent = listOfContextHeaders[destinationIndex.section]
     var updatedToDo = originToDoItem
-    updatedToDo.contextSection = newParent
+    updatedToDo.contextParent = newParent
     toDoModelController.editToDoItem(updatedToDo)
     updateContextToDoListWithNewParent(toDoItem: originToDoItem, newParent: newParent)
     updateDictionaryContext(originToDoItem: originToDoItem, newParent: newParent, updatedToDo: updatedToDo)
@@ -190,14 +190,14 @@ class ContextItemController {
   }
   
   func updateContextToDoListWithNewParent(toDoItem: ToDo, newParent: String) {
-    guard let index = contextToDoList.index(where: {$0.cloudRecordID == toDoItem.cloudRecordID}) else {return}
-    contextToDoList[index].contextSection = newParent
+    guard let index = contextToDoList.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID}) else {return}
+    contextToDoList[index].contextParent = newParent
   }
   
   func updateDictionaryContext(originToDoItem: ToDo, newParent: String, updatedToDo: ToDo) {
-    guard var listOfToDoInContext = dictionaryOfContexts[originToDoItem.contextSection] else {return}
-    listOfToDoInContext = listOfToDoInContext.filter( {$0.cloudRecordID != originToDoItem.cloudRecordID})
-    dictionaryOfContexts[originToDoItem.contextSection] = listOfToDoInContext
+    guard var listOfToDoInContext = dictionaryOfContexts[originToDoItem.calendarRecordID] else {return}
+    listOfToDoInContext = listOfToDoInContext.filter( {$0.calendarRecordID != originToDoItem.calendarRecordID})
+    dictionaryOfContexts[originToDoItem.contextParent] = listOfToDoInContext
     guard var newListOfToDoInContext = dictionaryOfContexts[newParent] else {return}
     newListOfToDoInContext.append(updatedToDo)
     dictionaryOfContexts[newParent] = newListOfToDoInContext

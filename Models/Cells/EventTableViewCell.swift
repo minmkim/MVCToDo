@@ -13,13 +13,13 @@ class EventTableViewCell: UITableViewCell {
   var toDoItem: ToDo? {
     didSet {
       toDoLabel.text = toDoItem?.toDoItem
-      if toDoItem?.contextSection != "" {
-        contextLabel.text = "\(toDoItem?.context ?? ""): \(toDoItem?.contextSection ?? "")"
+      if toDoItem?.contextParent != "" {
+        contextLabel.text = "\(toDoItem?.context ?? ""): \(toDoItem?.contextParent ?? "")"
       } else {
         contextLabel.text = toDoItem?.context
       }
       dueLabel.text = toDoItem?.dueTime
-      if toDoItem?.repeatCycle != "" && (toDoItem?.notification)! && toDoItem?.checked == false {
+      if toDoItem?.repeatCycle != "" && (toDoItem?.notification)! && toDoItem?.isChecked == false {
         repeatCycleImage.isHidden = false
         repeatCycleImage.image = UIImage(named: checkMarkAsset.repeatArrows)
       } else {

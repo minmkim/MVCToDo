@@ -9,67 +9,7 @@
 import Foundation
 import UIKit
 
-extension AddItemTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-  
-  // repeat picker delegate
-  func numberOfComponents(in pickerView: UIPickerView) -> Int {
-    return 2
-  }
-  
-  //repeat picker delegate
-  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    if component == 0 {
-      return controller.numberRepeat.count
-    } else {
-      return controller.repeatingNotifications.count
-    }
-  }
-  
-  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-    if component == 0 {
-      return controller.numberRepeat[row]
-    } else {
-      return controller.repeatingNotifications[row]
-    }
-  }
-  
-  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    let numberOfRepeat = pickerView.selectedRow(inComponent: 0)
-    let cycleRepeat = pickerView.selectedRow(inComponent: 1)
-    
-    controller.numberRepeatInt = Int(controller.numberRepeat[numberOfRepeat]) ?? 0
-    controller.cycleRepeatString = controller.repeatingNotifications[cycleRepeat]  //["Days", "Weeks", "Months"]
-    
-    if controller.numberRepeatInt == 1 {
-      switch controller.cycleRepeatString {
-      case "Days":
-        repeatingField.text = "Every Day"
-      case "Weeks":
-        repeatingField.text = "Every Week"
-      case "Months":
-        repeatingField.text = "Every Month"
-      default:
-        print("error in selecting picker row")
-      }
-    } else {
-      repeatingField.text = ("Every \(controller.numberRepeat[numberOfRepeat]) \(controller.repeatingNotifications[cycleRepeat])")
-    }
-  }
-  
-  func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-    var attributedString: NSAttributedString!
-    
-    switch component {
-    case 0:
-      attributedString = NSAttributedString(string: controller.numberRepeat[row], attributes: [NSAttributedStringKey.foregroundColor : themeController.mainTextColor])
-    case 1:
-      attributedString = NSAttributedString(string: controller.repeatingNotifications[row], attributes: [NSAttributedStringKey.foregroundColor : themeController.mainTextColor])
-    default:
-      attributedString = nil
-    }
-    
-    return attributedString
-  }
+extension AddItemTableViewController: UIPickerViewDelegate {
   
   // setup date and time picker if coming from editsegue
   func setDatePickerDate() {

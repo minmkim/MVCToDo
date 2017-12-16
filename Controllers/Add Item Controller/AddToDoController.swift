@@ -14,7 +14,7 @@ protocol NotesDelegate: class {
 
 class AddEditToDoController {
   
-  let toDoModelController = ToDoModelController()
+  var toDoModelController: ToDoModelController!
   weak var delegate: NotesDelegate?
   
   // variables updated from view
@@ -47,14 +47,13 @@ class AddEditToDoController {
   init(ItemToEdit: ToDo) {
     title = "Edit To Do"
     toDoItem = ItemToEdit
-    nagInt = toDoItem?.nagNumber ?? 0
     cycleRepeatString = toDoItem?.repeatCycle ?? ""
     numberRepeatInt = toDoItem?.repeatNumber ?? 0
     notes = toDoItem?.notes ?? ""
     print("editing: \(notes)")
     notification = toDoItem?.notification ?? false
-    isChecked = toDoItem?.checked ?? false
-    parent = toDoItem?.contextSection ?? ""
+    isChecked = toDoItem?.isChecked ?? false
+    parent = toDoItem?.contextParent ?? ""
   }
   
   func updateLabels() -> [String] {
@@ -62,7 +61,7 @@ class AddEditToDoController {
       var labelStrings = [String]()
       let toDoItem = editItem.toDoItem
       let context = editItem.context ?? ""
-      let parent = editItem.contextSection
+      let parent = editItem.contextParent
       let dueDate = editItem.dueDate ?? nil
       var formattedDueDate = ""
       if dueDate != nil {
@@ -97,22 +96,12 @@ class AddEditToDoController {
         repeatLabel = "Every \(repeatNumber) \(repeatCycle)"
       }
 
-      let nagNumber = editItem.nagNumber
-      var nagText = ""
-      if nagNumber == 0 {
-        nagText = "None"
-      } else if nagNumber == 1 {
-        nagText = "Every Minute"
-      } else {
-        nagText = "Every \(nagNumber) Minutes"
-      }
       labelStrings.append(toDoItem)
       labelStrings.append(context)
       labelStrings.append(formattedDueDate)
       labelStrings.append(dueTime)
       labelStrings.append(parent)
       labelStrings.append(repeatLabel)
-      labelStrings.append(nagText)
       labelStrings.append(notificationSwitch)
       return labelStrings //[todoitem, context, duedate, duetime, parent, repeatLabel, nagText, notification]
     } else {
@@ -122,6 +111,7 @@ class AddEditToDoController {
   
   func savePressed(toDo: String, context: String, dueDate: String, dueTime: String) {
     if toDoItem != nil {
+      print("here1")
       toDoItem?.toDoItem = toDo
       toDoItem?.context = context
       if dueDate != "" {
@@ -132,18 +122,18 @@ class AddEditToDoController {
       toDoItem?.dueTime = dueTime
       toDoItem?.repeatCycle = cycleRepeatString
       toDoItem?.repeatNumber = numberRepeatInt
-      toDoItem?.nagNumber = nagInt
       toDoItem?.notes = notes
-      print("notes: \(notes)")
       toDoItem?.notification = notification
-      toDoItem?.contextSection = parent
+      toDoItem?.contextParent = parent
       toDoModelController.editToDoItem(toDoItem!)
     } else {
+      print("here2")
       if dueDate == "" {
-        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification, contextSection: parent)
+        let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: nil, isChecked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, repeatDays: "", calendarRecordID: "", notification: notification, contextParent: parent)
         toDoModelController.addNewToDoItem(toDo)
       } else {
-        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, checked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, nagNumber: nagInt, cloudRecordID: "", notification: notification, contextSection: parent)
+        print("here3")
+        let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, isChecked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, repeatDays: "", calendarRecordID: "", notification: notification, contextParent: parent)
         toDoModelController.addNewToDoItem(toDo)
       }
     }

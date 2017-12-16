@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+
+
 protocol UpdateTableViewDelegate: class {
   func updateTableView()
   func insertRow(_ indexPath: IndexPath)
@@ -23,7 +25,12 @@ protocol UpdateTableViewDelegate: class {
 
 class EventController {
   
-  lazy var toDoModelController = ToDoModelController()
+  var toDoModelController: ToDoModelController! {
+    didSet {
+      print("set")
+      toDoModelController.delegate = self
+    }
+  }
   var themeController = ThemeController()
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
@@ -37,15 +44,13 @@ class EventController {
   var dragIndexPathOrigin: IndexPath?
   
   init() {
-    toDoModelController = ToDoModelController()
-    setToDoDates()
-    startCodableTestContext()
+    print("here2")
+    
   }
   
   var toDoDates = [Date]()
   
   func setToDoDates() {
-    toDoModelController = ToDoModelController()
     toDoDatesDate = toDoModelController.toDoList.map( {$0.dueDate ?? Date()} ) // if duedate is nil, will set it as today. all nil items are put on today
     toDoDatesDate = toDoDatesDate.map( { formatStringToDate(date: formatDateToString(date: $0, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)  })
     toDoDatesDate = Array(Set(toDoDatesDate))
@@ -67,7 +72,8 @@ class EventController {
   }
   
   func rowsPerSection(section: Int) -> Int {
-    toDoModelController = ToDoModelController()
+   // toDoModelController = ToDoModelController()
+    print(section)
     let date = toDoDatesDate[section]
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == date} )
     let rowsPerSection = listOfToDoForDate.count
@@ -100,13 +106,11 @@ class EventController {
   }
   
   func countItemsInToDoList() -> Int {
-    toDoModelController = ToDoModelController()
     return toDoModelController.toDoList.count
   }
   
   
   func checkForItemsInDate(section: Int) -> Bool {
-    toDoModelController = ToDoModelController()
     let date = toDoDatesDate[section]
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == date} )
     let rowsPerSection = listOfToDoForDate.count
@@ -145,7 +149,7 @@ class EventController {
   }
   
   func checkRepeatNotification(_ ID: String) -> Bool {
-    toDoModelController = ToDoModelController()
+//    toDoModelController = ToDoModelController()
     let repeatNotification = toDoModelController.checkRepeatNotification(ID)
     return repeatNotification
   }
@@ -155,7 +159,7 @@ class EventController {
     let formattedDate = formatStringToDate(date: formatDateToString(date: date, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)
     let indexSection = toDoDatesDate.index(of: formattedDate)
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-    let indexRow = listOfToDoForDate.index(where: {$0.cloudRecordID == toDoItem.cloudRecordID})
+    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID})
     let indexPath = IndexPath(row: indexRow!, section: indexSection!)
     return indexPath
   }
@@ -165,20 +169,20 @@ class EventController {
     setToDoDates()
     let indexSection = toDoDatesDate.index(of: formattedDate)
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-    let indexRow = listOfToDoForDate.index(where: {$0.cloudRecordID == toDoItem.cloudRecordID})
+    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID})
     let indexPath = IndexPath(row: indexRow!, section: indexSection!)
     return indexPath
   }
   
   func checkmarkButtonPressedController(_ ID: String) -> String {
-    toDoModelController = ToDoModelController()
+//    toDoModelController = ToDoModelController()
     let repeatNotification = checkRepeatNotification(ID)
     let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
     if checkmarkIcon == true {
       return themeController.checkedCheckmarkIcon
     } else {
       if repeatNotification {
-        guard let toDoIndex = toDoModelController.toDoList.index(where: {$0.cloudRecordID == ID}) else {return themeController.checkedCheckmarkIcon}
+        guard let toDoIndex = toDoModelController.toDoList.index(where: {$0.calendarRecordID == ID}) else {return themeController.checkedCheckmarkIcon}
         let toDoItem = toDoModelController.toDoList[toDoIndex]
         if toDoItem.notification {
           updateTableView(toDoItem)
@@ -235,7 +239,7 @@ class EventController {
   func calculateIndexPath(_ newDueDate: String) -> IndexPath {
     let formattedDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
     let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-    let indexRow = listOfToDoForDate.index(where: {$0.cloudRecordID == dragAndDropToDo?.cloudRecordID})
+    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == dragAndDropToDo?.calendarRecordID})
     
     var counter = -1
     var indexSection = 0
@@ -306,7 +310,7 @@ class EventController {
       self.delegate?.beginUpdates()
       self.delegate?.updateCell(originIndex: originIndex, updatedToDo: toDoItem)
       if numberOfItemsInOrigin > 1 {
-        self.toDoModelController = ToDoModelController()
+//        self.toDoModelController = ToDoModelController()
         self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
         // delegate?.updateTableView()
       } else {
@@ -371,6 +375,18 @@ class EventController {
       }
     }
   }
+  
+}
+
+extension EventController: CompletedDataLoadDelegate {
+  func setData() {
+    DispatchQueue.main.async {
+      self.setToDoDates()
+      self.delegate?.updateTableView()
+    }
+    
+  }
+  
   
 }
 
