@@ -34,6 +34,8 @@
 		A45CA23F1FC8C9ED004F18A6 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */; };
 		A45FE8791FCD961900E27C17 /* MainViewViewController + collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */; };
 		A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */; };
+		A482FD8D1FE7676400F353AC /* ReminderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A482FD8C1FE7676400F353AC /* ReminderController.swift */; };
+		A482FD8F1FE767EE00F353AC /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A482FD8E1FE767EE00F353AC /* Helper.swift */; };
 		A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */; };
 		A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */; };
 		A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */; };
@@ -108,6 +110,8 @@
 		A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewViewController + collection.swift"; sourceTree = "<group>"; };
 		A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		A482FD8C1FE7676400F353AC /* ReminderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderController.swift; sourceTree = "<group>"; };
+		A482FD8E1FE767EE00F353AC /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		A48E0B9A1FBDB619007ED8FD /* IndentedEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndentedEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventTableViewCell.swift; sourceTree = "<group>"; };
 		A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
@@ -278,6 +282,7 @@
 		A4BA783E1FC02ECF007281F3 /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
+				A482FD8C1FE7676400F353AC /* ReminderController.swift */,
 				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
 				A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */,
 				A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */,
@@ -363,6 +368,7 @@
 				A4DD2C951FB9AECB008CF72E /* Assets.xcassets */,
 				A4DD2C971FB9AECB008CF72E /* LaunchScreen.storyboard */,
 				A4DD2C9A1FB9AECB008CF72E /* Info.plist */,
+				A482FD8E1FE767EE00F353AC /* Helper.swift */,
 			);
 			path = TestingNewArch;
 			sourceTree = "<group>";
@@ -581,6 +587,7 @@
 				A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */,
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
 				A42CB49A1FD0893900C10976 /* ThemeController.swift in Sources */,
+				A482FD8D1FE7676400F353AC /* ReminderController.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddToDoTableViewCell.swift in Sources */,
 				A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */,
 				A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */,
@@ -619,6 +626,7 @@
 				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,
 				A4BFAD291FBEBB0400F17D37 /* AddNotesViewController.swift in Sources */,
 				A421913D1FD6413D00F893AE /* ParentViewController.swift in Sources */,
+				A482FD8F1FE767EE00F353AC /* Helper.swift in Sources */,
 				A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */,
 				A42CC4A31FE1F7DB0024AB03 /* RemindersController.swift in Sources */,
 			);

@@ -165,14 +165,14 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   let repeatFieldIndexPath = IndexPath(row: 8, section: 1)
   let repeatPickerCellIndexPath = IndexPath(row: 9, section: 1)
   var controller: AddEditToDoController!
-  var themeController = ThemeController()
+//  var themeController = ThemeController()
 
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.title = controller.setTitle()
     notificationSwitch.isEnabled = false
     updateLabels()
-    themeing()
+//    themeing()
     // if coming from context field, context should same context
     if contextField.text == "" {
       let context = controller.setContextField()
@@ -199,57 +199,57 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     // Dispose of any resources that can be recreated.
   }
   
-  func themeing() {
-    for label in labels {
-      label.textColor = themeController.mainTextColor
-    }
-    if themeController.isDarkTheme {
-       toDoItemText.keyboardAppearance = .dark
-      infoButton.backgroundColor = UIColor(red: 0.137, green: 0.137, blue: 0.137, alpha: 1)
-      notesButton.backgroundColor = .black
-    } else {
-      toDoItemText.keyboardAppearance = .light
-      infoButton.backgroundColor = .white
-      notesButton.backgroundColor = .groupTableViewBackground
-    }
-    toDoItemText.textColor = themeController.mainTextColor
-    contextField.textColor = themeController.mainTextColor
-    parentField.textColor = themeController.mainTextColor
-    dueDateField.textColor = themeController.mainTextColor
-    dueTimeField.textColor = themeController.mainTextColor
-    repeatingField.textColor = themeController.mainTextColor
-    
-    self.tableView.backgroundColor = themeController.addBackgroundColor
-    if navigationController?.navigationBar.barTintColor != .black && themeController.mainThemeColor != navigationController?.navigationBar.barTintColor {
-      infoButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      notesButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      notificationSwitch.tintColor = navigationController?.navigationBar.barTintColor
-      notificationSwitch.onTintColor = navigationController?.navigationBar.barTintColor
-      todayButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      tomorrowButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      customButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      saveButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-      cancelButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
-    } else {
-      infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      notesButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      notificationSwitch.tintColor = themeController.mainThemeColor
-      notificationSwitch.onTintColor = themeController.mainThemeColor
-      todayButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      tomorrowButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      customButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      saveButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-      cancelButton.setTitleColor(themeController.mainThemeColor, for: .normal)
-    }
-    dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
-    dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
-    toDoItemText.attributedPlaceholder = NSAttributedString(string: "To Do", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-    contextField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-    parentField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-    dueDateField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-    dueTimeField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-    repeatingField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
-  }
+//  func themeing() {
+//    for label in labels {
+//    //  label.textColor = themeController.mainTextColor
+//    }
+//    //if themeController.isDarkTheme {
+//       toDoItemText.keyboardAppearance = .dark
+//      infoButton.backgroundColor = UIColor(red: 0.137, green: 0.137, blue: 0.137, alpha: 1)
+//      notesButton.backgroundColor = .black
+//    } else {
+//      toDoItemText.keyboardAppearance = .light
+//      infoButton.backgroundColor = .white
+//      notesButton.backgroundColor = .groupTableViewBackground
+//    }
+//    toDoItemText.textColor = themeController.mainTextColor
+//    contextField.textColor = themeController.mainTextColor
+//    parentField.textColor = themeController.mainTextColor
+//    dueDateField.textColor = themeController.mainTextColor
+//    dueTimeField.textColor = themeController.mainTextColor
+//    repeatingField.textColor = themeController.mainTextColor
+//
+//    self.tableView.backgroundColor = themeController.addBackgroundColor
+//    if navigationController?.navigationBar.barTintColor != .black && themeController.mainThemeColor != navigationController?.navigationBar.barTintColor {
+//      infoButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      notesButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      notificationSwitch.tintColor = navigationController?.navigationBar.barTintColor
+//      notificationSwitch.onTintColor = navigationController?.navigationBar.barTintColor
+//      todayButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      tomorrowButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      customButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      saveButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//      cancelButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+//    } else {
+//      infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      notesButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      notificationSwitch.tintColor = themeController.mainThemeColor
+//      notificationSwitch.onTintColor = themeController.mainThemeColor
+//      todayButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      tomorrowButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      customButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      saveButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//      cancelButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+//    }
+//    dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
+//    dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
+//    toDoItemText.attributedPlaceholder = NSAttributedString(string: "To Do", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    contextField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    parentField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    dueDateField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    dueTimeField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    repeatingField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//  }
   
   func updateLabels() {
     let labelStrings = controller.updateLabels()
@@ -285,7 +285,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    cell.backgroundColor = themeController.addTextFieldColor
+//    cell.backgroundColor = themeController.addTextFieldColor
   }
  
   func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
