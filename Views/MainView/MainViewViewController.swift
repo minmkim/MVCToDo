@@ -233,6 +233,8 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       destination.passToDoModelDelegate = self
       if self.controller.toDoModelController != nil {
         destination.toDoModelController = self.controller.toDoModelController
+        destination.toDoModelController.loadDataFromReminders()
+        self.controller.toDoModelController = nil
       } else {
         print("forced here")
         destination.toDoModelController = ToDoModelController()

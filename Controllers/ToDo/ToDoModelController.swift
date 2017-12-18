@@ -21,8 +21,13 @@ class ToDoModelController {
   weak var delegate: CompletedDataLoadDelegate?
   
   init() {
+    print("init todomodel")
     remindersController = RemindersController()
     remindersController.delegate = self
+    
+  }
+  
+  func loadDataFromReminders() {
     remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
       
       for calendar in (self.remindersController.calendars) {
@@ -39,6 +44,10 @@ class ToDoModelController {
         }
       }
     }
+  }
+  
+  deinit {
+    print("deinit todomodel")
   }
   
   func updateView() {

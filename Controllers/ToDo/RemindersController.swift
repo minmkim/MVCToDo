@@ -9,7 +9,11 @@ class RemindersController {
   
   var eventStore = EKEventStore()
   var calendarReminderdictionary = [EKCalendar:[EKReminder]]()
-  var calendars = [EKCalendar]()
+  var calendars = [EKCalendar]() {
+    didSet {
+      print("calendar changed")
+    }
+  }
   var reminders = [EKReminder]()
   var incompleteReminders = [EKReminder]()
   weak var delegate: RemindersUpdatedDelegate?

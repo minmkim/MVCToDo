@@ -41,10 +41,16 @@ class AddEditToDoController {
   // from adding item
   init() {
     title = "Add To Do"
+    print("addcontroller init")
+  }
+  
+  deinit {
+    print("deinit addtodo controller")
   }
   
   // from editing item
   init(ItemToEdit: ToDo) {
+    print("addcontroller init")
     title = "Edit To Do"
     toDoItem = ItemToEdit
     cycleRepeatString = toDoItem?.repeatCycle ?? ""

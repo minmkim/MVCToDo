@@ -80,6 +80,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       self.delegate = destination as InformEventTableDelegate // sending information from A to C
       destination.controller.toDoModelController = toDoModelController
       destination.controller.toDoModelController.updateView()
+      toDoModelController = nil
 
     default:
       return

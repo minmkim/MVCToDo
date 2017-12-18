@@ -156,12 +156,19 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       destination.controller.toDoModelController = self.controller.toDoModelController
     } else if segue.identifier == segueIdentifiers.addToDoSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
-      var vc = AddItemTableViewController.init()
+      print("1")
+      var vc = AddItemTableViewController()
+      print("2")
       vc = navigation.viewControllers[0] as! AddItemTableViewController
+      print("3")
       vc.controller = AddEditToDoController()
+      print("4")
       vc.controller.segueIdentity = segueIdentifiers.addToDoSegue
+      print("5")
       vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
+      print("6")
       vc.controller.toDoModelController = controller.toDoModelController
+      print("7")
     }
   }
   

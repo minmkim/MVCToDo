@@ -36,6 +36,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var dailyRepeatButton: UIButton!
   @IBOutlet weak var neverRepeatButton: UIButton!
   
+  deinit {
+    print("deinit addtodoview")
+  }
+  
+  
+  
   @IBAction func repeatButtonPressed(_ sender: Any) {
     print("here")
   }
@@ -111,14 +117,17 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       toDoItemText.resignFirstResponder()
     }
     if self.navigationItem.title == "Add To Do" {
+      
       if controller.segueIdentity == nil {
         performSegue(withIdentifier: "UnwindToCancel", sender: self)
       }
+      controller = nil
       navigationController?.dismiss(animated: true)
     } else {
+      controller = nil
       navigationController?.popViewController(animated: true)
     }
-    controller = nil
+    
   }
   
   func done() {
@@ -169,6 +178,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    print("addview loaded")
     navigationItem.title = controller.setTitle()
     notificationSwitch.isEnabled = false
     updateLabels()

@@ -50,10 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
  //   let controller = MainViewController()
     let rootNavigationViewController = window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
-   // rootViewController.controller.toDoModelController = ToDoModelController()
+    rootViewController.controller.toDoModelController = ToDoModelController()
     rootViewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
-    rootViewController.controller.toDoModelController = nil
     let eventStore = EKEventStore()
     eventStore.requestAccess(to: EKEntityType.reminder, completion:
       {(granted, error) in
