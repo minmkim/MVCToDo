@@ -66,7 +66,7 @@ class NotesViewController: UIViewController, UITextViewDelegate {
     if segue.identifier == segueIdentifiers.unwindNoteSegue {
       let destination = segue.destination as! AddItemTableViewController
       print("segue1")
-      self.controller.delegate = destination.controller
+      controller.delegate = destination.controller
       controller.sendFinishedNote(notesTextView.text)
     }
   }

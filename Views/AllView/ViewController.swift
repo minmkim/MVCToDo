@@ -76,9 +76,8 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       controller.delegate = self // A receives notifications from B
     case segueIdentifiers.eventSegue?:
       let destination = segue.destination as! EventViewController
-      
-      self.delegate = destination as InformEventTableDelegate // sending information from A to C
       destination.controller = EventController(controller: RemindersController())
+      self.delegate = destination as InformEventTableDelegate // sending information from A to C
     default:
       return
     }

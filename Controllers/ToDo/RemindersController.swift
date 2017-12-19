@@ -16,6 +16,7 @@ class RemindersController {
   init() {
     print("init reminderscontroller")
     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+    
   }
   
   deinit {
@@ -64,14 +65,19 @@ class RemindersController {
 
   
   func loadReminderData(completionHandler: @escaping ([Reminder]) -> ()) {
+    calendars = []
     incompleteReminderList = []
     calendars = eventStore.calendars(for: EKEntityType.reminder)
     let incompletePredicate = eventStore.predicateForIncompleteReminders(withDueDateStarting: nil, ending: nil, calendars: nil)
-    eventStore.fetchReminders(matching: incompletePredicate, completion: { (reminders: [EKReminder]?) -> Void in
+    eventStore.fetchReminders(matching: incompletePredicate, completion: { [unowned self](reminders: [EKReminder]?) -> Void in
+      
       if reminders != nil {
         for reminder in reminders! {
-          let newReminder = Reminder(reminder)
-          self.incompleteReminderList.append(newReminder)
+          autoreleasepool {
+            let newReminder = Reminder(reminder)
+            self.incompleteReminderList.append(newReminder)
+          }
+          
         }
         self.incompleteReminderList = self.incompleteReminderList.sorted(by: {($0.dueDate ?? Date()) < ($1.dueDate ?? Date())})
       } else {
@@ -92,7 +98,7 @@ class RemindersController {
     calendars =
       eventStore.calendars(for: EKEntityType.reminder)
     let completePredicate = eventStore.predicateForCompletedReminders(withCompletionDateStarting: nil, ending: nil, calendars: nil)
-    eventStore.fetchReminders(matching: completePredicate, completion: { (reminders: [EKReminder]?) -> Void in
+    eventStore.fetchReminders(matching: completePredicate, completion: { [unowned self](reminders: [EKReminder]?) -> Void in
       if reminders != nil {
         for reminder in reminders! {
           let newReminder = Reminder(reminder)

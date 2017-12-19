@@ -61,12 +61,13 @@ class CalendarViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     //themeController = ThemeController()
     calendarCollectionView.reloadData()
-    tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(self.navBarTapped(_:)))
-    self.navigationController?.navigationBar.addGestureRecognizer(tapGestureRecognizer)
+//    tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(self.navBarTapped(_:)))
+//    self.navigationController?.navigationBar.addGestureRecognizer(tapGestureRecognizer)
   }
   
   override func viewWillDisappear(_ animated: Bool) {
-    self.navigationController?.navigationBar.removeGestureRecognizer(tapGestureRecognizer)
+    print("calendar view disappear")
+//    self.navigationController?.navigationBar.removeGestureRecognizer(tapGestureRecognizer)
   }
   
   @objc func navBarTapped(_ theObject: AnyObject){

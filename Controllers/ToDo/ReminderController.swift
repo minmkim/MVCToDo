@@ -35,13 +35,16 @@ class Remindercontroller {
   
   func loadIncompleteReminders(completionHandler: @escaping ([EKCalendar:[EKReminder]]) -> ()) {
     let incompletePredicate = eventStore.predicateForIncompleteReminders(withDueDateStarting: nil, ending: nil, calendars: nil)
-    eventStore.fetchReminders(matching: incompletePredicate, completion: { (reminders: [EKReminder]?) -> Void in
-      self.incompleteReminders = reminders!
-      for calendar in self.calendars {
-        let calendarList = self.incompleteReminders.filter({$0.calendar == calendar})
-        self.calendarReminderdictionary[calendar] = calendarList
+    eventStore.fetchReminders(matching: incompletePredicate, completion: { [weak self](reminders: [EKReminder]?) -> Void in
+      self?.incompleteReminders = reminders!
+      for calendar in (self?.calendars)! {
+        autoreleasepool {
+          let calendarList = self?.incompleteReminders.filter({$0.calendar == calendar})
+          self?.calendarReminderdictionary[calendar] = calendarList
+        }
+        
       }
-      completionHandler(self.calendarReminderdictionary)
+      completionHandler((self?.calendarReminderdictionary)!)
     })
   }
   

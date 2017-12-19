@@ -11,12 +11,7 @@ import UIKit
 
 class MainViewController {
   
-  var toDoModelController: ToDoModelController! {
-    didSet {
-      print("set here")
-     // setContextList()
-    }
-  }
+  var toDoModelController = ToDoModelController()
   
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["Inbox", "Home", "Work", "Personal"]
@@ -57,19 +52,20 @@ class MainViewController {
   }
   
   func returnCellNumberOfToday() -> String {
-    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
-    let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
-    let date: Date = Date()
-    let cal: Calendar = Calendar(identifier: .gregorian)
+//    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
+//    let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
+//    let date: Date = Date()
+//    let cal: Calendar = Calendar(identifier: .gregorian)
     
-    let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+//    let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
     
-    let overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
-    let todayItems = uncheckedListOfToDo.filter({
-      formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear) == formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
-    })
-    let count = todayItems.count + overDueItems.count
-    return String(count)
+ //   let overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
+  //  let todayItems = uncheckedListOfToDo.filter({
+//      formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear) == formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
+  //  })
+  //  let count = todayItems.count + overDueItems.count
+  //  return String(count)
+    return ""
   }
   
   func checkIfEditing() -> Bool {

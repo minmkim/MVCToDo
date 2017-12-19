@@ -34,8 +34,14 @@ class AddEditToDoController {
   
   // from editing item
   init(ItemToEdit: Reminder) {
+    print("init add controller")
     title = "Edit To Do"
     reminder = ItemToEdit
+  }
+  
+  deinit {
+    print("deinit add controller")
+    reminder = nil
   }
   
   func savePressed(toDo: String, context: String, dueDate: String, dueTime: String) {

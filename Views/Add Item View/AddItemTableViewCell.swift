@@ -100,7 +100,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     if ReminderTitleField.isFirstResponder {
       ReminderTitleField.resignFirstResponder()
     }
-    if self.navigationItem.title == "Add To Do" {
+    if navigationItem.title == "Add To Do" {
 //      if controller.segueIdentity == nil {
 //        performSegue(withIdentifier: "UnwindToCancel", sender: self)
 //      }
@@ -165,7 +165,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     dueTimeField.isUserInteractionEnabled = false
      // color of the back button
     //self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-    self.navigationItem.setLeftBarButton(nil, animated: true)
+    navigationItem.setLeftBarButton(nil, animated: true)
   }  // end viewdidload
   
   override func didReceiveMemoryWarning() {
@@ -241,17 +241,17 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       parentField.text = ""
       
       if reminder.isNotification {
-        self.notificationSwitch.isOn = true
+        notificationSwitch.isOn = true
       }
       self.tableView.reloadData()
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
       self.navigationController?.navigationBar.tintColor = .white
       
-      let time = DispatchTime.now() + 0.1
-      DispatchQueue.main.asyncAfter(deadline: time) {
-        self.ReminderTitleField.becomeFirstResponder()
-      }
+//      let time = DispatchTime.now() + 0.1
+//      DispatchQueue.main.asyncAfter(deadline: time) {
+//        ReminderTitleField.becomeFirstResponder()
+//      }
       saveButton.isEnabled = false
     }
   }
@@ -265,9 +265,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     let value = NSString(string: ReminderTitleField.text!).replacingCharacters(in: range, with: string)
     // if value.characters.count > 0 {
     if value.count > 0 {
-      self.saveButton.isEnabled = true
+      saveButton.isEnabled = true
     } else {
-      self.saveButton.isEnabled = false
+      saveButton.isEnabled = false
     }
     return true
   }
@@ -444,15 +444,14 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.noteSegue {
-      let controller = segue.destination as! NotesViewController
-      self.controller.delegate = controller.controller
+      let destination = segue.destination as! NotesViewController
+      controller.delegate = destination.controller
       //self.controller.setNotes()
     } else if segue.identifier == "ParentSegue" {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")
     } else if segue.identifier == "UnwindFromToDo" {
-      let controller = segue.destination as! EventViewController
-      
+//      let controller = segue.destination as! EventViewController
     }
   }
   

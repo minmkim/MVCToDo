@@ -23,11 +23,14 @@ protocol UpdateTableViewDelegate: class {
 
 class EventController {
   
-  var remindersController: RemindersController! {
-    didSet {
-      print("set")
-      //remindersController.delegate = self
-    }
+  var remindersController: RemindersController!
+  
+  init() {
+    print("init eventcontroller")
+  }
+  
+  deinit {
+    print("deinit eventcontroller")
   }
   
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
@@ -45,10 +48,12 @@ class EventController {
       if !Reminders.isEmpty {
         self.setupControllerData()
         for date in (self.toDoDates) {
-          let listOfReminders = Reminders.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
-          self.datesRemindersList[date] = listOfReminders
-          self.delegate?.updateTableView()
+          autoreleasepool {
+            let listOfReminders = Reminders.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
+            self.datesRemindersList[date] = listOfReminders
+          }
         }
+        self.delegate?.updateTableView()
       }
     }
   }

@@ -100,7 +100,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     UIView.animate(withDuration: 0.2, animations: {
       let rotateTransform = CGAffineTransform(rotationAngle: .pi)
       self.addItemButton.transform = rotateTransform
-    }) { (_) in
+    }) { [unowned self] (_) in
       self.addItemButton.transform = CGAffineTransform.identity
     }
     DispatchQueue.main.async {
