@@ -60,7 +60,7 @@ class ContextItemViewController: UIViewController {
     if segue.identifier == segueIdentifiers.editFromContextSegue {
       let destination = segue.destination as! AddItemTableViewController
       guard let toDoItem = controller.returnEditingToDo() else {return}
-      destination.controller = AddEditToDoController(ItemToEdit: toDoItem)
+  //    destination.controller = AddEditToDoController(ItemToEdit: toDoItem)
       destination.controller.segueIdentity = segueIdentifiers.editFromContextSegue
     } else if segue.identifier == segueIdentifiers.addFromContextSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController

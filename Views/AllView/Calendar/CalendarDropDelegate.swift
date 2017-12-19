@@ -29,22 +29,22 @@ extension CalendarViewController: UICollectionViewDropDelegate {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let previousCell = calendarCollectionView.cellForItem(at: testPath) as! CalendarCollectionViewCell
-        previousCell.backgroundColor = themeController.backgroundColor
+//        previousCell.backgroundColor = themeController.backgroundColor
         if indexPath.row == 0 {
           previousCell.dayIndicatorView.backgroundColor = .red
         } else {
-          previousCell.dayIndicatorView.backgroundColor = themeController.backgroundColor
+//          previousCell.dayIndicatorView.backgroundColor = themeController.backgroundColor
         }
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-        cell.backgroundColor = themeController.mainThemeColor
-        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
+//        cell.backgroundColor = themeController.mainThemeColor
+//        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
       }
     } else {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-        cell.backgroundColor = themeController.mainThemeColor
-        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
+//        cell.backgroundColor = themeController.mainThemeColor
+//        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
       }
     }
       return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)

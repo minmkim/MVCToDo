@@ -18,15 +18,15 @@ class Remindercontroller {
   var incompleteReminders = [EKReminder]()
   weak var delegate: RemindersUpdatedDelegate?
   
-  init() {
-    NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
-    calendars = eventStore.calendars(for: EKEntityType.reminder)
-  }
-  
-  deinit {
-    print("deinit ReminderController")
-    NotificationCenter.default.removeObserver(storeChanged)
-  }
+//  init() {
+//    NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+//    calendars = eventStore.calendars(for: EKEntityType.reminder)
+//  }
+//  
+//  deinit {
+//    print("deinit ReminderController")
+//    NotificationCenter.default.removeObserver(storeChanged)
+//  }
   
   @objc func storeChanged(_ notification: Notification) {
     calendars = eventStore.calendars(for: EKEntityType.reminder)

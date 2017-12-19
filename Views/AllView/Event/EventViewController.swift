@@ -154,7 +154,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       guard let indexPath = eventTableView.indexPath(for: sender as! EventTableViewCell) else {return}
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
       let destination = segue.destination as! AddItemTableViewController
-//      destination.controller = AddEditToDoController(ItemToEdit: cell.toDoItem!)
+      destination.controller = AddEditToDoController(ItemToEdit: cell.reminder)
 //      destination.controller.toDoModelController = self.controller.toDoModelController
     } else if segue.identifier == segueIdentifiers.addToDoSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController

@@ -14,11 +14,12 @@ class RemindersController {
   weak var delegate: RemindersUpdatedDelegate?
   
   init() {
+    print("init reminderscontroller")
     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
   }
   
   deinit {
-    print("here")
+    print("deinit reminderscontroller")
     NotificationCenter.default.removeObserver(storeChanged)
   }
   

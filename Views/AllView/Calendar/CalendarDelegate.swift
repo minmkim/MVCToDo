@@ -23,7 +23,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let todayIndexPath = IndexPath(row: 100, section: 0)
     let cell = calendarCollectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCell", for: indexPath) as! CalendarCollectionViewCell
-    cell.backgroundColor = themeController.backgroundColor
+   // cell.backgroundColor = themeController.backgroundColor
     let newVariable = VariableChange()
     newVariable.variable = collectionView.indexPathsForVisibleItems
     let monthString = controller.updateMonthLabel(IndexArray: newVariable.variable)
@@ -31,16 +31,16 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
     cell.numberOfMonthLabel.text = controller.calculateDayNumberForCell(indexPathRow: indexPath.row)
     cell.dayOfWeekLabel.text = controller.calculateDayOfWeekLabelForCell(indexPathRow: indexPath.row)
     cell.dayIndicatorView.layer.cornerRadius = 13
-    if themeController.needShadow {
-      cell.dayIndicatorView.layer.shadowOffset = CGSize(width: 0, height: 3)
-      cell.dayIndicatorView.layer.shadowOpacity = 0.7
-    } else {
-      cell.dayIndicatorView.layer.shadowOpacity = 0
-    }
+//    if themeController.needShadow {
+//      cell.dayIndicatorView.layer.shadowOffset = CGSize(width: 0, height: 3)
+//      cell.dayIndicatorView.layer.shadowOpacity = 0.7
+//    } else {
+//      cell.dayIndicatorView.layer.shadowOpacity = 0
+//    }
     
     switch indexPath.row {
     case selectedCalendarIndexPath?.row ?? 1000000: // if nil, 100000 will not load
-      cell.dayIndicatorView.backgroundColor = themeController.mainThemeColor
+   //   cell.dayIndicatorView.backgroundColor = themeController.mainThemeColor
       cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
       cell.numberOfMonthLabel.textColor = .white
     case todayIndexPath.row:
@@ -48,14 +48,14 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
       cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
       cell.numberOfMonthLabel.textColor = .white
     default:
-      cell.dayIndicatorView.backgroundColor = themeController.backgroundColor
+   //   cell.dayIndicatorView.backgroundColor = themeController.backgroundColor
       cell.dayIndicatorView.layer.shadowColor = UIColor.clear.cgColor
 //      if themeController.needShadow {
 //        cell.dayIndicatorView.layer.shadowColor = UIColor.white.cgColor
 //      } else {
 //        cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
 //      }
-      cell.numberOfMonthLabel.textColor = themeController.mainTextColor
+   //   cell.numberOfMonthLabel.textColor = themeController.mainTextColor
     }
     
     return cell
@@ -66,7 +66,7 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
     delegate?.calendarDayPressed(pressedDate)
     selectedCalendarIndexPath = indexPath
     guard let cell = calendarCollectionView.cellForItem(at: indexPath) as? CalendarCollectionViewCell else {return}
-    cell.dayIndicatorView.backgroundColor = themeController.mainThemeColor
+   // cell.dayIndicatorView.backgroundColor = themeController.mainThemeColor
     cell.dayIndicatorView.layer.shadowColor = UIColor.black.cgColor
     cell.numberOfMonthLabel.textColor = .white
     UIView.animate(withDuration: 0.1, animations: {

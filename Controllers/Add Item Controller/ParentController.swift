@@ -13,7 +13,7 @@ protocol ChosenParentDelegate: class {
 }
 
 class ParentController {
-//  lazy var toDoModelController = ToDoModelController()
+  
   var filteredList: [String]?
   var listOfParents = [String]()
   weak var delegate: ChosenParentDelegate?

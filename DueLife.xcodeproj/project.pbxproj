@@ -147,7 +147,6 @@
 		A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CalendarCollectionViewCell.swift; path = Models/Cells/CalendarCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
-		A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKit.swift; sourceTree = "<group>"; };
 		A4FE91901FC5E0540034A32D /* EventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventController.swift; path = Controllers/EventController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -288,7 +287,6 @@
 				A482FD8C1FE7676400F353AC /* ReminderController.swift */,
 				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
 				A45CA23E1FC8C9ED004F18A6 /* Notifications.swift */,
-				A4F9B09D1FDA2C0A00E98E1F /* CloudKit.swift */,
 				A42CC4A21FE1F7DB0024AB03 /* RemindersController.swift */,
 			);
 			path = ToDo;

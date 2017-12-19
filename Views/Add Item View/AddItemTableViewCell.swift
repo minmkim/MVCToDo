@@ -14,7 +14,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   //MARK: IB
   @IBOutlet var labels: [UILabel]!
-  @IBOutlet weak var toDoItemText: UITextField!
+  @IBOutlet weak var ReminderTitleField: UITextField!
   @IBOutlet weak var dueDateField: UITextField!
   @IBOutlet weak var dueTimeField: UITextField!
   @IBOutlet weak var contextField: UITextField!
@@ -49,11 +49,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func todayButtonPressed(_ sender: Any) {
-    dueDateField.text = controller.formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
+    dueDateField.text = Helper.formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
     
   }
   @IBAction func tomorrowButtonPressed(_ sender: Any) {
-    dueDateField.text = controller.calculateDateAndFormatDateToString(days: 1, date: Date(), format: dateAndTime.monthDateYear)
+    dueDateField.text = Helper.calculateDateAndFormatDateToString(days: 1, date: Date(), format: dateAndTime.monthDateYear)
   }
   @IBAction func customButtonPressed(_ sender: Any) {
     isDueDatePickerShown = true
@@ -71,11 +71,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     let notificationPermission = UserDefaults.standard.bool(forKey: "NotificationPermission")
     
     if notificationPermission {
-      if notificationSwitch.isOn {
-        controller.setNotification(true)
-      } else {
-        controller.setNotification(false)
-      }
+//      if notificationSwitch.isOn {
+//        controller.setNotification(true)
+//      } else {
+//        controller.setNotification(false)
+//      }
       //update row heights to reveal nag and repeat
       tableView.beginUpdates()
       tableView.endUpdates()
@@ -91,29 +91,19 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func infoPressed(_ sender: Any) {
-      let center = UNUserNotificationCenter.current()
-     center.getPendingNotificationRequests { (notifications) in
-     print("Count: \(notifications.count)")
-     for item in notifications {
-     print(item.content)
-     //UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [item.identifier])
-     }
-     }
   }
   
   @IBAction func notesPressed(_ sender: Any) {
- //   notesButton.backgroundColor = themeController.backgroundColor
- //   infoButton.backgroundColor = themeController.headerBackgroundColor
   }
   
   @IBAction func cancel() {
-    if toDoItemText.isFirstResponder {
-      toDoItemText.resignFirstResponder()
+    if ReminderTitleField.isFirstResponder {
+      ReminderTitleField.resignFirstResponder()
     }
     if self.navigationItem.title == "Add To Do" {
-      if controller.segueIdentity == nil {
-        performSegue(withIdentifier: "UnwindToCancel", sender: self)
-      }
+//      if controller.segueIdentity == nil {
+//        performSegue(withIdentifier: "UnwindToCancel", sender: self)
+//      }
       navigationController?.dismiss(animated: true)
     } else {
       navigationController?.popViewController(animated: true)
@@ -122,9 +112,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   func done() {
-    controller.savePressed(toDo: toDoItemText.text!, context: contextField.text ?? "", dueDate: dueDateField.text ?? "", dueTime: dueTimeField.text ?? "")
-    if toDoItemText.isFirstResponder {
-      toDoItemText.resignFirstResponder()
+    controller.savePressed(toDo: ReminderTitleField.text!, context: contextField.text ?? "", dueDate: dueDateField.text ?? "", dueTime: dueTimeField.text ?? "")
+    if ReminderTitleField.isFirstResponder {
+      ReminderTitleField.resignFirstResponder()
     }
     if controller.segueIdentity == segueIdentifiers.editFromContextSegue {
       performSegue(withIdentifier: "UnwindToContextToDo", sender: self)
@@ -135,11 +125,8 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else {
       print("unwind4")
       performSegue(withIdentifier: "UnwindFromToDo", sender: self)
-      controller.toDoModelController = nil
     }
   }
-  
-  
   
   // MARK: Variables
   var isDueDatePressed = false
@@ -165,30 +152,17 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   let repeatFieldIndexPath = IndexPath(row: 8, section: 1)
   let repeatPickerCellIndexPath = IndexPath(row: 9, section: 1)
   var controller: AddEditToDoController!
-//  var themeController = ThemeController()
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationItem.title = controller.setTitle()
+//    navigationItem.title = controller.setTitle()
     notificationSwitch.isEnabled = false
     updateLabels()
 //    themeing()
-    // if coming from context field, context should same context
-    if contextField.text == "" {
-      let context = controller.setContextField()
-      if context != "" {
-        contextField.text = context
-      }
-    }
-    if dueDateField.text == "" {
-      let dateString = controller.returnTodayDate()
-      dueDateField.text = dateString
-    }
-    toDoItemText.delegate = self
+    // if coming from context field, context should same context\
     repeatingField.isUserInteractionEnabled = false
     dueDateField.isUserInteractionEnabled = false
     dueTimeField.isUserInteractionEnabled = false
-    dueTimeField.delegate = self
      // color of the back button
     //self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     self.navigationItem.setLeftBarButton(nil, animated: true)
@@ -252,44 +226,43 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 //  }
   
   func updateLabels() {
-    let labelStrings = controller.updateLabels()
-    //[todoitem, context, duedate, duetime, parent, repeatLabel, notification]
-    if labelStrings != [] {
-      self.navigationController?.navigationBar.tintColor = .white
-      DispatchQueue.main.async {
-        self.toDoItemText.text = labelStrings[0]
-        self.contextField.text = labelStrings[1]
-        self.dueDateField.text = labelStrings[2]
-        self.dueTimeField.text = labelStrings[3]
-        self.parentField.text = labelStrings[4]
-        self.repeatingField.text = labelStrings[5]
-        if labelStrings[6] == "true" {
-          self.notificationSwitch.isOn = true
-          print(self.notificationSwitch.isOn)
-        }
-        if self.dueTimeField.text != "" {
-          self.notificationSwitch.isEnabled = true
-        }
-        self.tableView.reloadData()
+    if let reminder = controller.reminder {
+      ReminderTitleField.text = reminder.reminderTitle
+      contextField.text = reminder.context
+      
+      if let dueDate = reminder.dueDate {
+        dueDateField.text = Helper.formatDateToString(date: dueDate, format: dateAndTime.monthDateYear)
       }
+      
+      if let dueTime = reminder.dueTime {
+        dueTimeField.text = dueTime
+        notificationSwitch.isEnabled = true
+      }
+      parentField.text = ""
+      
+      if reminder.isNotification {
+        self.notificationSwitch.isOn = true
+      }
+      self.tableView.reloadData()
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
       self.navigationController?.navigationBar.tintColor = .white
       
-      let time = DispatchTime.now() + 0.2
+      let time = DispatchTime.now() + 0.1
       DispatchQueue.main.asyncAfter(deadline: time) {
-        self.toDoItemText.becomeFirstResponder()
+        self.ReminderTitleField.becomeFirstResponder()
       }
       saveButton.isEnabled = false
     }
   }
+  
   
   override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //    cell.backgroundColor = themeController.addTextFieldColor
   }
  
   func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-    let value = NSString(string: toDoItemText.text!).replacingCharacters(in: range, with: string)
+    let value = NSString(string: ReminderTitleField.text!).replacingCharacters(in: range, with: string)
     // if value.characters.count > 0 {
     if value.count > 0 {
       self.saveButton.isEnabled = true
@@ -365,16 +338,16 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         isDueTimePickerShown = false
         isDueDatePickerShown = false
         isRepeatShown = false
-        toDoItemText.resignFirstResponder()
+        ReminderTitleField.resignFirstResponder()
       } else if isRepeatShown { // if repeatPicker was open, close it and open dueDatePicker
         isDueDatePressed = true
         isDueDatePickerShown = false
         isDueTimePickerShown = false
         isRepeatShown = false
-        toDoItemText.resignFirstResponder()
+        ReminderTitleField.resignFirstResponder()
       } else { // if nothing open, open dueDatePicker
         isDueDatePressed = true
-        toDoItemText.resignFirstResponder()
+        ReminderTitleField.resignFirstResponder()
       }
       
       tableView.beginUpdates()
@@ -389,22 +362,22 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
           isDueDatePickerShown = false
           isDueTimePickerShown = true
           isRepeatShown = false
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         }else if isDueDatePickerShown {
           isDueDatePressed = false
           isDueDatePickerShown = false
           isDueTimePickerShown = true
           isRepeatShown = false
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         } else if isRepeatShown {
           isDueDatePressed = false
           isDueTimePickerShown = true
           isDueDatePickerShown = false
           isRepeatShown = false
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         } else {
           isDueTimePickerShown = true
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         }
         
         tableView.beginUpdates()
@@ -420,22 +393,22 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
           isDueTimePickerShown = false
           isDueDatePickerShown = false
           isRepeatShown = true
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         }else if isDueTimePickerShown {
           isDueDatePressed = false
           isDueTimePickerShown = false
           isDueDatePickerShown = false
           isRepeatShown = true
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         } else if isDueDatePickerShown {
           isDueDatePressed = false
           isDueDatePickerShown = false
           isDueTimePickerShown = false
           isRepeatShown = true
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         } else {
           isRepeatShown = true
-          toDoItemText.resignFirstResponder()
+          ReminderTitleField.resignFirstResponder()
         }
         
         tableView.beginUpdates()
@@ -451,7 +424,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   // MARK: segue
   @IBAction func unwindWithContex(sender: UIStoryboardSegue) {
-    contextField.text = controller.updateContextField()
+//    contextField.text = controller.updateContextField()
     if contextField.text == "" {
       parentField.text = ""
     }
@@ -466,14 +439,14 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func unwindWithParent(sender: UIStoryboardSegue) {
-    parentField.text = controller.updateParentField()
+//    parentField.text = controller.updateParentField()
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.noteSegue {
       let controller = segue.destination as! NotesViewController
       self.controller.delegate = controller.controller
-      self.controller.setNotes()
+      //self.controller.setNotes()
     } else if segue.identifier == "ParentSegue" {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")

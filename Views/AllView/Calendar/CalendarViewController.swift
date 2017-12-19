@@ -20,7 +20,7 @@ class CalendarViewController: UIViewController {
   weak var delegate: InformEventTableOfCalendarPressDelegate?
   
   var controller = CalendarController()
-  var themeController = ThemeController()
+  //var themeController = ThemeController()
   var didInitialScroll = false // did user touch calendar yet?
   var previousSelectedCalendayIndexPath: IndexPath?
   var selectedCalendarIndexPath: IndexPath?
@@ -35,9 +35,9 @@ class CalendarViewController: UIViewController {
     super.viewDidLoad()
     
     monthLabel.transform = CGAffineTransform(rotationAngle: -(.pi / 2))
-    calendarCollectionView.backgroundColor = themeController.mainThemeColor
+  //  calendarCollectionView.backgroundColor = themeController.mainThemeColor
     monthLabel.textColor = .white
-    monthLabel.backgroundColor = themeController.mainThemeColor
+ //   monthLabel.backgroundColor = themeController.mainThemeColor
     monthLabel.layer.shadowOffset = CGSize(width: 3, height: 0)
     monthLabel.layer.shadowColor = UIColor.black.cgColor
     monthLabel.layer.shadowOpacity = 0.7
@@ -59,7 +59,7 @@ class CalendarViewController: UIViewController {
   var tapGestureRecognizer : UITapGestureRecognizer!
   
   override func viewWillAppear(_ animated: Bool) {
-    themeController = ThemeController()
+    //themeController = ThemeController()
     calendarCollectionView.reloadData()
     tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(self.navBarTapped(_:)))
     self.navigationController?.navigationBar.addGestureRecognizer(tapGestureRecognizer)

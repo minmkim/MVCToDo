@@ -17,7 +17,7 @@ extension AddItemTableViewController: UIPickerViewDelegate {
     dueDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: UIControlEvents.valueChanged)
     
     if dueDateField.text != "" {
-      let date = controller.formatStringToDate(date: dueDateField.text!, format: dateAndTime.monthDateYear)
+      let date = Helper.formatStringToDate(date: dueDateField.text!, format: dateAndTime.monthDateYear)
       dueDatePicker.setDate(date, animated: true)
     }
   }
@@ -27,24 +27,24 @@ extension AddItemTableViewController: UIPickerViewDelegate {
     
     dueTimePicker.datePickerMode = UIDatePickerMode.time
     if dueTimeField.text != "" {
-      let time = controller.formatStringToDate(date: dueTimeField.text!, format: dateAndTime.hourMinute)
+      let time = Helper.formatStringToDate(date: dueTimeField.text!, format: dateAndTime.hourMinute)
       dueTimePicker.setDate(time, animated: true)
     }
   }
   
   // update time and date field when picker changes
   @objc func datePickerValueChanged(sender:UIDatePicker) {
-    dueDateField.text = controller.formatDateToString(date: sender.date, format: dateAndTime.monthDateYear)
+    dueDateField.text = Helper.formatDateToString(date: sender.date, format: dateAndTime.monthDateYear)
   }
   
   @objc func timePickerValueChanged(sender:UIDatePicker) {
-    dueTimeField.text = controller.formatDateToString(date: sender.date, format: dateAndTime.hourMinute)
+    dueTimeField.text = Helper.formatDateToString(date: sender.date, format: dateAndTime.hourMinute)
     notificationSwitch.isEnabled = true
   }
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    if textField == toDoItemText  { // Switch focus to other text field
-      toDoItemText.resignFirstResponder()
+    if textField == ReminderTitleField  { // Switch focus to other text field
+      ReminderTitleField.resignFirstResponder()
     }
     return true
   }
