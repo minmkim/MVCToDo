@@ -10,26 +10,35 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
   
-  var toDoItem: ToDo? {
+  var reminder: Reminder! {
     didSet {
-      toDoLabel.text = toDoItem?.toDoItem
-      if toDoItem?.contextParent != "" {
-        contextLabel.text = "\(toDoItem?.context ?? ""): \(toDoItem?.contextParent ?? "")"
+      toDoLabel.text = reminder.reminderTitle
+      if let context = reminder.context {
+        contextLabel.text = context
       } else {
-        contextLabel.text = toDoItem?.context
+        contextLabel.text = ""
       }
-      dueLabel.text = toDoItem?.dueTime
-      if toDoItem?.repeatCycle != "" && (toDoItem?.notification)! && toDoItem?.isChecked == false {
+      if let dueTime = reminder.dueTime {
+        dueLabel.text = dueTime
+      } else {
+        dueLabel.text = ""
+      }
+      if reminder.notes != nil {
+        noteImage.isHidden = false
+        noteImage.image = UIImage(named: "NoteIcon")
+      } else {
+        noteImage.isHidden = true
+      }
+      if reminder.isRepeat {
         repeatCycleImage.isHidden = false
         repeatCycleImage.image = UIImage(named: checkMarkAsset.repeatArrows)
       } else {
         repeatCycleImage.isHidden = true
       }
-      if toDoItem?.notes != "" {
-        noteImage.isHidden = false
-        noteImage.image = UIImage(named: "NoteIcon")
+      if reminder.isChecked {
+        checkmarkButton.setImage(UIImage(named: "CheckedCircle"), for: .normal)
       } else {
-        noteImage.isHidden = true
+        checkmarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
       }
     }
   }

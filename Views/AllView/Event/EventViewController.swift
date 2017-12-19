@@ -10,6 +10,9 @@ import UIKit
 
 
 class EventViewController: UIViewController, InformEventTableDelegate, UpdateTableViewDelegate {
+  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+  }
+  
   
   // MARK: Delegate functions
   // UpdateTableViewDelegate functions
@@ -54,15 +57,15 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.endUpdates()
   }
   
-  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+  func updateCell(originIndex: IndexPath, reminder: Reminder) {
     guard let cell = eventTableView.cellForRow(at: originIndex) as? EventTableViewCell else {return}
-    cell.toDoItem = updatedToDo
+    cell.reminder = reminder
   }
 
   // update duedate after drag and drop
   func sendNewToDoDueDateAfterDropSession(_ newDate: String) {
     DispatchQueue.main.async() {
-      self.controller.updateDueDate(newDate)
+//      self.controller.updateDueDate(newDate)
     }
   }
   
@@ -87,8 +90,8 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   @IBOutlet weak var eventTableView: UITableView!
   @IBOutlet weak var addItemButton: UIButton!
   var didInitialScroll = false
-  var controller = EventController()
-  var themeController = ThemeController()
+  var controller: EventController!
+ // var themeController = ThemeController()
   var shownIndexes : [IndexPath] = []
   
   @IBAction func buttonPress(_ sender: Any) {
@@ -98,7 +101,6 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       let rotateTransform = CGAffineTransform(rotationAngle: .pi)
       self.addItemButton.transform = rotateTransform
     }) { (_) in
-      
       self.addItemButton.transform = CGAffineTransform.identity
     }
     DispatchQueue.main.async {
@@ -111,9 +113,9 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     controller.delegate = self
     eventTableView.delegate = self
     eventTableView.dataSource = self
-    eventTableView.dragDelegate = self
+//    eventTableView.dragDelegate = self
     eventTableView.dragInteractionEnabled = true
-    eventTableView.dropDelegate = self
+//    eventTableView.dropDelegate = self
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
@@ -121,11 +123,11 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    themeController = ThemeController()
+    //themeController = ThemeController()
     eventTableView.reloadData()
-    eventTableView.backgroundColor = themeController.backgroundColor
-    footerView.backgroundColor = themeController.backgroundColor
-    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+//    eventTableView.backgroundColor = themeController.backgroundColor
+//    footerView.backgroundColor = themeController.backgroundColor
+//    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
   }
   
   // need to move this to after completion handler of reminders load
@@ -152,16 +154,16 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       guard let indexPath = eventTableView.indexPath(for: sender as! EventTableViewCell) else {return}
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
       let destination = segue.destination as! AddItemTableViewController
-      destination.controller = AddEditToDoController(ItemToEdit: cell.toDoItem!)
-      destination.controller.toDoModelController = self.controller.toDoModelController
+//      destination.controller = AddEditToDoController(ItemToEdit: cell.toDoItem!)
+//      destination.controller.toDoModelController = self.controller.toDoModelController
     } else if segue.identifier == segueIdentifiers.addToDoSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
       var vc = AddItemTableViewController.init()
       vc = navigation.viewControllers[0] as! AddItemTableViewController
       vc.controller = AddEditToDoController()
       vc.controller.segueIdentity = segueIdentifiers.addToDoSegue
-      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
-      vc.controller.toDoModelController = controller.toDoModelController
+//      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
+//      vc.controller.toDoModelController = controller.toDoModelController
     }
   }
   

@@ -100,7 +100,7 @@ class TodayController {
     let list = listOfContext[index.section]
     let newList = list.filter({$0.calendarRecordID != ID})
     listOfContext[index.section] = newList
-    toDoModelController.deleteToDoItem(ID: ID)
+//    toDoModelController.deleteToDoItem(ID: ID)
     delegate?.beginUpdate()
     delegate?.deleteRows(index)
     delegate?.endUpdate()

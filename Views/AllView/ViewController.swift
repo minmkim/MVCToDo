@@ -78,9 +78,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       let destination = segue.destination as! EventViewController
       
       self.delegate = destination as InformEventTableDelegate // sending information from A to C
-      destination.controller.toDoModelController = toDoModelController
-      destination.controller.toDoModelController.updateView()
-
+      destination.controller = EventController(controller: RemindersController())
     default:
       return
     }

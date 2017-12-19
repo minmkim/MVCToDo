@@ -14,7 +14,6 @@ protocol NotesDelegate: class {
 
 class AddEditToDoController {
   
-  var toDoModelController: ToDoModelController!
   weak var delegate: NotesDelegate?
   
   // variables updated from view
@@ -125,16 +124,16 @@ class AddEditToDoController {
       toDoItem?.notes = notes
       toDoItem?.notification = notification
       toDoItem?.contextParent = parent
-      toDoModelController.editToDoItem(toDoItem!)
+//      toDoModelController.editToDoItem(toDoItem!)
     } else {
       print("here2")
       if dueDate == "" {
         let toDo = ToDo(toDoItem: toDo, dueDate: nil, dueTime: nil, isChecked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, repeatDays: "", calendarRecordID: "", notification: notification, contextParent: parent)
-        toDoModelController.addNewToDoItem(toDo)
+//        toDoModelController.addNewToDoItem(toDo)
       } else {
         print("here3")
         let toDo = ToDo(toDoItem: toDo, dueDate: formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear), dueTime: dueTime, isChecked: isChecked, context: context, notes: notes, repeatNumber: numberRepeatInt, repeatCycle: cycleRepeatString, repeatDays: "", calendarRecordID: "", notification: notification, contextParent: parent)
-        toDoModelController.addNewToDoItem(toDo)
+//        toDoModelController.addNewToDoItem(toDo)
       }
     }
   }

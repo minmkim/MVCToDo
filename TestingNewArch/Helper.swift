@@ -28,4 +28,23 @@ class Helper {
     return result
   }
   
+  static func calculateDate(days: Int, date: Date, format: String) -> String {
+    let formatter = DateFormatter()
+    let calendar = Calendar.current
+    formatter.dateFormat = format
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    let newDay = calendar.date(byAdding: .day, value: days, to: date)
+    let result = formatter.string(from: newDay ?? Date())
+    return result
+  }
+  
+  static func calculateDateComponent(byAdding: Calendar.Component, numberOf: Int, date: Date, format: String) -> Date {
+    let formatter = DateFormatter()
+    let calendar = Calendar.current
+    formatter.dateFormat = format
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    let newDay = calendar.date(byAdding: byAdding, value: numberOf, to: date)
+    return newDay ?? Date()
+  }
+  
 }

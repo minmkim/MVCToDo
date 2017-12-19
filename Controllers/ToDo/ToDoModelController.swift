@@ -20,45 +20,45 @@ class ToDoModelController {
   var toDoList = [ToDo]()
   weak var delegate: CompletedDataLoadDelegate?
   
-  init() {
-    remindersController = RemindersController()
-    remindersController.delegate = self
-    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
-      
-      for calendar in (self.remindersController.calendars) {
-        for reminder in calendarReminderdictionary[calendar]! {
-          var time: String?
-          if reminder.dueDateComponents?.date != nil {
-            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
-            if time == "12:00 AM" {
-              time = ""
-            }
-          }
-          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
-          self.toDoList.append(toDo5)
-        }
-      }
-    }
-  }
-  
+//  init() {
+//    remindersController = RemindersController()
+////    remindersController.delegate = self
+//    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
+//
+//      for calendar in (self.remindersController.calendars) {
+//        for reminder in calendarReminderdictionary[calendar]! {
+//          var time: String?
+//          if reminder.dueDateComponents?.date != nil {
+//            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
+//            if time == "12:00 AM" {
+//              time = ""
+//            }
+//          }
+//          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
+//          self.toDoList.append(toDo5)
+//        }
+//      }
+//    }
+//  }
+
   func updateView() {
     delegate?.setData()
   }
-  
-  func addNewToDoItem(_ toDoItem: ToDo) {
-    remindersController.setNewReminder(toDoItem: toDoItem)
-    toDoList.append(toDoItem)
-    saveToDisk()
-  }
-  
-  func editToDoItem(_ toDoItem: ToDo) {
-    remindersController.editReminder(toDoItem: toDoItem)
-    guard let index = toDoList.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID}) else {return}
-    toDoList.remove(at: index)
-    toDoList.append(toDoItem)
-    saveToDisk()
-  }
-  
+//
+//  func addNewToDoItem(_ toDoItem: ToDo) {
+//    remindersController.setNewReminder(toDoItem: toDoItem)
+//    toDoList.append(toDoItem)
+//    saveToDisk()
+//  }
+//
+//  func editToDoItem(_ toDoItem: ToDo) {
+//    remindersController.editReminder(toDoItem: toDoItem)
+//    guard let index = toDoList.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID}) else {return}
+//    toDoList.remove(at: index)
+//    toDoList.append(toDoItem)
+//    saveToDisk()
+//  }
+//
   func editToDoItemAfterDragAndDrop(ToDo: ToDo, newDueDate: String) -> Bool {
     guard let index = toDoList.index(where: {$0.calendarRecordID == ToDo.calendarRecordID}) else {return false}
     var tempToDoItem = toDoList[index]
@@ -83,13 +83,13 @@ class ToDoModelController {
     return isDueDateDifferent
   }
   
-  func deleteToDoItem(ID: String) {
-    guard let index = toDoList.index(where: {$0.calendarRecordID == ID}) else {return}
-    let toDoItem = toDoList[index]
-    remindersController.removeReminder(toDoItem: toDoItem)
-    toDoList.remove(at: index)
-    saveToDisk()
-  }
+//  func deleteToDoItem(ID: String) {
+//    guard let index = toDoList.index(where: {$0.calendarRecordID == ID}) else {return}
+//    let toDoItem = toDoList[index]
+//    remindersController.removeReminder(reminder: toDoItem)
+//    toDoList.remove(at: index)
+//    saveToDisk()
+//  }
   
   func removeNotifications(ID: String, nagNumber: Int) {
 //    if nagNumber != 0 {
@@ -251,24 +251,25 @@ class ToDoModelController {
   
 }
 
-extension ToDoModelController: RemindersUpdatedDelegate {
-  func updateData() {
-    toDoList = [ToDo]()
-    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
-      for calendar in (self.remindersController.calendars) {
-        for reminder in calendarReminderdictionary[calendar]! {
-          var time: String?
-          if reminder.dueDateComponents?.date != nil {
-            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
-            if time == "12:00 AM" {
-              time = ""
-            }
-          }
-          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
-          self.toDoList.append(toDo5)
-        }
-      }
-      self.delegate?.setData()
-    }
-  }
-}
+//extension ToDoModelController: RemindersUpdatedDelegate {
+//  func updateData() {
+//    toDoList = [ToDo]()
+//    remindersController.loadReminderData { [unowned self] (calendarReminderdictionary) in
+//      for calendar in (self.remindersController.calendars) {
+//        for reminder in calendarReminderdictionary[calendar]! {
+//          var time: String?
+//          if reminder.dueDateComponents?.date != nil {
+//            time = self.formatDateToString(date: (reminder.dueDateComponents?.date)!, format: dateAndTime.hourMinute)
+//            if time == "12:00 AM" {
+//              time = ""
+//            }
+//          }
+//          let toDo5 = ToDo(toDoItem: reminder.title, dueDate: reminder.dueDateComponents?.date, dueTime: time, isChecked: reminder.isCompleted, context: reminder.calendar.title, notes: reminder.notes ?? "", repeatNumber: 0, repeatCycle: "", repeatDays: "", calendarRecordID: reminder.calendarItemIdentifier, notification: false, contextParent: "")
+//          self.toDoList.append(toDo5)
+//        }
+//      }
+//      self.delegate?.setData()
+//    }
+//  }
+//}
+

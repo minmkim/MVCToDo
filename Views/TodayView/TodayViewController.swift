@@ -35,8 +35,8 @@ class TodayViewController: UIViewController {
   override func viewDidLoad() {
         super.viewDidLoad()
     todayController.delegate = self
-    todayTableView.delegate = self
-    todayTableView.dataSource = self
+//    todayTableView.delegate = self
+//    todayTableView.dataSource = self
       footerView.backgroundColor = themeController.backgroundColor
     view.backgroundColor = themeController.backgroundColor
     todayTableView.backgroundColor = themeController.backgroundColor

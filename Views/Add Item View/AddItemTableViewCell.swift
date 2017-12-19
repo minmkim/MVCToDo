@@ -479,7 +479,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       controller.controller = ParentController(context: contextField.text ?? "")
     } else if segue.identifier == "UnwindFromToDo" {
       let controller = segue.destination as! EventViewController
-      controller.controller.toDoModelController = self.controller.toDoModelController
+      
     }
   }
   

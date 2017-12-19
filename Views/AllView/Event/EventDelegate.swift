@@ -18,37 +18,27 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    let rowsPerSection = controller.rowsPerSection(section: section)
+    let rowsPerSection = controller.rowsPerSection(for: section)
     return rowsPerSection
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
-    cell.toDoItem = controller.cellLabelStrings(indexPath: indexPath)
-    cell.checkmarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
-    cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
-    cell.backgroundColor = themeController.backgroundColor
-    cell.toDoLabel.textColor = themeController.mainTextColor
-    cell.contextColor.backgroundColor = controller.returnContextColor(cell.toDoItem?.context ?? "")
-    cell.contextColor.layer.cornerRadius = 3.0
-    if cell.toDoItem?.isChecked ?? false {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
-    } else {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
-    }
+    guard let reminder = controller.returnReminder(for: indexPath) else {return cell}
+    cell.reminder = reminder
     return cell
   }
   
-  @objc func checkmarkButtonPress(sender: UIButton) {
-    let generator = UISelectionFeedbackGenerator()
-    let peek = SystemSoundID(1519)
-    guard let cellID = sender.title(for: .normal) else {return}
-    let image = controller.checkmarkButtonPressedController(cellID)
-    generator.prepare()
-    AudioServicesPlaySystemSound(peek)
-    generator.selectionChanged()
-    sender.setImage(UIImage(named: image), for: .normal)
-  }
+//  @objc func checkmarkButtonPress(sender: UIButton) {
+//    let generator = UISelectionFeedbackGenerator()
+//    let peek = SystemSoundID(1519)
+//    guard let cellID = sender.title(for: .normal) else {return}
+//    let image = controller.checkmarkButtonPressedController(cellID)
+//    generator.prepare()
+//    AudioServicesPlaySystemSound(peek)
+//    generator.selectionChanged()
+//    sender.setImage(UIImage(named: image), for: .normal)
+//  }
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 32
@@ -61,9 +51,9 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     separator.backgroundColor = .groupTableViewBackground
     returnedView.addSubview(separator)
     returnedView.addSubview(label)
-    returnedView.backgroundColor = themeController.backgroundColor
+    returnedView.backgroundColor = .white
     label.textColor = .lightGray
-    label.text = controller.headerTitleOfSections(index: section)
+    label.text = controller.headerTitleOfSections(for: section)
     label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)
     label.translatesAutoresizingMaskIntoConstraints = false
     label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 18).isActive = true
@@ -76,7 +66,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     separator.trailingAnchor.constraint(equalTo: returnedView.trailingAnchor, constant: -16).isActive = true
 
     
-    if controller.checkIfToday(label.text ?? "") {
+    if controller.checkIfToday(for: (label.text ?? "")) {
       let todayLabel = UILabel()
       returnedView.addSubview(todayLabel)
       todayLabel.textColor = .red
@@ -93,9 +83,8 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
-      guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
       eventTableView.beginUpdates()
-      controller.deleteItem(ID: cloudID, indexPath: indexPath)
+      controller.deleteItem(reminder: cell.reminder, indexPath: indexPath)
       eventTableView.endUpdates()
     }
   }

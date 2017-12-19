@@ -79,7 +79,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     if editingStyle == .delete {
       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
       guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
-      controller.deleteItem(ID: cloudID, index: indexPath)
+//      controller.deleteItem(ID: cloudID, index: indexPath)
     }
   }
   

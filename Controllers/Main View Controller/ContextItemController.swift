@@ -126,29 +126,29 @@ class ContextItemController {
     return toDoItem
   }
   
-  func deleteItem(ID: String, index: IndexPath) {
-    guard let toDoIndex = contextToDoList.index(where: {$0.calendarRecordID == ID}) else {return}
-    contextToDoList.remove(at: toDoIndex)
-    toDoModelController.deleteToDoItem(ID: ID)
-    let parent = listOfContextHeaders[index.section]
-    let contextList = dictionaryOfContexts[parent]
-    guard let filteredContextList = contextList?.filter( {$0.calendarRecordID != ID}) else {return}
-    dictionaryOfContexts[parent] = filteredContextList
-    if filteredContextList.count == 0 {
-      dictionaryOfContexts[parent] = nil
-      listOfContextHeaders.remove(at: index.section)
-      delegate?.beginUpdate()
-      delegate?.deleteSection(index)
-      delegate?.deleteRow(index)
-      if listOfContextHeaders.count == 0 {
-        listOfContextHeaders.append("")
-        delegate?.insertSection(index)
-      }
-      delegate?.endUpdate()
-    } else {
-      delegate?.deleteRow(index)
-    }
-  }
+//  func deleteItem(ID: String, index: IndexPath) {
+//    guard let toDoIndex = contextToDoList.index(where: {$0.calendarRecordID == ID}) else {return}
+//    contextToDoList.remove(at: toDoIndex)
+//    toDoModelController.deleteToDoItem(ID: ID)
+//    let parent = listOfContextHeaders[index.section]
+//    let contextList = dictionaryOfContexts[parent]
+//    guard let filteredContextList = contextList?.filter( {$0.calendarRecordID != ID}) else {return}
+//    dictionaryOfContexts[parent] = filteredContextList
+//    if filteredContextList.count == 0 {
+//      dictionaryOfContexts[parent] = nil
+//      listOfContextHeaders.remove(at: index.section)
+//      delegate?.beginUpdate()
+//      delegate?.deleteSection(index)
+//      delegate?.deleteRow(index)
+//      if listOfContextHeaders.count == 0 {
+//        listOfContextHeaders.append("")
+//        delegate?.insertSection(index)
+//      }
+//      delegate?.endUpdate()
+//    } else {
+//      delegate?.deleteRow(index)
+//    }
+//  }
   
   // MARK: - Setting data
   
@@ -179,7 +179,7 @@ class ContextItemController {
     let newParent = listOfContextHeaders[destinationIndex.section]
     var updatedToDo = originToDoItem
     updatedToDo.contextParent = newParent
-    toDoModelController.editToDoItem(updatedToDo)
+//    toDoModelController.editToDoItem(updatedToDo)
     updateContextToDoListWithNewParent(toDoItem: originToDoItem, newParent: newParent)
     updateDictionaryContext(originToDoItem: originToDoItem, newParent: newParent, updatedToDo: updatedToDo)
 

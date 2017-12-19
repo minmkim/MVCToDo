@@ -7,16 +7,14 @@ protocol RemindersUpdatedDelegate: class {
 
 class RemindersController {
   
-  var eventStore = EKEventStore()
-  var calendarReminderdictionary = [EKCalendar:[EKReminder]]()
+  let eventStore = EKEventStore()
   var calendars = [EKCalendar]()
-  var reminders = [EKReminder]()
-  var incompleteReminders = [EKReminder]()
+  var incompleteReminderList = [Reminder]()
+  var completeReminderList = [Reminder]()
   weak var delegate: RemindersUpdatedDelegate?
   
   init() {
     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
-    calendars = eventStore.calendars(for: EKEntityType.reminder)
   }
   
   deinit {
@@ -29,72 +27,107 @@ class RemindersController {
     delegate?.updateData()
   }
   
-  func loadReminderData(completionHandler: @escaping ([EKCalendar:[EKReminder]]) -> ()) {
+  func setNewReminder(ekReminder: EKReminder) {
+    do {
+      try eventStore.save(ekReminder,
+                          commit: true)
+      let newReminder = Reminder(ekReminder)
+      incompleteReminderList.append(newReminder)
+    } catch let error {
+      print("Reminder failed with error \(error.localizedDescription)")
+    }
+  }
+  
+  func editReminder(reminder: Reminder) {
+    guard let reminderToEdit = reminder.reminder else {return}
+    do {
+      try eventStore.save(reminderToEdit, commit: true)
+    } catch let error {
+      print("Reminder failed with error \(error.localizedDescription)")
+    }
+  }
+  
+  func removeReminder(reminder: Reminder) {
+    guard let reminderToDelete = reminder.reminder else {return}
+    do {
+      try eventStore.remove(reminderToDelete, commit: true)
+      if reminder.isChecked {
+        completeReminderList = completeReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
+      } else {
+        incompleteReminderList = incompleteReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
+      }
+    } catch let error {
+      print("Reminder failed with error \(error.localizedDescription)")
+    }
+  }
+
+  
+  func loadReminderData(completionHandler: @escaping ([Reminder]) -> ()) {
+    incompleteReminderList = []
+    calendars = eventStore.calendars(for: EKEntityType.reminder)
     let incompletePredicate = eventStore.predicateForIncompleteReminders(withDueDateStarting: nil, ending: nil, calendars: nil)
     eventStore.fetchReminders(matching: incompletePredicate, completion: { (reminders: [EKReminder]?) -> Void in
-      self.incompleteReminders = reminders!
-      for calendar in self.calendars {
-        let calendarList = self.incompleteReminders.filter({$0.calendar == calendar})
-        self.calendarReminderdictionary[calendar] = calendarList
+      if reminders != nil {
+        for reminder in reminders! {
+          let newReminder = Reminder(reminder)
+          self.incompleteReminderList.append(newReminder)
+        }
+        self.incompleteReminderList = self.incompleteReminderList.sorted(by: {($0.dueDate ?? Date()) < ($1.dueDate ?? Date())})
+      } else {
+        print("error, reminders list is empty")
       }
-      completionHandler(self.calendarReminderdictionary)
+      
+//      self.incompleteReminders = reminders!
+//      for calendar in self.calendars {
+//        let calendarList = self.incompleteReminders.filter({$0.calendar == calendar})
+//        self.calendarReminderdictionary[calendar] = calendarList
+//      }
+      completionHandler(self.incompleteReminderList)
     })
   }
   
-  func loadCompletedReminderData(completionHandler: @escaping () -> ()) {
+  func loadCompletedReminderData(completionHandler: @escaping ([Reminder]) -> ()) {
+    completeReminderList = []
     calendars =
       eventStore.calendars(for: EKEntityType.reminder)
     let completePredicate = eventStore.predicateForCompletedReminders(withCompletionDateStarting: nil, ending: nil, calendars: nil)
-    
-    DispatchQueue.global().async {
-      self.eventStore.fetchReminders(matching: completePredicate, completion: { (reminders: [EKReminder]?) -> Void in
-        self.reminders = reminders!
-        completionHandler()
-      })
-    }
+    eventStore.fetchReminders(matching: completePredicate, completion: { (reminders: [EKReminder]?) -> Void in
+      if reminders != nil {
+        for reminder in reminders! {
+          let newReminder = Reminder(reminder)
+          self.completeReminderList.append(newReminder)
+        }
+        self.completeReminderList = self.completeReminderList.sorted(by: {($0.dueDate ?? Date()) < ($1.dueDate ?? Date())})
+      } else {
+        print("error, reminders list is empty")
+      }
+      completionHandler(self.completeReminderList)
+    })
   }
   
-  func formatDateForAlarm(dueDate: String, dueTime: String) -> Date {
-    let dateTime = ("\(dueDate) \(dueTime)")
-    let formattedDateAndTime = formatStringToDate(date: dateTime, format: "YYYYMMdd hh:mm a")
-    return formattedDateAndTime
-  }
-  
-  func returnReminder(reminder: EKReminder, toDoItem: ToDo) -> EKReminder {
-
-    reminder.title = toDoItem.toDoItem
-    reminder.isCompleted = false
-    reminder.notes = toDoItem.notes
+  func createReminder(reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues, endRepeatDate: Date?) -> EKReminder{
+    let reminder = EKReminder(eventStore: eventStore)
+    reminder.title = reminderTitle
     
     var dateComponents: DateComponents? = nil
-    if toDoItem.dueDate != nil {
-      if toDoItem.dueTime == "" || toDoItem.dueTime == nil {
-        dateComponents = setDateComponentsForDueDateNoTime(for: toDoItem.dueDate!)
-      } else {
-        let formattedDate = formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
+    if let date = dueDate {
+      if let time = dueTime {
+        let formattedDate = formatDateAndTime(dueDate: date, dueTime: time)
         dateComponents = setDateComponentsForDueDateTime(for: formattedDate)
+      } else {
+       dateComponents = setDateComponentsForDueDateNoTime(for: date)
       }
     }
     reminder.dueDateComponents = dateComponents
-    
-    if toDoItem.notification {
-      let formattedDate = formatDateAndTime(dueDate: toDoItem.dueDate!, dueTime: toDoItem.dueTime!)
-      reminder.alarms = [setAlarm(alarmDate: formattedDate)]
-    }
-    
-    //    if toDoItem.repeatCycle != nil {
-    //      setRecurrenceRules()
-    //    }
-    if toDoItem.context != "" {
-      let calendar = calendars.filter({$0.title == toDoItem.context})
-      if calendar != [] {
-        reminder.calendar = calendar[0]
-      } else {
+    reminder.isCompleted = false
+    if let setContext = context {
+      let calendar = calendars.filter({$0.title == setContext})
+      if calendar != [] { // if calendar array is not empty
+        reminder.calendar = calendar.first
+      } else { // if creating a new calendar
         let newCalendar = EKCalendar(for: .reminder, eventStore: eventStore)
-        newCalendar.title = toDoItem.context!
+        newCalendar.title = setContext
         let sourcesInEventStore = eventStore.sources
-        
-        
         let filteredSources = sourcesInEventStore.filter { $0.sourceType == .calDAV }
         
         if let icloudSource = filteredSources.first {
@@ -102,7 +135,7 @@ class RemindersController {
         } else {
           let nextFilteredSource = sourcesInEventStore.filter { $0.sourceType == .local }
           if let localSource = nextFilteredSource.first {
-               newCalendar.source = localSource
+            newCalendar.source = localSource
           }
         }
         do {
@@ -111,81 +144,87 @@ class RemindersController {
         } catch {
           print("cal \(newCalendar.source.title) failed : \(error)")
         }
-//        let subscribedSourceIndex = sourcesInEventStore.index {$0.title == "Subscribed Calendars"}
-//        if let subscribedSourceIndex = subscribedSourceIndex {
-//          newCalendar.source = sourcesInEventStore[subscribedSourceIndex]
-//          do {
-//            try self.eventStore.saveCalendar(newCalendar, commit: true)
-//            print("calendar creation successful")
-//          } catch {
-//            print("cal \(newCalendar.source.title) failed : \(error)")
-//          }
-//        }
-        
-        do {
-          try eventStore.saveCalendar(newCalendar, commit: true)
-        } catch let error {
-          print("Reminder failed with error \(error.localizedDescription)")
-        }
         reminder.calendar = newCalendar
       }
-    } else {
+    } else { // if nil use default
       reminder.calendar = eventStore.defaultCalendarForNewReminders()
     }
     
+    if let newNote = notes {
+      reminder.notes = newNote
+    }
+    
+    if notification {
+      if let alarmDate = notifyDate {
+        let newAlarm = setAlarm(alarmDate: alarmDate)
+        reminder.alarms = [newAlarm]
+      }
+    }
+    
+    if isRepeat {
+      reminder.recurrenceRules = [setRecurrenceRules(repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeat: endRepeatDate)]
+    }
     return reminder
   }
   
-  func setNewReminder(toDoItem: ToDo) {
-    var reminder = EKReminder(eventStore: eventStore)
-    reminder = returnReminder(reminder: reminder, toDoItem: toDoItem)
-    do {
-      try eventStore.save(reminder,
-                          commit: true)
-     // reminder.refresh()
-    } catch let error {
-      print("Reminder failed with error \(error.localizedDescription)")
-    }
-  }
   
-  func editReminder(toDoItem: ToDo) {
-    var reminder: EKReminder?
-    if toDoItem.isChecked {
-      reminder = reminders.filter( {$0.calendarItemIdentifier == toDoItem.calendarRecordID}).first
-    } else {
-      reminder =
-        incompleteReminders.filter( {$0.calendarItemIdentifier == toDoItem.calendarRecordID}).first
+  func setRecurrenceRules(repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues, endRepeat: Date?) -> EKRecurrenceRule {
+    var endRepeatDate: EKRecurrenceEnd?
+    if let endDate = endRepeat {
+      endRepeatDate = EKRecurrenceEnd(end: endDate)
     }
-    guard var setReminder = reminder else {
-      print("error here")
-      return
+    var rule = EKRecurrenceRule()
+    switch repeatCycle {
+    case .daily?:
+      rule = EKRecurrenceRule(recurrenceWith: .daily, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: nil)
+      
+    case .weekly?:
+      if repeatCustomRule == .daysOfTheWeek {
+        var dayOfWeek = [EKRecurrenceDayOfWeek]()
+        for day in repeatCustomNumber {
+          switch day {
+          case 0:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.sunday))
+          case 1:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.monday))
+          case 2:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.tuesday))
+          case 3:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.wednesday))
+          case 4:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.thursday))
+          case 5:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.friday))
+          case 6:
+            dayOfWeek.append(EKRecurrenceDayOfWeek(.saturday))
+          default:
+            print("8 days in a week?")
+          }
+        }
+        rule = EKRecurrenceRule(recurrenceWith: .weekly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: dayOfWeek, daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      } else {
+        rule = EKRecurrenceRule(recurrenceWith: .weekly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      }
+      
+    case .monthly?:
+      if repeatCustomRule == .daysOfTheMonth {
+        rule = EKRecurrenceRule(recurrenceWith: .monthly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: (repeatCustomNumber as [NSNumber]), monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      } else {
+        rule = EKRecurrenceRule(recurrenceWith: .monthly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      }
+      
+    case .yearly?:
+      if repeatCustomRule == .monthsOfTheYear {
+        rule = EKRecurrenceRule(recurrenceWith: .yearly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: nil, monthsOfTheYear: (repeatCustomNumber as [NSNumber]), weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      } else {
+        rule = EKRecurrenceRule(recurrenceWith: .yearly, interval: (repeatCycleInterval ?? 1), daysOfTheWeek: nil, daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: endRepeatDate)
+      }
+    default:
+      print("error for setting recurrence rule")
     }
-    setReminder = returnReminder(reminder: setReminder, toDoItem: toDoItem)
     
-    do {
-      try eventStore.save(setReminder, commit: true)
-      print("edit update")
-    } catch let error {
-      print("Reminder failed with error \(error.localizedDescription)")
-    }
-    print("16")
-  }
-  
-  func removeReminder(toDoItem: ToDo) {
-    var reminder: EKReminder?
-    if toDoItem.isChecked {
-      reminder = reminders.filter( {$0.calendarItemIdentifier == toDoItem.calendarRecordID}).first
-    } else {
-      reminder =
-        incompleteReminders.filter( {$0.calendarItemIdentifier == toDoItem.calendarRecordID}).first
-    }
-    guard let removeReminder = reminder else {return}
     
-    do {
-      try eventStore.remove(removeReminder, commit: true)
-    } catch let error {
-      print("Reminder failed with error \(error.localizedDescription)")
-    }
+    return rule
   }
   
   func setAlarm(alarmDate: Date) -> EKAlarm {
@@ -211,69 +250,53 @@ class RemindersController {
   }
   
   func formatDateAndTime(dueDate: Date, dueTime: String) -> Date {
-    let date = formatDateToString(date: dueDate, format: dateAndTime.monthDateYear)
+    let date = Helper.formatDateToString(date: dueDate, format: dateAndTime.monthDateYear)
     print("format duedate \(dueDate)")
     print("format date \(date)")
     let dateTime = ("\(date) \(dueTime)")
-    let formattedDateAndTime = formatStringToDate(date: dateTime, format: "MMM dd, yyyy hh:mm a")
+    let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "MMM dd, yyyy hh:mm a")
     return formattedDateAndTime
   }
   
-  func setRecurrenceRules() {
-    let friday = EKRecurrenceDayOfWeek(.friday)
-  let saturday = EKRecurrenceDayOfWeek(.saturday)
-  let rule = EKRecurrenceRule(recurrenceWith: .weekly, interval: 1, daysOfTheWeek: [friday, saturday], daysOfTheMonth: nil, monthsOfTheYear: nil, weeksOfTheYear: nil, daysOfTheYear: nil, setPositions: nil, end: nil)
+  func formatDateForAlarm(dueDate: String, dueTime: String) -> Date {
+    let dateTime = ("\(dueDate) \(dueTime)")
+    let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "YYYYMMdd hh:mm a")
+    return formattedDateAndTime
   }
+  
   
 //  var str = "Hello, playground     {!}@#{[32819389]-[2319012]#@{!}"
   
-  func setDueDateTimeWithoutNotification(toDoItem: ToDo) -> ToDo {
-    var appendedData = "{!}@#{["
-    if toDoItem.dueDate != nil {
-      appendedData += formatDateToString(date: toDoItem.dueDate!, format: dateAndTime.monthDateYear)
-      appendedData += "]["
-    } else {
-      appendedData += " ][ ]#@{!}"
-    }
-    if toDoItem.dueTime != nil && toDoItem.dueTime != "" {
-      appendedData += toDoItem.dueTime!
-      appendedData += "]#@{!}"
-    } else {
-      appendedData += "]#@{!}"
-    }
-    
-    var notes = toDoItem.notes
-    
-    if notes.hasSuffix("]#@{!}") {
-      let rangeOfZero = notes.range(of: "{!}@#{[", options: .backwards)
-      // Get the characters after the last 0
-      let suffix = String(describing: notes.prefix(upTo: (rangeOfZero?.lowerBound)!))
-      notes = suffix
-      notes = String(notes.dropLast(1))
-    }
-    
-    notes += "\n\(appendedData)"
-    var formattedToDo = toDoItem
-    formattedToDo.notes = notes
-    return formattedToDo
-  }
-  
-  func formatStringToDate(date: String, format: String) -> Date {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    guard let result = formatter.date(from: date) else {
-      return formatter.date(from: "Mar 14, 1984")!
-    }
-    return result
-  }
-  
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
-  }
+//  func setDueDateTimeWithoutNotification(toDoItem: ToDo) -> ToDo {
+//    var appendedData = "{!}@#{["
+//    if toDoItem.dueDate != nil {
+//      appendedData += formatDateToString(date: toDoItem.dueDate!, format: dateAndTime.monthDateYear)
+//      appendedData += "]["
+//    } else {
+//      appendedData += " ][ ]#@{!}"
+//    }
+//    if toDoItem.dueTime != nil && toDoItem.dueTime != "" {
+//      appendedData += toDoItem.dueTime!
+//      appendedData += "]#@{!}"
+//    } else {
+//      appendedData += "]#@{!}"
+//    }
+//
+//    var notes = toDoItem.notes
+//
+//    if notes.hasSuffix("]#@{!}") {
+//      let rangeOfZero = notes.range(of: "{!}@#{[", options: .backwards)
+//      // Get the characters after the last 0
+//      let suffix = String(describing: notes.prefix(upTo: (rangeOfZero?.lowerBound)!))
+//      notes = suffix
+//      notes = String(notes.dropLast(1))
+//    }
+//
+//    notes += "\n\(appendedData)"
+//    var formattedToDo = toDoItem
+//    formattedToDo.notes = notes
+//    return formattedToDo
+//  }
+
   
 }
