@@ -74,8 +74,8 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     navigationItem.title = "Contexts"
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     navigationItem.backBarButtonItem?.tintColor = .white
-    
     addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: (self.view.frame.width - 16), height: 200)
+    
     let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureSwipeDown))
     gesture.delegate = self
     gesture.direction = .down
@@ -90,7 +90,6 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     if #available(iOS 11.0, *) {
       contextCollectionView?.contentInsetAdjustmentBehavior = .always
     }
-    
     DispatchQueue.main.async {
       var index = -1
       for _ in 0...2 {

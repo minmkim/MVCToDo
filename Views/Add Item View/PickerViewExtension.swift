@@ -38,7 +38,10 @@ extension AddItemTableViewController: UIPickerViewDelegate {
   }
   
   @objc func timePickerValueChanged(sender:UIDatePicker) {
-    dueTimeField.text = Helper.formatDateToString(date: sender.date, format: dateAndTime.hourMinute)
+    let time = Helper.formatDateToString(date: sender.date, format: dateAndTime.hourMinute)
+    dueTimeField.text = time
+    alarmTime.text = time
+    controller.endRepeatDate = sender.date
     notificationSwitch.isEnabled = true
   }
   

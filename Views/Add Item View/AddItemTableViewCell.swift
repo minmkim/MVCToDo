@@ -35,8 +35,50 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var weeklyRepeatButton: UIButton!
   @IBOutlet weak var dailyRepeatButton: UIButton!
   @IBOutlet weak var neverRepeatButton: UIButton!
+  @IBOutlet weak var alarmTime: UILabel!
+  lazy var previousStepperValue = 0
+  
+  @IBOutlet weak var alarmTimeStepper: UIStepper!
+  @IBAction func alarmTimeStepperPress(_ sender: UIStepper) {
+    print(alarmTimeStepper.value)
+    if alarmTime.text != "" {
+      let time = Helper.formatStringToDate(date: alarmTime.text!, format: dateAndTime.hourMinute)
+      if Int(alarmTimeStepper.value) < previousStepperValue {
+        let newTime = Helper.calculateDateComponent(byAdding: .minute, numberOf: -5, date: time, format: dateAndTime.hourMinute)
+        controller.endRepeatDate = newTime
+        alarmTime.text = Helper.formatDateToString(date: newTime, format: dateAndTime.hourMinute)
+      } else {
+        let newTime = Helper.calculateDateComponent(byAdding: .minute, numberOf: 5, date: time, format: dateAndTime.hourMinute)
+        controller.endRepeatDate = newTime
+        alarmTime.text = Helper.formatDateToString(date: newTime, format: dateAndTime.hourMinute)
+      }
+      previousStepperValue = Int(alarmTimeStepper.value)
+    }
+  }
+  
+
   
   @IBAction func repeatButtonPressed(_ sender: Any) {
+    switch sender as! UIButton {
+    case neverRepeatButton:
+      repeatingField.text = ""
+      controller.isRepeat = false
+    case dailyRepeatButton:
+      repeatingField.text = "Every day"
+      controller.isRepeat = true
+      controller.repeatCycle = Reminder.RepeatCycleValues.daily
+    case weeklyRepeatButton:
+      repeatingField.text = "Every week"
+      controller.isRepeat = true
+      controller.repeatCycle = Reminder.RepeatCycleValues.monthly
+    case monthlyRepeatButton:
+      repeatingField.text = "Every month"
+      controller.isRepeat = true
+      controller.repeatCycle = Reminder.RepeatCycleValues.monthly
+    default:
+      repeatingField.text = ""
+      controller.isRepeat = false
+    }
     print("here")
   }
 
@@ -123,7 +165,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else if controller.segueIdentity == segueIdentifiers.addFromTodaySegue || controller.segueIdentity == segueIdentifiers.editFromTodaySegue {
       performSegue(withIdentifier: segueIdentifiers.unwindToTodayView, sender: self)
     } else {
-      print("unwind4")
       performSegue(withIdentifier: "UnwindFromToDo", sender: self)
     }
   }
@@ -149,13 +190,15 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   let parentFieldIndexPath = IndexPath(row: 2, section: 1)
   let dueDatePickerCellIndexPath = IndexPath(row: 4, section: 1)
   let dueTimePickerCellIndexPath = IndexPath(row: 6, section: 1)
-  let repeatFieldIndexPath = IndexPath(row: 8, section: 1)
-  let repeatPickerCellIndexPath = IndexPath(row: 9, section: 1)
+  let alarmTimeIndexPath = IndexPath(row: 8, section: 1)
+  let repeatFieldIndexPath = IndexPath(row: 9, section: 1)
+  let repeatPickerCellIndexPath = IndexPath(row: 10, section: 1)
   var controller: AddEditToDoController!
 
   override func viewDidLoad() {
     super.viewDidLoad()
-//    navigationItem.title = controller.setTitle()
+    navigationItem.title = controller.setTitle()
+    alarmTimeStepper.minimumValue = -50
     notificationSwitch.isEnabled = false
     updateLabels()
     ReminderTitleField.delegate = self
@@ -218,7 +261,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 //    }
 //    dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
 //    dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")
-//    toDoItemText.attributedPlaceholder = NSAttributedString(string: "To Do", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+//    toDoItemText.attributedPlaceholder = NSAttributedString(string: "Reminder", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
 //    contextField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
 //    parentField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
 //    dueDateField.attributedPlaceholder = NSAttributedString(string: "None", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
@@ -236,13 +279,20 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       }
       
       if let dueTime = reminder.dueTime {
-        dueTimeField.text = dueTime
-        notificationSwitch.isEnabled = true
+        if dueTime != "12:00 AM"  || reminder.isNotification != false {
+          dueTimeField.text = dueTime
+          notificationSwitch.isEnabled = true
+        }
+        
       }
       parentField.text = ""
       
       if reminder.isNotification {
         notificationSwitch.isOn = true
+      }
+      
+      if let alarmTime = reminder.notifyDate {
+        self.alarmTime.text = Helper.formatDateToString(date: alarmTime, format: dateAndTime.hourMinute)
       }
       self.tableView.reloadData()
     } else {
@@ -298,6 +348,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         return 216.0
       } else {
         return 0.0
+      }
+    case (alarmTimeIndexPath.section, alarmTimeIndexPath.row):
+      if notificationSwitch.isOn == false {
+        return 0.0
+      } else {
+        return 44.0
       }
     case (repeatFieldIndexPath.section, repeatFieldIndexPath.row):
       if notificationSwitch.isOn == false {
@@ -415,7 +471,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
       }
-    case (1, 10):
+    case (1, 11):
       let cell = tableView.cellForRow(at: indexPath)
       cell?.selectionStyle = UITableViewCellSelectionStyle.none
     default:
@@ -446,13 +502,37 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.noteSegue {
       let destination = segue.destination as! NotesViewController
-      controller.delegate = destination.controller
-      //self.controller.setNotes()
+      if let note = controller.notes {
+        destination.controller.receivedNote = note
+      }
     } else if segue.identifier == "ParentSegue" {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")
     } else if segue.identifier == "UnwindFromToDo" {
-//      let controller = segue.destination as! EventViewController
+      let destination = segue.destination as! EventViewController
+      controller.sendToEventControllerDelegate = destination.controller
+      var context: String?
+      if contextField.text != "" {
+        context = contextField.text
+      }
+      var parent: String?
+      if parentField.text != "" {
+        parent = parentField.text
+      }
+      var dueTime: String?
+      if dueTimeField.text != "" {
+        dueTime = dueTimeField.text
+      }
+      if dueDateField.text == "" {
+        controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: nil, dueTime: nil, isNotify: notificationSwitch.isOn, alarmTime: nil)
+      } else {
+        if notificationSwitch.isOn {
+          controller.setAlarmDate(dueDate: dueDateField.text!, dueTime: alarmTime.text!)
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: controller.endRepeatDate)
+        } else {
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: nil)
+        }
+      }
     }
   }
   

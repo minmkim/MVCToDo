@@ -36,13 +36,14 @@ class RemindersController {
     do {
       try eventStore.save(ekReminder,
                           commit: true)
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+ //     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       let newReminder = Reminder(ekReminder)
       incompleteReminderList.append(newReminder)
     } catch let error {
       NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
+    
   }
   
   func editReminder(reminder: Reminder) {
@@ -59,7 +60,6 @@ class RemindersController {
   
   func removeReminder(reminder: Reminder) {
     NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
-
     guard let reminderToDelete = reminder.reminder else {return}
     do {
       try eventStore.remove(reminderToDelete, commit: true)
@@ -95,12 +95,6 @@ class RemindersController {
       } else {
         print("error, reminders list is empty")
       }
-      
-//      self.incompleteReminders = reminders!
-//      for calendar in self.calendars {
-//        let calendarList = self.incompleteReminders.filter({$0.calendar == calendar})
-//        self.calendarReminderdictionary[calendar] = calendarList
-//      }
       completionHandler(self.incompleteReminderList)
     })
   }
@@ -124,7 +118,7 @@ class RemindersController {
     })
   }
   
-  func createReminder(reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues, endRepeatDate: Date?) -> EKReminder{
+  func createReminder(reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
     let reminder = EKReminder(eventStore: eventStore)
     reminder.title = reminderTitle
     
@@ -139,7 +133,7 @@ class RemindersController {
     }
     reminder.dueDateComponents = dateComponents
     reminder.isCompleted = false
-    if let setContext = context {
+    if context != "", let setContext = context {
       let calendar = calendars.filter({$0.title == setContext})
       if calendar != [] { // if calendar array is not empty
         reminder.calendar = calendar.first
@@ -175,13 +169,55 @@ class RemindersController {
     
     if notification {
       if let alarmDate = notifyDate {
+        print(alarmDate)
         let newAlarm = setAlarm(alarmDate: alarmDate)
         reminder.alarms = [newAlarm]
       }
     }
     
     if isRepeat {
-      reminder.recurrenceRules = [setRecurrenceRules(repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeat: endRepeatDate)]
+      if let repeatRule = repeatCustomRule {
+        reminder.recurrenceRules = [setRecurrenceRules(repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatRule, endRepeat: endRepeatDate)]
+        
+      } else {
+        
+        
+        switch repeatCycle {
+        case .daily?:
+          if let endDate = endRepeatDate {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .daily, interval: (repeatCycleInterval ?? 1), end: EKRecurrenceEnd(end: endDate))]
+          } else {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .daily, interval: (repeatCycleInterval ?? 1), end: nil)]
+          }
+          
+          
+        case .weekly?:
+          if let endDate = endRepeatDate {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .weekly, interval: (repeatCycleInterval ?? 1), end: EKRecurrenceEnd(end: endDate))]
+          } else {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .weekly, interval: (repeatCycleInterval ?? 1), end: nil)]
+          }
+          
+          
+        case .monthly?:
+          if let endDate = endRepeatDate {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .monthly, interval: (repeatCycleInterval ?? 1), end: EKRecurrenceEnd(end: endDate))]
+          } else {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .monthly, interval: (repeatCycleInterval ?? 1), end: nil)]
+          }
+          
+          
+        case .yearly?:
+          if let endDate = endRepeatDate {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .yearly, interval: (repeatCycleInterval ?? 1), end: EKRecurrenceEnd(end: endDate))]
+          } else {
+            reminder.recurrenceRules = [EKRecurrenceRule(recurrenceWith: .yearly, interval: (repeatCycleInterval ?? 1), end: nil)]
+          }
+          
+        default:
+          print("error for setting recurrence rule")
+        }
+      }
     }
     return reminder
   }
@@ -276,13 +312,6 @@ class RemindersController {
     let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "MMM dd, yyyy hh:mm a")
     return formattedDateAndTime
   }
-  
-  func formatDateForAlarm(dueDate: String, dueTime: String) -> Date {
-    let dateTime = ("\(dueDate) \(dueTime)")
-    let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "YYYYMMdd hh:mm a")
-    return formattedDateAndTime
-  }
-  
   
 //  var str = "Hello, playground     {!}@#{[32819389]-[2319012]#@{!}"
   

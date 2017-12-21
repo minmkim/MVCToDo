@@ -12,14 +12,38 @@ protocol NotesDelegate: class {
   func sendNotes(_ notes: String)
 }
 
+protocol SendDataToEventControllerDelegate: class {
+  func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?)
+  func editReminder(for reminder: Reminder)
+}
+
 class AddEditToDoController {
   
   weak var delegate: NotesDelegate?
+  weak var sendToEventControllerDelegate: SendDataToEventControllerDelegate?
   
   var reminder: Reminder?
   var segueIdentity: String? // if coming from contextcontroller
   var contextString: String? // if need to add context label
   var todayDate = false
+  
+  var notes: String?
+  var repeatCycleInterval: Int?
+  var repeatCycle: Reminder.RepeatCycleValues?
+  var repeatCustomNumber = [Int]()
+  var repeatCustomRule: Reminder.RepeatCustomRuleValues?
+  var endRepeatDate: Date?
+  var isRepeat = false {
+    didSet {
+      if isRepeat == false {
+        repeatCycleInterval = nil
+        repeatCycle = nil
+        repeatCustomNumber = []
+        repeatCustomRule = nil
+        endRepeatDate = nil
+      }
+    }
+  }
   
   let nagListOfContext = ["Minutes"]
   let repeatingNotifications = ["Days", "Weeks", "Months"]
@@ -37,11 +61,52 @@ class AddEditToDoController {
     print("init add controller")
     title = "Edit To Do"
     reminder = ItemToEdit
+    notes = reminder?.notes
+    repeatCycleInterval = reminder?.repeatCycleInterval
+    repeatCycle = reminder?.repeatCycle
+    repeatCustomNumber = reminder?.repeatCustomNumber ?? []
+    repeatCustomRule = reminder?.repeatCustomRule
+    endRepeatDate = reminder?.endRepeatDate
+    isRepeat = (reminder?.isRepeat)!
   }
   
   deinit {
     print("deinit add controller")
     reminder = nil
+  }
+  
+  func donePressed(reminderTitle: String, context: String?, parent: String?, dueDate: String?, dueTime: String?, isNotify: Bool, alarmTime: Date?) {
+    
+    if reminder != nil {
+      if let oldReminder = reminder?.reminder {
+        oldReminder.title = reminderTitle
+        if dueDate != nil {
+          let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
+          reminder?.dueDate = date
+        } else {
+          reminder?.dueDate = nil
+        }
+        reminder?.dueTime = dueTime
+        reminder?.isNotification = isNotify
+        reminder?.notifyDate = alarmTime
+      }
+      
+      
+      
+    } else {
+      if dueDate != nil {
+        let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
+        sendToEventControllerDelegate?.addNewReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: date, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+      } else {
+        sendToEventControllerDelegate?.addNewReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: nil, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+      }
+    }
+  }
+  
+  func setAlarmDate(dueDate: String, dueTime: String) {
+    let dateString = Helper.formatStringToDate(date: dueDate, format: dateAndTime.monthDateYear)
+    let formattedDate = Helper.formatDateToString(date: dateString, format: dateAndTime.yearMonthDay)
+    endRepeatDate = Helper.formatDateForAlarm(dueDate: formattedDate, dueTime: dueTime)
   }
   
   func savePressed(toDo: String, context: String, dueDate: String, dueTime: String) {
@@ -91,19 +156,7 @@ class AddEditToDoController {
 
 extension AddEditToDoController: SavedNoteDelegate {
   func returnSavedNote(_ notes: String) {
-  //  self.notes = notes
-  }
-}
-
-extension AddEditToDoController: ChosenContextDelegate {
-  func sendChosenContext(_ context: String) {
-    if context == "None" {
-//      self.context = ""
-//      self.parent = ""
-//    } else {
-//      self.context = context
-      //    }
-    }
+    self.notes = notes
   }
 }
 

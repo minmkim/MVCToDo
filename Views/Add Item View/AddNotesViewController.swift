@@ -57,17 +57,15 @@ class NotesViewController: UIViewController, UITextViewDelegate {
       notesTextView.scrollRangeToVisible(range)
       self.navigationItem.rightBarButtonItem?.title = "Save"
     } else { // save pressed
+      controller.receivedNote = notesTextView.text
       performSegue(withIdentifier: segueIdentifiers.unwindNoteSegue, sender: self)
-      print("segue2")
     }
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.unwindNoteSegue {
       let destination = segue.destination as! AddItemTableViewController
-      print("segue1")
-      controller.delegate = destination.controller
-      controller.sendFinishedNote(notesTextView.text)
+      destination.controller.notes = controller.receivedNote
     }
   }
   

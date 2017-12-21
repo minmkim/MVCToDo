@@ -33,12 +33,12 @@ class TodayController {
     startCodableTestContext()
     let filteredIncompleteReminders = remindersController.incompleteReminderList.filter({$0.dueDate != nil})
     let date = Date()
+    
     let cal: Calendar = Calendar(identifier: .gregorian)
     let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-    
     overDueItems = filteredIncompleteReminders.filter({$0.dueDate! < newDate})
     overDueItems = overDueItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
-    todayItems = filteredIncompleteReminders.filter({ $0.dueDate == Date()})
+    todayItems = filteredIncompleteReminders.filter({ cal.isDateInToday($0.dueDate ?? Date()) })
     todayItems = todayItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
     listOfContext = [overDueItems, todayItems]
   }

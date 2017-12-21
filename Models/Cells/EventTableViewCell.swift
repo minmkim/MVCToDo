@@ -19,7 +19,11 @@ class EventTableViewCell: UITableViewCell {
         contextLabel.text = ""
       }
       if let dueTime = reminder.dueTime {
-        dueLabel.text = dueTime
+        if dueTime != "12:00 AM" || reminder.isNotification != false {
+          dueLabel.text = dueTime
+        } else {
+          dueLabel.text = ""
+        }
       } else {
         dueLabel.text = ""
       }

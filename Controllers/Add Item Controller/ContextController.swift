@@ -8,16 +8,11 @@
 
 import Foundation
 
-protocol ChosenContextDelegate: class {
-  func sendChosenContext(_ context: String)
-}
-
 class ContextController {
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
   var filteredList: [String]?
   var chosenContext = ""
-  weak var delegate: ChosenContextDelegate?
   
   init(){
     startCodableTestContext()
@@ -59,10 +54,6 @@ class ContextController {
     } else {
       chosenContext = context
     }
-  }
-  
-  func sendContext() {
-    delegate?.sendChosenContext(chosenContext)
   }
   
   func makeContextListFromColors() {

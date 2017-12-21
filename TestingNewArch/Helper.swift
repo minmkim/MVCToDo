@@ -67,4 +67,10 @@ class Helper {
     return result
   }
   
+  static func formatDateForAlarm(dueDate: String, dueTime: String) -> Date {
+    let dateTime = ("\(dueDate) \(dueTime)")
+    let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "YYYYMMdd hh:mm a")
+    return formattedDateAndTime
+  }
+  
 }

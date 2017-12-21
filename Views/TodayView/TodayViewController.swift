@@ -43,6 +43,7 @@ class TodayViewController: UIViewController {
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
+    addItemButton.setImage(UIImage(named: themeController.addCircle) , for: .normal)
         // Do any additional setup after loading the view.
     }
 
