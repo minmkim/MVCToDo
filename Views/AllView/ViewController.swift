@@ -14,7 +14,7 @@ protocol InformEventTableDelegate: class {
 }
 
 protocol PassToDoModelToMainDelegate: class {
-  func returnToDoModel(_ controller: ToDoModelController)
+  func returnToDoModel(_ controller: RemindersController)
 }
 
 
@@ -27,7 +27,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   weak var passToDoModelDelegate: PassToDoModelToMainDelegate?
   
   @IBOutlet weak var calendarContainer: UIView!
-  var toDoModelController: ToDoModelController!
+  var remindersController: RemindersController!
   @IBOutlet weak var eventContainer: UIView!
   weak var delegate: InformEventTableDelegate?
   var themeController = ThemeController()
@@ -38,7 +38,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   
   override func viewWillDisappear(_ animated: Bool) {
     if isMovingFromParentViewController {
-      passToDoModelDelegate?.returnToDoModel(toDoModelController)
+      passToDoModelDelegate?.returnToDoModel(remindersController)
     }
     
   }
@@ -76,7 +76,7 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
       controller.delegate = self // A receives notifications from B
     case segueIdentifiers.eventSegue?:
       let destination = segue.destination as! EventViewController
-      destination.controller = EventController(controller: RemindersController())
+      destination.controller = EventController(controller: remindersController)
       self.delegate = destination as InformEventTableDelegate // sending information from A to C
     default:
       return

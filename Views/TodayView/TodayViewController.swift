@@ -12,7 +12,7 @@ class TodayViewController: UIViewController {
 
   
   @IBOutlet weak var addItemButton: UIButton!
-  var todayController = TodayController()
+  var todayController: TodayController!
   var themeController = ThemeController()
   @IBOutlet weak var footerView: UIView!
   @IBOutlet weak var todayTableView: UITableView!
@@ -35,8 +35,8 @@ class TodayViewController: UIViewController {
   override func viewDidLoad() {
         super.viewDidLoad()
     todayController.delegate = self
-//    todayTableView.delegate = self
-//    todayTableView.dataSource = self
+    todayTableView.delegate = self
+    todayTableView.dataSource = self
       footerView.backgroundColor = themeController.backgroundColor
     view.backgroundColor = themeController.backgroundColor
     todayTableView.backgroundColor = themeController.backgroundColor
@@ -52,7 +52,6 @@ class TodayViewController: UIViewController {
     }
   
   @IBAction func unwindToTodayView(sender: UIStoryboardSegue) {
-    todayController = TodayController()
     todayController.delegate = self
     todayTableView.reloadData()
   }

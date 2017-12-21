@@ -43,7 +43,7 @@ class EventController {
   
   init(controller: RemindersController) {
     remindersController = controller   
-    
+    remindersController.delegate = self
     remindersController.loadReminderData { [unowned self] (Reminders) in
       if !Reminders.isEmpty {
         self.setupControllerData()
@@ -144,11 +144,17 @@ class EventController {
   
   func deleteItem(reminder: Reminder, indexPath: IndexPath) {
     remindersController.removeReminder(reminder: reminder)
+    
+    guard var listOfreminders = datesRemindersList[reminder.context ?? ""] else {return}
+    listOfreminders = listOfreminders.filter({$0.calendarRecordID != reminder.calendarRecordID})
+    datesRemindersList[reminder.context ?? ""] = listOfreminders
+    delegate?.beginUpdates()
     delegate?.deleteRow(indexPath)
     if checkForItemsInDate(section: indexPath.section) {
       setupControllerData()
       delegate?.deleteSection(indexPath)
     }
+    delegate?.endUpdates()
   }
   
   func checkRepeatNotification(reminder: Reminder) -> Bool {
@@ -356,8 +362,25 @@ extension EventController: CompletedDataLoadDelegate {
     }
     
   }
-  
-  
+}
+
+extension EventController: RemindersUpdatedDelegate {
+  func updateData() {
+    print("updating data")
+    remindersController.loadReminderData { [unowned self] (Reminders) in
+      if !Reminders.isEmpty {
+        self.setupControllerData()
+        for date in (self.toDoDates) {
+          autoreleasepool {
+            let listOfReminders = Reminders.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
+            self.datesRemindersList[date] = listOfReminders
+          }
+        }
+        self.delegate?.updateTableView()
+      }
+    }
+    delegate?.updateTableView()
+  }
 }
 
 

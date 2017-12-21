@@ -101,9 +101,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       ReminderTitleField.resignFirstResponder()
     }
     if navigationItem.title == "Add To Do" {
-//      if controller.segueIdentity == nil {
-//        performSegue(withIdentifier: "UnwindToCancel", sender: self)
-//      }
+      if controller.segueIdentity == nil {
+        performSegue(withIdentifier: "UnwindToCancel", sender: self)
+      }
       navigationController?.dismiss(animated: true)
     } else {
       navigationController?.popViewController(animated: true)
@@ -158,6 +158,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 //    navigationItem.title = controller.setTitle()
     notificationSwitch.isEnabled = false
     updateLabels()
+    ReminderTitleField.delegate = self
 //    themeing()
     // if coming from context field, context should same context\
     repeatingField.isUserInteractionEnabled = false
@@ -248,10 +249,10 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
       self.navigationController?.navigationBar.tintColor = .white
       
-//      let time = DispatchTime.now() + 0.1
-//      DispatchQueue.main.asyncAfter(deadline: time) {
-//        ReminderTitleField.becomeFirstResponder()
-//      }
+      let time = DispatchTime.now() + 0.05
+      DispatchQueue.main.asyncAfter(deadline: time) {
+        self.ReminderTitleField.becomeFirstResponder()
+      }
       saveButton.isEnabled = false
     }
   }

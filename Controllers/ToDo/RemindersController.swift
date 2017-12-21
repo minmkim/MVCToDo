@@ -21,44 +21,56 @@ class RemindersController {
   
   deinit {
     print("deinit reminderscontroller")
-    NotificationCenter.default.removeObserver(storeChanged)
+    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
   }
   
+
+  
   @objc func storeChanged(_ notification: Notification) {
-    calendars = eventStore.calendars(for: EKEntityType.reminder)
+    print("store changed")
     delegate?.updateData()
   }
   
   func setNewReminder(ekReminder: EKReminder) {
+    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     do {
       try eventStore.save(ekReminder,
                           commit: true)
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       let newReminder = Reminder(ekReminder)
       incompleteReminderList.append(newReminder)
     } catch let error {
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
   }
   
   func editReminder(reminder: Reminder) {
+    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     guard let reminderToEdit = reminder.reminder else {return}
     do {
       try eventStore.save(reminderToEdit, commit: true)
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
     } catch let error {
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
   }
   
   func removeReminder(reminder: Reminder) {
+    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
+
     guard let reminderToDelete = reminder.reminder else {return}
     do {
       try eventStore.remove(reminderToDelete, commit: true)
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       if reminder.isChecked {
         completeReminderList = completeReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
       } else {
         incompleteReminderList = incompleteReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
       }
     } catch let error {
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
   }

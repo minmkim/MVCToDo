@@ -163,7 +163,6 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       vc.controller = AddEditToDoController()
       vc.controller.segueIdentity = segueIdentifiers.addToDoSegue
 //      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
-//      vc.controller.toDoModelController = controller.toDoModelController
     }
   }
   

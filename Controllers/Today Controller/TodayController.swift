@@ -18,29 +18,27 @@ protocol TodayTableViewDelegate: class {
 
 class TodayController {
   
-  var toDoModelController = ToDoModelController()
-  lazy var themeController = ThemeController()
+  var remindersController: RemindersController!
   var delegate: TodayTableViewDelegate?
   
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
-  var overDueItems = [ToDo]()
-  var todayItems = [ToDo]()
-  var listOfContext = [[ToDo]]()
-  var editingToDo: ToDo?
+  var overDueItems = [Reminder]()
+  var todayItems = [Reminder]()
+  var listOfContext = [[Reminder]]()
+  var reminderToEdit: Reminder?
   
-  init() {
+  init(controller: RemindersController) {
+    remindersController = controller
     startCodableTestContext()
-    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
-    let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
-    let date: Date = Date()
+    let filteredIncompleteReminders = remindersController.incompleteReminderList.filter({$0.dueDate != nil})
+    let date = Date()
     let cal: Calendar = Calendar(identifier: .gregorian)
-    
     let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
     
-    overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
+    overDueItems = filteredIncompleteReminders.filter({$0.dueDate! < newDate})
     overDueItems = overDueItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
-    todayItems = uncheckedListOfToDo.filter({ $0.dueDate == Date()})
+    todayItems = filteredIncompleteReminders.filter({ $0.dueDate == Date()})
     todayItems = todayItems.sorted(by: {$0.dueDate ?? Date() < $1.dueDate ?? Date()})
     listOfContext = [overDueItems, todayItems]
   }
@@ -53,10 +51,10 @@ class TodayController {
     return listOfContext[section].count
   }
   
-  func returnToDoInCell(index: IndexPath) -> ToDo {
+  func returnReminderInCell(index: IndexPath) -> Reminder {
     let list = listOfContext[index.section]
-    let toDoItem = list[index.row]
-    return toDoItem
+    let reminder = list[index.row]
+    return reminder
   }
   
   func returnContextHeader(_ section: Int) -> String {
@@ -67,16 +65,16 @@ class TodayController {
     }
   }
   
-  func setEditingToDo(_ toDoItem: ToDo) {
-    editingToDo = toDoItem
+  func setReminderToEdit(_ reminder: Reminder) {
+    reminderToEdit = reminder
   }
   
-  func returnEditingToDo() -> ToDo? {
-    return editingToDo
+  func returnEditingToDo() -> Reminder? {
+    return reminderToEdit
   }
   
   func returnDueDate(_ date: Date) -> String {
-    let dateString = formatDateToString(date: date, format: dateAndTime.monthDateYear)
+    let dateString = Helper.formatDateToString(date: date, format: dateAndTime.monthDateYear)
     return dateString
   }
   
@@ -87,31 +85,22 @@ class TodayController {
   }
   
   func checkmarkButtonPressedController(_ ID: String) -> String {
-    toDoModelController = ToDoModelController()
-    let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
-    if checkmarkIcon == true {
-      return themeController.checkedCheckmarkIcon
-    } else {
-      return themeController.uncheckedCheckmarkIcon
-    }
+//    let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
+//    if checkmarkIcon == true {
+//      return themeController.checkedCheckmarkIcon
+//    } else {
+      return ""
+//    }
   }
   
-  func deleteItem(ID: String, index: IndexPath) {
+  func deleteItem(for reminderToDelete: Reminder, index: IndexPath) {
     let list = listOfContext[index.section]
-    let newList = list.filter({$0.calendarRecordID != ID})
+    let newList = list.filter({$0.calendarRecordID != reminderToDelete.calendarRecordID})
     listOfContext[index.section] = newList
-//    toDoModelController.deleteToDoItem(ID: ID)
+    remindersController.removeReminder(reminder: reminderToDelete)
     delegate?.beginUpdate()
     delegate?.deleteRows(index)
     delegate?.endUpdate()
-  }
-
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
   }
   
   func startCodableTestContext() {

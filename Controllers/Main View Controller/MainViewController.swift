@@ -11,7 +11,7 @@ import UIKit
 
 class MainViewController {
   
-  var toDoModelController = ToDoModelController()
+  var remindersController: RemindersController!
   
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["Inbox", "Home", "Work", "Personal"]
@@ -23,9 +23,8 @@ class MainViewController {
     //setContextList()
   }
   
-  init(controller: ToDoModelController) {
-    toDoModelController = controller
-    setContextList()
+  init(controller: RemindersController) {
+    remindersController = controller
   }
   
   
@@ -35,13 +34,13 @@ class MainViewController {
   
   func returnNumberOfItemInContext(_ index: Int) -> Int {
     let context = listOfContext[index]
-    let filteredToDoList = toDoModelController.toDoList.filter({$0.context == context})
+    let filteredToDoList = remindersController.incompleteReminderList.filter({$0.context == context})
     return filteredToDoList.count
   }
   
   func returnCellNumberOfContextString(_ index: Int) -> String {
     let context = listOfContext[index]
-    let filteredToDoList = toDoModelController.toDoList.filter({$0.context == context})
+    let filteredToDoList = remindersController.incompleteReminderList.filter({$0.context == context})
     let uncheckedContext = filteredToDoList.filter({$0.isChecked == false})
     let uncheckedContextInt = uncheckedContext.count
     if uncheckedContextInt == 0 {
@@ -103,7 +102,7 @@ class MainViewController {
   
   
   func setContextList() {
-    var toDoList = toDoModelController.toDoList.flatMap({$0.context})
+    var toDoList = remindersController.incompleteReminderList.flatMap({$0.context})
     let restoreList = startCodableTestContext()
     let stringRestoreList = makeContextListFromColors(restoreList)
     toDoList += stringRestoreList
@@ -142,7 +141,7 @@ class MainViewController {
     }
     return listOfContextAndColors
   }
-  
+
   func formatDateToString(date: Date, format: String) -> String {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "en_US_POSIX")

@@ -13,12 +13,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   @IBOutlet weak var contextCollectionView: UICollectionView!
   @IBOutlet weak var mainViewTable: UITableView!
   var controller = MainViewController()
-//  lazy var controller: MainViewController = {
-//     MainViewController()
-//  }()
   var themeController = ThemeController()
-//  var allViewController: ViewController?
-//  
   let addContextView: UIView = {
     let view = UIView()
     view.backgroundColor = colors.red
@@ -80,7 +75,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
     navigationItem.backBarButtonItem?.tintColor = .white
     
-    addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: (self.view.frame.width - 16), height: 80)
+    addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: (self.view.frame.width - 16), height: 200)
     let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureSwipeDown))
     gesture.delegate = self
     gesture.direction = .down
@@ -227,16 +222,13 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       destination.controller.title = title
     } else if segue.identifier == segueIdentifiers.todayViewSegue {
        let destination = segue.destination as! TodayViewController
+      let todayController = TodayController(controller: controller.remindersController)
+      destination.todayController = todayController
       navigationController?.navigationBar.barTintColor = controller.returnColor("Today")
     } else if segue.identifier == segueIdentifiers.allSegue {
       let destination = segue.destination as! ViewController
       destination.passToDoModelDelegate = self
-      if self.controller.toDoModelController != nil {
-        destination.toDoModelController = self.controller.toDoModelController
-      } else {
-        print("forced here")
-        destination.toDoModelController = ToDoModelController()
-      }
+      destination.remindersController = controller.remindersController
       UIApplication.shared.statusBarStyle = .lightContent
       
     }
@@ -281,7 +273,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
 }
 
 extension MainViewViewController: PassToDoModelToMainDelegate {
-  func returnToDoModel(_ controller: ToDoModelController) {
+  func returnToDoModel(_ controller: RemindersController) {
     print("delegated")
     self.controller = MainViewController(controller: controller)
   }

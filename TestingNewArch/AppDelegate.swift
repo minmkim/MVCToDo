@@ -48,12 +48,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UINavigationBar.appearance().barStyle = .black
 
  //   let controller = MainViewController()
-//    let rootNavigationViewController = window!.rootViewController as? UINavigationController
-//    let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
-//   // rootViewController.controller.toDoModelController = ToDoModelController()
-//    rootViewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-//    rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
-//    rootViewController.controller.toDoModelController = nil
+    let rootNavigationViewController = window!.rootViewController as? UINavigationController
+    let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
+    let remindersController = RemindersController()
+    rootViewController.controller = MainViewController(controller: remindersController)
+    rootViewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
+    
     let eventStore = EKEventStore()
     eventStore.requestAccess(to: EKEntityType.reminder, completion:
       {(granted, error) in
