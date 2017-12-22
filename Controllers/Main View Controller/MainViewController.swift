@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol UpdateCollectionViewDelegate: class {
+  func insertContext(at index: IndexPath)
+  func updateContext()
+}
+
 class MainViewController {
   
   var remindersController: RemindersController!
@@ -18,6 +23,8 @@ class MainViewController {
   var selectedContextIndex = 0
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var editingContext: IndexPath?
+  var newCalendarContext: String?
+  weak var updateCollectionViewDelegate: UpdateCollectionViewDelegate?
   
   init() {
     //setContextList()
@@ -25,6 +32,7 @@ class MainViewController {
   
   init(controller: RemindersController) {
     remindersController = controller
+    remindersController.calandarCompleteDelegate = self
     setContextList()
   }
   
@@ -92,13 +100,18 @@ class MainViewController {
     return listOfContext[index]
   }
   
-  func returnNewIndexPath(_ context: String) -> IndexPath {
+  func updateContextAndInsertNewContext() -> IndexPath {
     setContextList()
-    let row = listOfContext.index(of: context)
-    let indexPath = IndexPath(row: row!, section: 1)
-    return indexPath
+    if let newContext = newCalendarContext {
+      newCalendarContext = nil
+      guard let row = listOfContext.index(of: newContext) else {return IndexPath(row: listOfContext.count, section: 1)}
+      print("3")
+      let indexPath = IndexPath(row: row, section: 1)
+      return indexPath
+    } else {
+      return IndexPath(row: listOfContext.count, section: 1)
+    }
   }
-  
   
   func setContextList() {
     let contextList: [String] = remindersController.calendars.flatMap({$0.title})
@@ -117,4 +130,19 @@ class MainViewController {
     return newList
   }
   
+}
+
+extension MainViewController: CalandarCompleteDelegate {
+  func calendarUpdateCompleted() {
+    print("delegate calendarupdate")
+    let newIndex = updateContextAndInsertNewContext()
+    if newCalendarContext != nil {
+      updateCollectionViewDelegate?.insertContext(at: newIndex)
+    }
+  }
+  
+  func calendarNotificationUpdate() {
+    setContextList()
+    updateCollectionViewDelegate?.updateContext()
+  }
 }

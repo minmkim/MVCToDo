@@ -43,7 +43,7 @@ class EventController {
   
   init(controller: RemindersController) {
     remindersController = controller   
-    remindersController.delegate = self
+    remindersController.remindersUpdatedDelegate = self
     remindersController.loadReminderData { [unowned self] (Reminders) in
       if !Reminders.isEmpty {
         self.setupControllerData()

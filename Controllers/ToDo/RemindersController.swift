@@ -5,13 +5,19 @@ protocol RemindersUpdatedDelegate: class {
   func updateData()
 }
 
+protocol CalandarCompleteDelegate: class {
+  func calendarUpdateCompleted()
+  func calendarNotificationUpdate()
+}
+
 class RemindersController {
   
   let eventStore = EKEventStore()
   var calendars = [EKCalendar]()
   var incompleteReminderList = [Reminder]()
   var completeReminderList = [Reminder]()
-  weak var delegate: RemindersUpdatedDelegate?
+  weak var remindersUpdatedDelegate: RemindersUpdatedDelegate?
+  weak var calandarCompleteDelegate: CalandarCompleteDelegate?
   
   init() {
     print("init reminderscontroller")
@@ -28,7 +34,10 @@ class RemindersController {
   
   @objc func storeChanged(_ notification: Notification) {
     print("store changed")
-    delegate?.updateData()
+    completeReminderList = []
+    calendars = eventStore.calendars(for: EKEntityType.reminder)
+    remindersUpdatedDelegate?.updateData()
+    calandarCompleteDelegate?.calendarNotificationUpdate()
   }
   
   func setNewReminder(ekReminder: EKReminder) {
@@ -36,7 +45,7 @@ class RemindersController {
     do {
       try eventStore.save(ekReminder,
                           commit: true)
- //     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       let newReminder = Reminder(ekReminder)
       incompleteReminderList.append(newReminder)
     } catch let error {
@@ -290,11 +299,15 @@ class RemindersController {
   }
   
   func editOrCreateCalendar(context: String, color: UIColor) {
+    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     if let calendar = calendars.filter({$0.title == context}).first {
       calendar.cgColor = color.cgColor
       do {
         try self.eventStore.saveCalendar(calendar, commit: true)
         print("calendar creation successful")
+        completeReminderList = []
+        calendars = eventStore.calendars(for: EKEntityType.reminder)
+        calandarCompleteDelegate?.calendarUpdateCompleted()
       } catch {
         print("cal \(calendar.source.title) failed : \(error)")
       }
@@ -316,10 +329,14 @@ class RemindersController {
       do {
         try self.eventStore.saveCalendar(newCalendar, commit: true)
         print("calendar creation successful")
+        completeReminderList = []
+        calendars = eventStore.calendars(for: EKEntityType.reminder)
+        calandarCompleteDelegate?.calendarUpdateCompleted()
       } catch {
         print("cal \(newCalendar.source.title) failed : \(error)")
       }
     }
+    NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
   }
   
   func setDateComponentsForDueDateTime(for date: Date) -> DateComponents {

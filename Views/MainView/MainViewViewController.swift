@@ -12,7 +12,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   
   @IBOutlet weak var contextCollectionView: UICollectionView!
   @IBOutlet weak var mainViewTable: UITableView!
-  var controller = MainViewController()
+  var controller: MainViewController!
   var themeController = ThemeController()
   let addContextView: UIView = {
     let view = UIView()
@@ -66,9 +66,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     return stackView
   }()
   
+  override func viewDidAppear(_ animated: Bool) {
+    controller.updateCollectionViewDelegate = self
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     view.backgroundColor = themeController.backgroundColor
     contextCollectionView.backgroundColor = themeController.backgroundColor
     navigationItem.title = "Contexts"
@@ -135,7 +138,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
   
   @objc func addPressed(sender:UIButton) {
     if contextField.text != "" {
-      UIView.animate(withDuration: 0.3) {
+      UIView.animate(withDuration: 0.2) {
         self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
       }
       view.endEditing(true)
@@ -149,8 +152,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         controller.editingContext = nil
       } else {
         controller.setCalendarColor(color: addContextView.backgroundColor!, context: contextField.text!)
-          let newIndexPath = controller.returnNewIndexPath(contextField.text!)
-            contextCollectionView.insertItems(at: [newIndexPath])
+        controller.newCalendarContext = contextField.text!
       }
       controller.setContextList()
       contextCollectionView.reloadData()
@@ -269,5 +271,19 @@ extension MainViewViewController: PassToDoModelToMainDelegate {
   func returnToDoModel(_ controller: RemindersController) {
     print("delegated")
     self.controller = MainViewController(controller: controller)
+  }
+}
+
+extension MainViewViewController: UpdateCollectionViewDelegate {
+  func insertContext(at index: IndexPath) {
+    print("insert context delegate")
+    contextCollectionView.insertItems(at: [index])
+  }
+  
+  func updateContext() {
+    print("updateContext delegate")
+    DispatchQueue.main.async {
+      self.contextCollectionView.reloadData()
+    }
   }
 }

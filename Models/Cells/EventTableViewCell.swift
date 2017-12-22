@@ -44,6 +44,8 @@ class EventTableViewCell: UITableViewCell {
       } else {
         checkmarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
       }
+      contextColor.backgroundColor = UIColor(cgColor: reminder.reminder.calendar.cgColor)
+      contextColor.layer.cornerRadius = 3
     }
   }
   
