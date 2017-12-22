@@ -50,7 +50,7 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
       } else {
         cell.contextItemLabel.text = "Today"
         cell.numberOfContextLabel.text = controller.returnCellNumberOfToday()
-        cell.backView.backgroundColor =  controller.returnColor("Today")
+        cell.backView.backgroundColor =  colors.darkRed
         return cell
       }
       

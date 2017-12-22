@@ -131,14 +131,14 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     print(ID)
     switch response.actionIdentifier {
     case "Complete":
-      let toDoModelController = ToDoModelController()
-      toDoModelController.checkmarkButtonPressedModel(ID)
+      print("complete")
+      //toDoModelController.checkmarkButtonPressedModel(ID)
     case "Postpone One Hour":
-      let toDoModelController = ToDoModelController()
-      toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
+      print("Postpone One Hour")
+//      toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
     case "Postpone One Day":
-      let toDoModelController = ToDoModelController()
-      toDoModelController.postponeNotifications(ID: ID, numberHours: 24)
+      print("Postpone One Day")
+//      toDoModelController.postponeNotifications(ID: ID, numberHours: 24)
     default: print("Unknown Action")
     }
   }

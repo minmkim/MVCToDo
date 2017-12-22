@@ -281,14 +281,45 @@ class RemindersController {
     default:
       print("error for setting recurrence rule")
     }
-    
-    
     return rule
   }
   
   func setAlarm(alarmDate: Date) -> EKAlarm {
     let alarm = EKAlarm(absoluteDate: alarmDate)
     return alarm
+  }
+  
+  func editOrCreateCalendar(context: String, color: UIColor) {
+    if let calendar = calendars.filter({$0.title == context}).first {
+      calendar.cgColor = color.cgColor
+      do {
+        try self.eventStore.saveCalendar(calendar, commit: true)
+        print("calendar creation successful")
+      } catch {
+        print("cal \(calendar.source.title) failed : \(error)")
+      }
+    } else { // if creating a new calendar
+      let newCalendar = EKCalendar(for: .reminder, eventStore: eventStore)
+      newCalendar.title = context
+      newCalendar.cgColor = color.cgColor
+      let sourcesInEventStore = eventStore.sources
+      let filteredSources = sourcesInEventStore.filter { $0.sourceType == .calDAV }
+      
+      if let icloudSource = filteredSources.first {
+        newCalendar.source = icloudSource
+      } else {
+        let nextFilteredSource = sourcesInEventStore.filter { $0.sourceType == .local }
+        if let localSource = nextFilteredSource.first {
+          newCalendar.source = localSource
+        }
+      }
+      do {
+        try self.eventStore.saveCalendar(newCalendar, commit: true)
+        print("calendar creation successful")
+      } catch {
+        print("cal \(newCalendar.source.title) failed : \(error)")
+      }
+    }
   }
   
   func setDateComponentsForDueDateTime(for date: Date) -> DateComponents {

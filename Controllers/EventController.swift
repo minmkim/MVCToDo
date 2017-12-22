@@ -352,15 +352,15 @@ class EventController {
   
 }
 
-extension EventController: CompletedDataLoadDelegate {
-  func setData() {
-    DispatchQueue.main.async {
-      self.setupControllerData()
-      self.delegate?.updateTableView()
-    }
-    
-  }
-}
+//extension EventController: CompletedDataLoadDelegate {
+//  func setData() {
+//    DispatchQueue.main.async {
+//      self.setupControllerData()
+//      self.delegate?.updateTableView()
+//    }
+//
+//  }
+//}
 
 extension EventController: RemindersUpdatedDelegate {
   func updateData() {

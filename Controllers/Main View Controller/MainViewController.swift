@@ -76,6 +76,10 @@ class MainViewController {
     }
   }
   
+  func setCalendarColor(color: UIColor, context: String) {
+    remindersController.editOrCreateCalendar(context: context, color: color)
+  }
+  
   func returnEditingIndexPath() -> IndexPath {
     return editingContext!
   }
@@ -87,8 +91,6 @@ class MainViewController {
   func returnContextString(_ index: Int) -> String {
     return listOfContext[index]
   }
-  
-
   
   func returnNewIndexPath(_ context: String) -> IndexPath {
     setContextList()

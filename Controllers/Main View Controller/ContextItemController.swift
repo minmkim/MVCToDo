@@ -111,9 +111,9 @@ class ContextItemController {
   }
   
   func returnNavigationBarColor() -> UIColor {
-    guard let colorInt = listOfContextAndColors[title ?? ""] else {return colors.gray}
-    let color = contextColors[colorInt]
-    return color
+    guard let calendar = remindersController.calendars.filter({$0.title == title}).first else {return colors.gray}
+    print("color here")
+    return UIColor(cgColor: calendar.cgColor)
   }
   
   func setEditingToDo(_ reminder: Reminder) {
@@ -152,7 +152,6 @@ class ContextItemController {
   
   func toDoItemsInContext() {
     let uncheckedList = remindersController.incompleteReminderList
-    print("context \(title)")
     guard let context = title else {return}
     contextReminderList = uncheckedList.filter({$0.context == context})
   }

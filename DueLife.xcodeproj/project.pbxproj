@@ -55,7 +55,6 @@
 		A4DD2CBF1FB9AEE8008CF72E /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CBE1FB9AEE8008CF72E /* EventViewController.swift */; };
 		A4DD2CC51FBB3BDF008CF72E /* ToDoItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CC41FBB3BDE008CF72E /* ToDoItemModel.swift */; };
 		A4DD2CC71FBB3C30008CF72E /* CloudKitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CC61FBB3C30008CF72E /* CloudKitModel.swift */; };
-		A4DD2CCC1FBB3EA1008CF72E /* ToDoModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */; };
 		A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */; };
 		A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */; };
 		A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */; };
@@ -138,7 +137,6 @@
 		A4DD2CBE1FB9AEE8008CF72E /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		A4DD2CC41FBB3BDE008CF72E /* ToDoItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoItemModel.swift; sourceTree = "<group>"; };
 		A4DD2CC61FBB3C30008CF72E /* CloudKitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitModel.swift; sourceTree = "<group>"; };
-		A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoModelController.swift; sourceTree = "<group>"; };
 		A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarController.swift; sourceTree = "<group>"; };
 		A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDelegate.swift; sourceTree = "<group>"; };
@@ -280,7 +278,6 @@
 		A4BA783E1FC02ECF007281F3 /* ToDo */ = {
 			isa = PBXGroup;
 			children = (
-				A4DD2CCB1FBB3EA1008CF72E /* ToDoModelController.swift */,
 				A42CC4A21FE1F7DB0024AB03 /* RemindersController.swift */,
 			);
 			path = ToDo;
@@ -589,7 +586,6 @@
 				A421913B1FD63F8600F893AE /* ParentController.swift in Sources */,
 				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
 				A4DD2CBD1FB9AEE3008CF72E /* CalendarViewController.swift in Sources */,
-				A4DD2CCC1FBB3EA1008CF72E /* ToDoModelController.swift in Sources */,
 				A48E0B9B1FBDB619007ED8FD /* IndentedEventTableViewCell.swift in Sources */,
 				A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */,
 				A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */,

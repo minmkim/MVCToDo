@@ -114,12 +114,6 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         }
       }
     }
-//    DispatchQueue.global().async {
-//      let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//      self.allViewController = storyboard.instantiateViewController(withIdentifier: "AllViewController") as? ViewController
-//      self.allViewController?.toDoModelController = self.controller.toDoModelController
-//      self.allViewController?.passToDoModelDelegate = self
-//    }
     contextCollectionView.delegate = self
     contextCollectionView.dataSource = self
     // Do any additional setup after loading the view.
@@ -146,7 +140,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       }
       view.endEditing(true)
       if controller.checkIfEditing() {
-     //   controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
+        controller.setCalendarColor(color: addContextView.backgroundColor!, context: contextField.text!)
         let indexPath = controller.returnEditingIndexPath()
         let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
         UIView.animate(withDuration: 0.3) {
@@ -154,9 +148,9 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         controller.editingContext = nil
       } else {
-      //  controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
-        //  let newIndexPath = controller.returnNewIndexPath(contextField.text!)
-        //    contextCollectionView.insertItems(at: [newIndexPath])
+        controller.setCalendarColor(color: addContextView.backgroundColor!, context: contextField.text!)
+          let newIndexPath = controller.returnNewIndexPath(contextField.text!)
+            contextCollectionView.insertItems(at: [newIndexPath])
       }
       controller.setContextList()
       contextCollectionView.reloadData()
@@ -223,7 +217,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
        let destination = segue.destination as! TodayViewController
       let todayController = TodayController(controller: controller.remindersController)
       destination.todayController = todayController
-      navigationController?.navigationBar.barTintColor = controller.returnColor("Today")
+      navigationController?.navigationBar.barTintColor = colors.darkRed
     } else if segue.identifier == segueIdentifiers.allSegue {
       let destination = segue.destination as! ViewController
       destination.passToDoModelDelegate = self
