@@ -146,7 +146,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       }
       view.endEditing(true)
       if controller.checkIfEditing() {
-        controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
+     //   controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
         let indexPath = controller.returnEditingIndexPath()
         let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
         UIView.animate(withDuration: 0.3) {
@@ -154,7 +154,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         controller.editingContext = nil
       } else {
-        controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
+      //  controller.addContextSavedPressed(color: addContextView.backgroundColor!, context: contextField.text!)
         //  let newIndexPath = controller.returnNewIndexPath(contextField.text!)
         //    contextCollectionView.insertItems(at: [newIndexPath])
       }
@@ -217,8 +217,8 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     if segue.identifier == "ContextItemSegue" {
       let destination = segue.destination as! ContextItemViewController
       let title = controller.returnContextString(controller.selectedContextIndex)
+      destination.controller = ContextItemController(remindersController: controller.remindersController, title: title)
       destination.navigationItem.title = title
-      destination.controller.title = title
     } else if segue.identifier == segueIdentifiers.todayViewSegue {
        let destination = segue.destination as! TodayViewController
       let todayController = TodayController(controller: controller.remindersController)

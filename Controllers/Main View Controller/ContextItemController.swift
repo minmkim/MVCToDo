@@ -17,43 +17,46 @@ protocol UpdateContextItemTableViewDelegate: class {
   func insertRow(_ indexPath: IndexPath)
   func beginUpdate()
   func endUpdate()
-  func updateCell(originIndex: IndexPath, updatedToDo: ToDo)
+  func updateCell(originIndex: IndexPath, updatedReminder: Reminder)
 }
 
 class ContextItemController {
   
-  var toDoModelController = ToDoModelController()
-  var themeController = ThemeController()
+  var remindersController: RemindersController
   weak var delegate: UpdateContextItemTableViewDelegate?
   
   //drag and drop var
-  var dragAndDropToDo: ToDo?
+  var dragAndDropReminder: Reminder?
   var dragIndexPathOrigin: IndexPath?
 
-  var title: String? {
-    didSet {
-      startCodableTestContext()
-      makeContextListFromColors()
-      toDoItemsInContext()
-      returnContextHeaders()
-    }
+  var title: String?
+  
+  init(remindersController: RemindersController, title: String) {
+    self.remindersController = remindersController
+    self.title = title
+    startCodableTestContext()
+    makeContextListFromColors()
+    toDoItemsInContext()
+    returnContextHeaders()
   }
  
   var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
   var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   
-  var contextToDoList = [ToDo]()
+  var contextReminderList = [Reminder]()
   var listOfContextHeaders = [String]()
-  var dictionaryOfContexts = [String:[ToDo]]()
-  var toDoItem: ToDo?
+  var dictionaryOfContexts = [String:[Reminder]]()
+  var reminder: Reminder?
   
   
   func returnContextHeaders() {
-    listOfContextHeaders = contextToDoList.flatMap( {$0.contextParent} )
+    listOfContextHeaders = contextReminderList.flatMap( {$0.contextParent} )
     listOfContextHeaders = Array(Set(listOfContextHeaders))
     if listOfContextHeaders.count == 0 {
       listOfContextHeaders.insert("", at: 0)
+      print("listOfContextHeaders \(listOfContextHeaders)")
+      print("contextReminderList \(contextReminderList)")
     }
     listOfContextHeaders = listOfContextHeaders.sorted(by: {$0 < $1})
     createContextListUnderHeader()
@@ -61,8 +64,13 @@ class ContextItemController {
   
   func createContextListUnderHeader() {
     for context in listOfContextHeaders {
-      let listOfContextsWithHeader = contextToDoList.filter({$0.contextParent == context})
-      dictionaryOfContexts[context] = listOfContextsWithHeader
+      if context == "" {
+        let listOfContextsWithHeader = contextReminderList.filter({$0.contextParent == nil})
+        dictionaryOfContexts[context] = listOfContextsWithHeader
+      } else {
+        let listOfContextsWithHeader = contextReminderList.filter({$0.contextParent == context})
+        dictionaryOfContexts[context] = listOfContextsWithHeader
+      }
     }
   }
   
@@ -95,21 +103,11 @@ class ContextItemController {
     }
   }
   
-  func returnToDoItemForCell(_ index: IndexPath) -> ToDo {
+  func returnToDoItemForCell(_ index: IndexPath) -> Reminder {
     let context = listOfContextHeaders[index.section]
-    let listOfToDoInContext = dictionaryOfContexts[context]
-    let toDo = listOfToDoInContext![index.row] // remove this !
-    return toDo
-  }
-  
-  func checkmarkButtonPressedController(_ ID: String) -> String {
-    toDoModelController = ToDoModelController()
-    let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
-    if checkmarkIcon == true {
-      return themeController.checkedCheckmarkIcon
-    } else {
-      return themeController.uncheckedCheckmarkIcon
-    }
+    let listOfRemindersInContext = dictionaryOfContexts[context]
+    let reminder = listOfRemindersInContext![index.row] // remove this !
+    return reminder
   }
   
   func returnNavigationBarColor() -> UIColor {
@@ -118,12 +116,12 @@ class ContextItemController {
     return color
   }
   
-  func setEditingToDo(_ toDo: ToDo) {
-    toDoItem = toDo
+  func setEditingToDo(_ reminder: Reminder) {
+    self.reminder = reminder
   }
   
-  func returnEditingToDo() -> ToDo? {
-    return toDoItem
+  func returnEditingToDo() -> Reminder? {
+    return reminder
   }
   
 //  func deleteItem(ID: String, index: IndexPath) {
@@ -153,10 +151,10 @@ class ContextItemController {
   // MARK: - Setting data
   
   func toDoItemsInContext() {
-    toDoModelController = ToDoModelController()
-    let uncheckedList = toDoModelController.toDoList.filter({$0.isChecked == false})
+    let uncheckedList = remindersController.incompleteReminderList
+    print("context \(title)")
     guard let context = title else {return}
-    contextToDoList = uncheckedList.filter({$0.context == context})
+    contextReminderList = uncheckedList.filter({$0.context == context})
   }
   
   func makeContextListFromColors() {
@@ -169,38 +167,38 @@ class ContextItemController {
     dragIndexPathOrigin = indexPath
   }
   
-  func dragAndDropInitiated(_ ToDo: ToDo) {
-    dragAndDropToDo = ToDo
+  func dragAndDropInitiated(_ reminder: Reminder) {
+    dragAndDropReminder = reminder
   }
   
   func updateNewParentSectionWithDrop(_ destinationIndex: IndexPath) {
-    guard let originToDoItem = dragAndDropToDo else {return}
+    guard let originReminder = dragAndDropReminder else {return}
     guard let originIndex = dragIndexPathOrigin else {return}
     let newParent = listOfContextHeaders[destinationIndex.section]
-    var updatedToDo = originToDoItem
-    updatedToDo.contextParent = newParent
+    var updatedReminder = originReminder
+    updatedReminder.contextParent = newParent
 //    toDoModelController.editToDoItem(updatedToDo)
-    updateContextToDoListWithNewParent(toDoItem: originToDoItem, newParent: newParent)
-    updateDictionaryContext(originToDoItem: originToDoItem, newParent: newParent, updatedToDo: updatedToDo)
+    updateContextReminderListWithNewParent(reminder: originReminder, newParent: newParent)
+    updateDictionaryContext(originReminderItem: originReminder, newParent: newParent, updatedReminder: updatedReminder)
 
     delegate?.beginUpdate()
-    delegate?.updateCell(originIndex: originIndex, updatedToDo: updatedToDo)
+    delegate?.updateCell(originIndex: originIndex, updatedReminder: updatedReminder)
     delegate?.moveRowAt(originIndex: originIndex, destinationIndex: destinationIndex)
     delegate?.endUpdate()
   }
   
-  func updateContextToDoListWithNewParent(toDoItem: ToDo, newParent: String) {
-    guard let index = contextToDoList.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID}) else {return}
-    contextToDoList[index].contextParent = newParent
+  func updateContextReminderListWithNewParent(reminder: Reminder, newParent: String) {
+    guard let index = contextReminderList.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+    contextReminderList[index].contextParent = newParent
   }
   
-  func updateDictionaryContext(originToDoItem: ToDo, newParent: String, updatedToDo: ToDo) {
-    guard var listOfToDoInContext = dictionaryOfContexts[originToDoItem.calendarRecordID] else {return}
-    listOfToDoInContext = listOfToDoInContext.filter( {$0.calendarRecordID != originToDoItem.calendarRecordID})
-    dictionaryOfContexts[originToDoItem.contextParent] = listOfToDoInContext
-    guard var newListOfToDoInContext = dictionaryOfContexts[newParent] else {return}
-    newListOfToDoInContext.append(updatedToDo)
-    dictionaryOfContexts[newParent] = newListOfToDoInContext
+  func updateDictionaryContext(originReminderItem: Reminder, newParent: String, updatedReminder: Reminder) {
+    guard var listOfReminderInContext = dictionaryOfContexts[originReminderItem.calendarRecordID] else {return}
+    listOfReminderInContext = listOfReminderInContext.filter( {$0.calendarRecordID != originReminderItem.calendarRecordID})
+    dictionaryOfContexts[originReminderItem.contextParent ?? ""] = listOfReminderInContext
+    guard var newListOfReminderInContext = dictionaryOfContexts[newParent] else {return}
+    newListOfReminderInContext.append(updatedReminder)
+    dictionaryOfContexts[newParent] = newListOfReminderInContext
     }
   
   func startCodableTestContext() {
@@ -213,12 +211,4 @@ class ContextItemController {
   }
   
   // MARK: - Formatting Dates
-  
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
-  }
 }

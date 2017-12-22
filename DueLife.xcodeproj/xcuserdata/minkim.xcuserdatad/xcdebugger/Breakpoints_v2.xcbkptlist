@@ -2,4 +2,84 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Controllers/ToDo/RemindersController.swift"
+            timestampString = "535618259.779319"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "loadCompletedReminderData(completionHandler:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;__ObjC.EKReminder&gt;&gt;) -&gt; () in TestingNewArch.RemindersController.loadCompletedReminderData(completionHandler: (Swift.Array&lt;TestingNewArch.Reminder&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/ToDo/RemindersController.swift"
+                  timestampString = "535618617.871278"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "1920">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (TestingNewArch.Reminder, TestingNewArch.Reminder) -&gt; Swift.Bool in closure #1 (Swift.Optional&lt;Swift.Array&lt;__ObjC.EKReminder&gt;&gt;) -&gt; () in TestingNewArch.RemindersController.loadCompletedReminderData(completionHandler: (Swift.Array&lt;TestingNewArch.Reminder&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/ToDo/RemindersController.swift"
+                  timestampString = "535618617.873613"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "1236">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "implicit closure #1 : @autoclosure () throws -&gt; Foundation.Date in closure #1 (TestingNewArch.Reminder, TestingNewArch.Reminder) -&gt; Swift.Bool in closure #1 (Swift.Optional&lt;Swift.Array&lt;__ObjC.EKReminder&gt;&gt;) -&gt; () in TestingNewArch.RemindersController.loadCompletedReminderData(completionHandler: (Swift.Array&lt;TestingNewArch.Reminder&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/ToDo/RemindersController.swift"
+                  timestampString = "535618617.875725"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "implicit closure #2 : @autoclosure () throws -&gt; Foundation.Date in closure #1 (TestingNewArch.Reminder, TestingNewArch.Reminder) -&gt; Swift.Bool in closure #1 (Swift.Optional&lt;Swift.Array&lt;__ObjC.EKReminder&gt;&gt;) -&gt; () in TestingNewArch.RemindersController.loadCompletedReminderData(completionHandler: (Swift.Array&lt;TestingNewArch.Reminder&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/ToDo/RemindersController.swift"
+                  timestampString = "535618617.877972"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -15,30 +15,27 @@ class ContextItemTableViewCell: UITableViewCell {
   @IBOutlet weak var checkMarkButton: UIButton!
   @IBOutlet weak var noteImage: UIImageView!
   
-  var toDoItem: ToDo? {
+  var reminder: Reminder! {
     didSet {
-      toDoItemLabel.text = toDoItem?.toDoItem
-      if toDoItem?.dueDate != nil {
-        let date = formatDateToString(date: (toDoItem?.dueDate)!, format: dateAndTime.monthDateYear)
+      toDoItemLabel.text = reminder.reminderTitle
+      if let dueDate = reminder.dueDate {
+        let date = Helper.formatDateToString(date: dueDate, format: dateAndTime.monthDateYear)
         dueDateLabel.text = date
       } else {
         dueDateLabel.text = ""
       }
-      if toDoItem?.notes != "" {
+      if reminder.notes != nil {
         noteImage.isHidden = false
         noteImage.image = UIImage(named: "NoteIcon")
       } else {
         noteImage.isHidden = true
       }
+      if reminder.isChecked {
+        checkMarkButton.setImage(UIImage(named: "CheckedCircle"), for: .normal)
+      } else {
+        checkMarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
+      }
     }
-  }
-  
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
   }
   
   override func awakeFromNib() {

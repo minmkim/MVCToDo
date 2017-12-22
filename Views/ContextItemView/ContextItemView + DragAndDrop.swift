@@ -11,10 +11,10 @@ extension ContextItemViewController: UITableViewDragDelegate {
   
   func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
     let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
-    guard let toDoItem = cell.toDoItem else {return [UIDragItem]()}
-    controller.dragAndDropInitiated(toDoItem)
+    guard let reminder = cell.reminder else {return [UIDragItem]()}
+    controller.dragAndDropInitiated(reminder)
     controller.returnDragIndexPath(indexPath)
-    guard let data = (toDoItem.calendarRecordID).data(using: .utf8) else { return [] }
+    guard let data = (reminder.calendarRecordID).data(using: .utf8) else { return [] }
     let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
     _ = UIDragItem(itemProvider: itemProvider)
     return [UIDragItem(itemProvider: itemProvider)]

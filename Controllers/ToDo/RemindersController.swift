@@ -46,11 +46,10 @@ class RemindersController {
     
   }
   
-  func editReminder(reminder: Reminder) {
+  func editReminder(reminder: EKReminder) {
     NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
-    guard let reminderToEdit = reminder.reminder else {return}
     do {
-      try eventStore.save(reminderToEdit, commit: true)
+      try eventStore.save(reminder, commit: true)
       NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
     } catch let error {
       NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
@@ -118,8 +117,13 @@ class RemindersController {
     })
   }
   
-  func createReminder(reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
+  func returnReminder() -> EKReminder {
     let reminder = EKReminder(eventStore: eventStore)
+    return reminder
+  }
+  
+  func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
+    let reminder = reminder
     reminder.title = reminderTitle
     
     var dateComponents: DateComponents? = nil

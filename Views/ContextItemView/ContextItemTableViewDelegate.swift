@@ -23,41 +23,41 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = contextItemTableView.dequeueReusableCell(withIdentifier: "ContextItem", for: indexPath) as! ContextItemTableViewCell
-    let toDoItem = controller.returnToDoItemForCell(indexPath)
+    let reminder = controller.returnToDoItemForCell(indexPath)
 //    if toDoItem.contextSection != "" {
 //      cell.layoutMargins = UIEdgeInsetsMake(0, 30, 0, 0)
 //    } else {
 //      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
 //    }
-    cell.toDoItem = toDoItem
-    cell.toDoItemLabel.textColor = themeController.mainTextColor
-    cell.checkMarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
+    cell.reminder = reminder
+//    cell.toDoItemLabel.textColor = themeController.mainTextColor
+//    cell.checkMarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkMarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
-    if cell.toDoItem?.isChecked ?? false {
-      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
-    } else {
-      cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
-    }
-    cell.backgroundColor = themeController.backgroundColor
+//    if cell.toDoItem?.isChecked ?? false {
+//      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
+//    } else {
+//      cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+//    }
+//    cell.backgroundColor = themeController.backgroundColor
     return cell
   }
   
   @objc func checkmarkButtonPress(sender:UIButton) {
     let generator = UISelectionFeedbackGenerator()
     guard let cellID = sender.title(for: .normal) else {return}
-    let image = controller.checkmarkButtonPressedController(cellID)
+//    let image = controller.checkmarkButtonPressedController(cellID)
     let peek = SystemSoundID(1519)
     generator.prepare()
     AudioServicesPlaySystemSound(peek)
     generator.selectionChanged()
-    sender.setImage(UIImage(named: image), for: .normal)
+    sender.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal) // fix this!!!
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     contextItemTableView.deselectRow(at: indexPath, animated: true)
     let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
-    guard let toDoItem = cell.toDoItem else {return}
-    controller.setEditingToDo(toDoItem)
+    guard let reminder = cell.reminder else {return}
+    controller.setEditingToDo(reminder)
     performSegue(withIdentifier: segueIdentifiers.editFromContextSegue, sender: self)
   }
   
@@ -78,7 +78,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
-      guard let cloudID = cell.toDoItem?.calendarRecordID else {return}
+      let cloudID = cell.reminder.calendarRecordID
 //      controller.deleteItem(ID: cloudID, index: indexPath)
     }
   }
@@ -94,7 +94,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     separator.backgroundColor = .groupTableViewBackground
     returnedView.addSubview(separator)
     returnedView.addSubview(label)
-    returnedView.backgroundColor = themeController.backgroundColor
+//    returnedView.backgroundColor = themeController.backgroundColor
     label.textColor = navigationController?.navigationBar.barTintColor
     label.text = controller.returnContextHeader(section)
     label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)

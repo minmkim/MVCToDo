@@ -14,7 +14,7 @@ protocol NotesDelegate: class {
 
 protocol SendDataToEventControllerDelegate: class {
   func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?)
-  func editReminder(for reminder: Reminder)
+  func editReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?, oldReminder: Reminder)
 }
 
 class AddEditToDoController {
@@ -77,22 +77,13 @@ class AddEditToDoController {
   
   func donePressed(reminderTitle: String, context: String?, parent: String?, dueDate: String?, dueTime: String?, isNotify: Bool, alarmTime: Date?) {
     
-    if reminder != nil {
-      if let oldReminder = reminder?.reminder {
-        oldReminder.title = reminderTitle
-        if dueDate != nil {
-          let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
-          reminder?.dueDate = date
-        } else {
-          reminder?.dueDate = nil
-        }
-        reminder?.dueTime = dueTime
-        reminder?.isNotification = isNotify
-        reminder?.notifyDate = alarmTime
+    if let oldReminder = reminder {
+      if dueDate != nil {
+      let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
+        sendToEventControllerDelegate?.editReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: date, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate, oldReminder: oldReminder)
+      } else {
+        sendToEventControllerDelegate?.editReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: nil, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate, oldReminder: oldReminder)
       }
-      
-      
-      
     } else {
       if dueDate != nil {
         let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)

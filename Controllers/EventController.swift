@@ -381,27 +381,45 @@ extension EventController: RemindersUpdatedDelegate {
 }
 
 extension EventController: SendDataToEventControllerDelegate {
+  
   func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) {
-    let reminder = remindersController.createReminder(reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
-    remindersController.setNewReminder(ekReminder: reminder)
+    var newReminder = remindersController.returnReminder()
+    newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    remindersController.setNewReminder(ekReminder: newReminder)
     let date = Helper.formatDateToString(date: (dueDate ?? Date()), format: dateAndTime.yearMonthDay)
     if let _ = toDoDates.index(where: {$0 == date}) {
       if let list = datesRemindersList[date] {
         var setList = list
-        setList.append(Reminder(reminder))
+        setList.append(Reminder(newReminder))
         datesRemindersList[date] = setList
         delegate?.updateTableView()
       }
     } else {
-      datesRemindersList[date] = [Reminder(reminder)]
+      datesRemindersList[date] = [Reminder(newReminder)]
       toDoDates.append(date)
       toDoDates.sort(by: { $0 < $1 })
       delegate?.updateTableView()
     }
   }
   
-  func editReminder(for reminder: Reminder) {
-    
+  func editReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?, oldReminder: Reminder) {
+    guard var originalReminder = oldReminder.reminder else {return}
+    originalReminder = remindersController.createReminder(reminder: originalReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    remindersController.editReminder(reminder: originalReminder)
+    let date = Helper.formatDateToString(date: (dueDate ?? Date()), format: dateAndTime.yearMonthDay)
+    if let _ = toDoDates.index(where: {$0 == date}) {
+      if var list = datesRemindersList[date] {
+        guard let index = list.index(where: {$0.calendarRecordID == originalReminder.calendarItemIdentifier}) else {return}
+        list.remove(at: index)
+        list.append(Reminder(originalReminder))
+        print(remindersController.incompleteReminderList)
+      }
+    } else {
+      datesRemindersList[date] = [Reminder(originalReminder)]
+      toDoDates.append(date)
+      toDoDates.sort(by: { $0 < $1 })
+      delegate?.updateTableView()
+    }
   }
   
 }

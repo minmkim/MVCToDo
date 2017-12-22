@@ -12,8 +12,7 @@ class ContextItemViewController: UIViewController {
 
   @IBOutlet weak var contextItemTableView: UITableView!
   @IBOutlet weak var footerView: UIView!
-  var controller = ContextItemController()
-  var themeController = ThemeController()
+  var controller: ContextItemController!
   var shownIndexes : [IndexPath] = []
   
   @IBOutlet weak var addItemButton: UIButton!
@@ -27,13 +26,13 @@ class ContextItemViewController: UIViewController {
     controller.delegate = self
     let color = controller.returnNavigationBarColor()
     navigationController?.navigationBar.barTintColor = color
-    contextItemTableView.backgroundColor = themeController.backgroundColor
-    view.backgroundColor = themeController.backgroundColor
-    footerView.backgroundColor = themeController.backgroundColor
+//    contextItemTableView.backgroundColor = themeController.backgroundColor
+//    view.backgroundColor = themeController.backgroundColor
+//    footerView.backgroundColor = themeController.backgroundColor
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
-    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+    addItemButton.setImage(UIImage(named: checkMarkAsset.addCircle), for: .normal)
   }
   
   override func didReceiveMemoryWarning() {
@@ -58,9 +57,10 @@ class ContextItemViewController: UIViewController {
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.editFromContextSegue {
+      guard let indexPath = contextItemTableView.indexPath(for: sender as! ContextItemTableViewCell) else {return}
+       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
       let destination = segue.destination as! AddItemTableViewController
-      guard let toDoItem = controller.returnEditingToDo() else {return}
-  //    destination.controller = AddEditToDoController(ItemToEdit: toDoItem)
+      destination.controller = AddEditToDoController(ItemToEdit: cell.reminder)
       destination.controller.segueIdentity = segueIdentifiers.editFromContextSegue
     } else if segue.identifier == segueIdentifiers.addFromContextSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
@@ -109,8 +109,8 @@ extension ContextItemViewController: UpdateContextItemTableViewDelegate {
     print("moved")
     contextItemTableView.moveRow(at: originIndex, to: destinationIndex)
   }
-  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+  func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
     let cell = contextItemTableView.cellForRow(at: originIndex) as! ContextItemTableViewCell
-    cell.toDoItem = updatedToDo
+    cell.reminder = updatedReminder
   }
 }

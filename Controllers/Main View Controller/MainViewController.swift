@@ -13,7 +13,7 @@ class MainViewController {
   
   var remindersController: RemindersController!
   
-  var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
+
   var listOfContext = ["Inbox", "Home", "Work", "Personal"]
   var selectedContextIndex = 0
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
@@ -25,6 +25,7 @@ class MainViewController {
   
   init(controller: RemindersController) {
     remindersController = controller
+    setContextList()
   }
   
   
@@ -87,11 +88,7 @@ class MainViewController {
     return listOfContext[index]
   }
   
-  func addContextSavedPressed(color: UIColor, context: String) {
-    let indexOfColor = contextColors.index(of: color)
-    listOfContextAndColors[context] = indexOfColor
-    saveContext()
-  }
+
   
   func returnNewIndexPath(_ context: String) -> IndexPath {
     setContextList()
@@ -102,52 +99,20 @@ class MainViewController {
   
   
   func setContextList() {
-    var toDoList = remindersController.incompleteReminderList.flatMap({$0.context})
-    let restoreList = startCodableTestContext()
-    let stringRestoreList = makeContextListFromColors(restoreList)
-    toDoList += stringRestoreList
-    listOfContext = Array(Set(toDoList))
-    listOfContext = listOfContext.sorted(by: {$0 < $1})
-    listOfContext = listOfContext.filter( {$0 != "None"} )
-    listOfContext = listOfContext.filter( {$0 != "Today"} )
-    listOfContext = listOfContext.filter( {$0 != ""} )
-  }
-  
-  func saveContext() {
-    //save it
-    let encoder = JSONEncoder()
-    if let encoded = try? encoder.encode(listOfContextAndColors){
-      UserDefaults.standard.set(encoded, forKey: "contextList")
-    }
+    let contextList: [String] = remindersController.calendars.flatMap({$0.title})
+    listOfContext = contextList.sorted(by: {$0 < $1})
   }
   
   func returnColor(_ index: String) -> UIColor {
-    guard let colorInt = listOfContextAndColors[index] else {return colors.gray}
-    let color = contextColors[colorInt]
-    return color
+    guard let calendar = remindersController.calendars.filter({$0.title == index}).first else {return contextColors[11]}
+    guard let color = calendar.cgColor else {return contextColors[11]}
+    let uiColor = UIColor.init(cgColor: color)
+    return uiColor
   }
   
   func makeContextListFromColors(_ list: [String:Int]) -> [String] {
     let newList = list.keys.map({$0})
     return newList
-  }
-  
-  func startCodableTestContext() -> [String:Int] {
-    if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
-      let decoder = JSONDecoder()
-      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String:Int]{
-        listOfContextAndColors = contextList
-      }
-    }
-    return listOfContextAndColors
-  }
-
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
   }
   
 }
