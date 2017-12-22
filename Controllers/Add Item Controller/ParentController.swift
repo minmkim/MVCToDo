@@ -20,12 +20,11 @@ class ParentController {
   var chosenParent = ""
   
   init(context: String) {
-//    let listOfToDoInContext = toDoModelController.toDoList.filter({$0.context == context})
-//    listOfParents = listOfToDoInContext.map({$0.contextParent})
-//    listOfParents = listOfParents.filter({$0 != ""})
-//    listOfParents = Array(Set(listOfParents))
-//    listOfParents = listOfParents.sorted(by: {$0 < $1} )
-//    filteredList = listOfParents
+    weak var reminderController = RemindersController()
+    let remindersList = reminderController?.incompleteReminderList
+    reminderController = nil
+    guard let list = remindersList else {return}
+    listOfParents = list.flatMap({$0.contextParent})
   }
   
   func returnCellLabel(_ index: Int) -> String {

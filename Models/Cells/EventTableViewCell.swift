@@ -14,7 +14,11 @@ class EventTableViewCell: UITableViewCell {
     didSet {
       toDoLabel.text = reminder.reminderTitle
       if let context = reminder.context {
-        contextLabel.text = context
+        if let parent = reminder.contextParent {
+          contextLabel.text = ("\(context): \(parent)")
+        } else {
+          contextLabel.text = context
+        }
       } else {
         contextLabel.text = ""
       }

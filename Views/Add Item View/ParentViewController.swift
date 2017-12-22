@@ -11,7 +11,7 @@ import UIKit
 class ParentViewController: UITableViewController, UISearchResultsUpdating {
   
   @IBOutlet weak var footerView: UIView!
-  var controller: ParentController?
+  var controller: ParentController!
   var themeController = ThemeController()
   let searchController = UISearchController(searchResultsController: nil)
   
@@ -65,15 +65,14 @@ class ParentViewController: UITableViewController, UISearchResultsUpdating {
     guard let indexPath = tableView.indexPathForSelectedRow else {return}//optional, to get from any UIButton for example
     guard let currentCell = tableView.cellForRow(at: indexPath) else {return}
     guard let parentString = currentCell.textLabel?.text else {return}
-    controller?.setChosenParent(parentString)
+    controller.setChosenParent(parentString)
+    controller.sendChosenParent()
     performSegue(withIdentifier: segueIdentifiers.unwindParentSegue, sender: self)
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.unwindParentSegue {
-      let destination = segue.destination as! AddItemTableViewController
-      self.controller?.delegate = destination.controller as ChosenParentDelegate
-      self.controller?.sendChosenParent()
+      
     }
   }
   

@@ -10,7 +10,7 @@ import UIKit
 
 
 class EventViewController: UIViewController, InformEventTableDelegate, UpdateTableViewDelegate {
-  func updateCell(originIndex: IndexPath, updatedToDo: ToDo) {
+  func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
   }
   
   

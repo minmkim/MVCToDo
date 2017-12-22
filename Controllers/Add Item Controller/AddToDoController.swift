@@ -151,9 +151,3 @@ extension AddEditToDoController: SavedNoteDelegate {
   }
 }
 
-extension AddEditToDoController: ChosenParentDelegate {
-  func returnChosenParent(_ parent: String) {
-//    self.parent = parent
-  }
-}
-

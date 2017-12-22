@@ -53,10 +53,11 @@ class ContextItemController {
   func returnContextHeaders() {
     listOfContextHeaders = contextReminderList.flatMap( {$0.contextParent} )
     listOfContextHeaders = Array(Set(listOfContextHeaders))
+    if contextReminderList.contains(where: {$0.contextParent == nil}) {
+      listOfContextHeaders.insert("", at: 0)
+    }
     if listOfContextHeaders.count == 0 {
       listOfContextHeaders.insert("", at: 0)
-      print("listOfContextHeaders \(listOfContextHeaders)")
-      print("contextReminderList \(contextReminderList)")
     }
     listOfContextHeaders = listOfContextHeaders.sorted(by: {$0 < $1})
     createContextListUnderHeader()

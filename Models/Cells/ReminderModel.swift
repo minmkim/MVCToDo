@@ -150,7 +150,24 @@ struct Reminder {
     }
     let isChecked = unformattedReminder.isCompleted
     let context = unformattedReminder.calendar.title
-    let notes = unformattedReminder.notes
+    var notes = unformattedReminder.notes
+    
+    var parent: String?
+    if var note = notes {
+      if note.hasSuffix("}#@{!}") {
+        let rangeOfZero = note.range(of: "{!}@#{", options: .backwards)
+        let suffix = String(describing: note.prefix(upTo:  (rangeOfZero?.lowerBound)!))
+        print("suffix: \(suffix)")
+        if suffix.count == 0 {
+          notes = nil
+        } else {
+          notes = suffix
+        }
+        note = String(note.dropLast(6))
+        note = String(note.dropFirst(suffix.count + 6))
+        parent = note
+      }
+    }
     
     var alarmDate: Date?
     var isNotification = false
@@ -235,7 +252,7 @@ struct Reminder {
     self.dueTime = dueTime
     self.isChecked = isChecked
     self.context = context
-    self.contextParent = nil
+    self.contextParent = parent
     self.notes = notes
     self.isNotification = isNotification
     self.notifyDate = alarmDate
@@ -247,5 +264,17 @@ struct Reminder {
     self.endRepeatDate = endRepeatDate
     self.calendarRecordID = calendarRecordID
   }
+  
+  
+    func returnParentFromNotes(for note: String) -> String? {
+      if note.hasSuffix("}#@{!}") {
+        let rangeOfZero = note.range(of: "{!}@#{", options: .backwards)
+        // Get the characters after the last 0
+        let suffix = String(describing: note.prefix(upTo: (rangeOfZero?.lowerBound)!))
+        return suffix
+      } else {
+        return nil
+      }
+    }
   
 }

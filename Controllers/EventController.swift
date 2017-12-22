@@ -18,7 +18,7 @@ protocol UpdateTableViewDelegate: class {
   func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath)
   func beginUpdates()
   func endUpdates()
-  func updateCell(originIndex: IndexPath, updatedToDo: ToDo)
+  func updateCell(originIndex: IndexPath, updatedReminder: Reminder)
 }
 
 class EventController {
@@ -38,7 +38,7 @@ class EventController {
   weak var delegate: UpdateTableViewDelegate?
   var toDoDates = [String]()
   var datesRemindersList = [String:[Reminder]]()
-  var dragAndDropToDo: ToDo?
+  var dragAndDropReminder: Reminder?
   var dragIndexPathOrigin: IndexPath?
   
   init(controller: RemindersController) {
@@ -279,8 +279,8 @@ class EventController {
     dragIndexPathOrigin = indexPath
   }
   
-  func dragAndDropInitiated(_ ToDo: ToDo) {
-    dragAndDropToDo = ToDo
+  func dragAndDropInitiated(_ Reminder: Reminder) {
+    dragAndDropReminder = Reminder
   }
   
 //  func updateDueDate(_ newDate: String) {
@@ -384,7 +384,7 @@ extension EventController: SendDataToEventControllerDelegate {
   
   func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) {
     var newReminder = remindersController.returnReminder()
-    newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
     remindersController.setNewReminder(ekReminder: newReminder)
     let date = Helper.formatDateToString(date: (dueDate ?? Date()), format: dateAndTime.yearMonthDay)
     if let _ = toDoDates.index(where: {$0 == date}) {
@@ -404,7 +404,7 @@ extension EventController: SendDataToEventControllerDelegate {
   
   func editReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?, oldReminder: Reminder) {
     guard var originalReminder = oldReminder.reminder else {return}
-    originalReminder = remindersController.createReminder(reminder: originalReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    originalReminder = remindersController.createReminder(reminder: originalReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
     remindersController.editReminder(reminder: originalReminder)
     let date = Helper.formatDateToString(date: (dueDate ?? Date()), format: dateAndTime.yearMonthDay)
     if let _ = toDoDates.index(where: {$0 == date}) {

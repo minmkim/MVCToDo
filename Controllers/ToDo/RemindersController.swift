@@ -131,7 +131,7 @@ class RemindersController {
     return reminder
   }
   
-  func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
+  func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, parent: String?,notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
     let reminder = reminder
     reminder.title = reminderTitle
     
@@ -176,8 +176,25 @@ class RemindersController {
       reminder.calendar = eventStore.defaultCalendarForNewReminders()
     }
     
-    if let newNote = notes {
+    if var newNote = notes {
+      if newNote.hasSuffix("}#@{!}") {
+        let rangeOfZero = newNote.range(of: "{!}@#{", options: .backwards)
+        // Get the characters after the last 0
+        let suffix = String(describing: newNote.prefix(upTo: (rangeOfZero?.lowerBound)!))
+        newNote = String(newNote.dropLast(suffix.count))
+      }
       reminder.notes = newNote
+    }
+    
+    if let contextParent = parent {
+      if var note = reminder.notes {
+        note.append("\n{!}@#{\(contextParent)}#@{!}")
+        reminder.notes = note
+        
+      } else {
+        let note = "{!}@#{\(contextParent)}#@{!}"
+        reminder.notes = note
+      }
     }
     
     if notification {
@@ -364,39 +381,5 @@ class RemindersController {
     let formattedDateAndTime = Helper.formatStringToDate(date: dateTime, format: "MMM dd, yyyy hh:mm a")
     return formattedDateAndTime
   }
-  
-//  var str = "Hello, playground     {!}@#{[32819389]-[2319012]#@{!}"
-  
-//  func setDueDateTimeWithoutNotification(toDoItem: ToDo) -> ToDo {
-//    var appendedData = "{!}@#{["
-//    if toDoItem.dueDate != nil {
-//      appendedData += formatDateToString(date: toDoItem.dueDate!, format: dateAndTime.monthDateYear)
-//      appendedData += "]["
-//    } else {
-//      appendedData += " ][ ]#@{!}"
-//    }
-//    if toDoItem.dueTime != nil && toDoItem.dueTime != "" {
-//      appendedData += toDoItem.dueTime!
-//      appendedData += "]#@{!}"
-//    } else {
-//      appendedData += "]#@{!}"
-//    }
-//
-//    var notes = toDoItem.notes
-//
-//    if notes.hasSuffix("]#@{!}") {
-//      let rangeOfZero = notes.range(of: "{!}@#{[", options: .backwards)
-//      // Get the characters after the last 0
-//      let suffix = String(describing: notes.prefix(upTo: (rangeOfZero?.lowerBound)!))
-//      notes = suffix
-//      notes = String(notes.dropLast(1))
-//    }
-//
-//    notes += "\n\(appendedData)"
-//    var formattedToDo = toDoItem
-//    formattedToDo.notes = notes
-//    return formattedToDo
-//  }
-
   
 }

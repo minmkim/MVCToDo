@@ -285,7 +285,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
         }
         
       }
-      parentField.text = ""
+      parentField.text = reminder.contextParent
       
       if reminder.isNotification {
         notificationSwitch.isOn = true
@@ -508,6 +508,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else if segue.identifier == "ParentSegue" {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")
+      controller.controller.delegate = self
     } else if segue.identifier == "UnwindFromToDo" {
       let destination = segue.destination as! EventViewController
       controller.sendToEventControllerDelegate = destination.controller
@@ -536,5 +537,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
   }
   
+}
+
+extension AddItemTableViewController: ChosenParentDelegate {
+  func returnChosenParent(_ parent: String) {
+    parentField.text = parent
+  }
 }
 
