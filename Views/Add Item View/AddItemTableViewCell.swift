@@ -509,6 +509,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")
       controller.controller.delegate = self
+    } else if segue.identifier == segueIdentifiers.customRepeatSegue {
+      let destination = segue.destination as! CustomRepeatViewTableViewController
+      destination.controller = RepeatController()
     } else if segue.identifier == "UnwindFromToDo" {
       let destination = segue.destination as! EventViewController
       controller.sendToEventControllerDelegate = destination.controller

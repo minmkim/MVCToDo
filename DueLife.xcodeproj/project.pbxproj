@@ -33,6 +33,14 @@
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
 		A45FE8791FCD961900E27C17 /* MainViewViewController + collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */; };
 		A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */; };
+		A46D74D61FEDBAD9004306BD /* RepeatCycleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74D51FEDBAD9004306BD /* RepeatCycleTableViewCell.swift */; };
+		A46D74D81FEDBADF004306BD /* RepeatIntervalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74D71FEDBADF004306BD /* RepeatIntervalTableViewCell.swift */; };
+		A46D74DA1FEDBAE8004306BD /* RepeatCalendarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74D91FEDBAE7004306BD /* RepeatCalendarTableViewCell.swift */; };
+		A46D74DC1FEDBAEE004306BD /* RepeatMonthTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74DB1FEDBAEE004306BD /* RepeatMonthTableViewCell.swift */; };
+		A46D74DE1FEDC08C004306BD /* RepeatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74DD1FEDC08C004306BD /* RepeatController.swift */; };
+		A46D74E01FEDC220004306BD /* RepeatWeeklyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74DF1FEDC220004306BD /* RepeatWeeklyTableViewCell.swift */; };
+		A46D74E21FEDE302004306BD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74E11FEDE302004306BD /* CalendarCollectionViewCell.swift */; };
+		A46D74E41FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74E31FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift */; };
 		A482FD8F1FE767EE00F353AC /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A482FD8E1FE767EE00F353AC /* Helper.swift */; };
 		A482FD911FE84E8500F353AC /* ReminderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A482FD901FE84E8500F353AC /* ReminderModel.swift */; };
 		A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */; };
@@ -55,7 +63,6 @@
 		A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */; };
 		A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */; };
 		A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */; };
-		A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */; };
 		A4FE91911FC5E0540034A32D /* EventController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FE91901FC5E0540034A32D /* EventController.swift */; };
 /* End PBXBuildFile section */
 
@@ -104,6 +111,14 @@
 		A45CA23D1FC8C8C3004F18A6 /* TestingNewArch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestingNewArch.entitlements; sourceTree = "<group>"; };
 		A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewViewController + collection.swift"; sourceTree = "<group>"; };
 		A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		A46D74D51FEDBAD9004306BD /* RepeatCycleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatCycleTableViewCell.swift; sourceTree = "<group>"; };
+		A46D74D71FEDBADF004306BD /* RepeatIntervalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatIntervalTableViewCell.swift; sourceTree = "<group>"; };
+		A46D74D91FEDBAE7004306BD /* RepeatCalendarTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatCalendarTableViewCell.swift; sourceTree = "<group>"; };
+		A46D74DB1FEDBAEE004306BD /* RepeatMonthTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatMonthTableViewCell.swift; sourceTree = "<group>"; };
+		A46D74DD1FEDC08C004306BD /* RepeatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatController.swift; sourceTree = "<group>"; };
+		A46D74DF1FEDC220004306BD /* RepeatWeeklyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatWeeklyTableViewCell.swift; sourceTree = "<group>"; };
+		A46D74E11FEDE302004306BD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
+		A46D74E31FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingCalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		A482FD8E1FE767EE00F353AC /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		A482FD901FE84E8500F353AC /* ReminderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderModel.swift; sourceTree = "<group>"; };
 		A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEventTableViewCell.swift; sourceTree = "<group>"; };
@@ -134,7 +149,6 @@
 		A4DD2CCF1FBB3EC0008CF72E /* CalendarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarController.swift; sourceTree = "<group>"; };
 		A4DD2CD11FBB3F3D008CF72E /* EventDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDelegate.swift; sourceTree = "<group>"; };
 		A4DD2CD31FBB3F44008CF72E /* CalendarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDelegate.swift; sourceTree = "<group>"; };
-		A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CalendarCollectionViewCell.swift; path = Models/Cells/CalendarCollectionViewCell.swift; sourceTree = SOURCE_ROOT; };
 		A4FE91901FC5E0540034A32D /* EventController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventController.swift; path = Controllers/EventController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -185,11 +199,17 @@
 			children = (
 				A43FF2AB1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift */,
 				A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */,
-				A4DD2CD71FBB47C7008CF72E /* CalendarCollectionViewCell.swift */,
 				A48E0B9E1FBDB723007ED8FD /* EventTableViewCell.swift */,
+				A46D74E11FEDE302004306BD /* CalendarCollectionViewCell.swift */,
+				A46D74E31FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift */,
 				A43FF2B71FCA160100A5ECB4 /* ContextItemTableViewCell.swift */,
 				A48E0B9C1FBDB632007ED8FD /* CalendarEventTableViewCell.swift */,
 				A482FD901FE84E8500F353AC /* ReminderModel.swift */,
+				A46D74D51FEDBAD9004306BD /* RepeatCycleTableViewCell.swift */,
+				A46D74DF1FEDC220004306BD /* RepeatWeeklyTableViewCell.swift */,
+				A46D74D71FEDBADF004306BD /* RepeatIntervalTableViewCell.swift */,
+				A46D74D91FEDBAE7004306BD /* RepeatCalendarTableViewCell.swift */,
+				A46D74DB1FEDBAEE004306BD /* RepeatMonthTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -316,6 +336,7 @@
 				A45CA2391FC86618004F18A6 /* NotesController.swift */,
 				A45CA23B1FC87102004F18A6 /* ContextController.swift */,
 				A421913A1FD63F8600F893AE /* ParentController.swift */,
+				A46D74DD1FEDC08C004306BD /* RepeatController.swift */,
 			);
 			path = "Add Item Controller";
 			sourceTree = "<group>";
@@ -568,14 +589,15 @@
 				A45FE8791FCD961900E27C17 /* MainViewViewController + collection.swift in Sources */,
 				A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */,
 				A45CA23A1FC86618004F18A6 /* NotesController.swift in Sources */,
+				A46D74E01FEDC220004306BD /* RepeatWeeklyTableViewCell.swift in Sources */,
 				A42CB49A1FD0893900C10976 /* ThemeController.swift in Sources */,
 				A4BFAD251FBEB94100F17D37 /* AddItemTableViewCell.swift in Sources */,
 				A4147BF61FD3496B00F67853 /* TodayViewController.swift in Sources */,
 				A4147BFD1FD34A5A00F67853 /* TodayView + tableview delegates.swift in Sources */,
 				A43FF2AC1FCA031600A5ECB4 /* MainDisplayTableViewCell.swift in Sources */,
 				A421913B1FD63F8600F893AE /* ParentController.swift in Sources */,
-				A4DD2CD81FBB47C7008CF72E /* CalendarCollectionViewCell.swift in Sources */,
 				A4DD2CBD1FB9AEE3008CF72E /* CalendarViewController.swift in Sources */,
+				A46D74DE1FEDC08C004306BD /* RepeatController.swift in Sources */,
 				A4BFAD241FBEB8A000F17D37 /* AddToDoController.swift in Sources */,
 				A42CB4941FD0869700C10976 /* SettingsTableViewController.swift in Sources */,
 				A42CC4A51FE2F28F0024AB03 /* CustomRepeatViewTableViewController.swift in Sources */,
@@ -585,9 +607,11 @@
 				A43FF2B61FCA15EF00A5ECB4 /* ContextItemViewController.swift in Sources */,
 				A48E0B9D1FBDB632007ED8FD /* CalendarEventTableViewCell.swift in Sources */,
 				A43FF2AF1FCA035000A5ECB4 /* MainViewViewController.swift in Sources */,
+				A46D74D81FEDBADF004306BD /* RepeatIntervalTableViewCell.swift in Sources */,
 				A482FD911FE84E8500F353AC /* ReminderModel.swift in Sources */,
 				A43FF2B81FCA160100A5ECB4 /* ContextItemTableViewCell.swift in Sources */,
 				A4DD2C911FB9AECB008CF72E /* ViewController.swift in Sources */,
+				A46D74E41FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift in Sources */,
 				A4BFAD2F1FBEC57300F17D37 /* Enum.swift in Sources */,
 				A48E0B9F1FBDB723007ED8FD /* EventTableViewCell.swift in Sources */,
 				A4FE91911FC5E0540034A32D /* EventController.swift in Sources */,
@@ -597,15 +621,19 @@
 				A43FF2B31FCA051F00A5ECB4 /* MainViewController.swift in Sources */,
 				A4DD2CD01FBB3EC0008CF72E /* CalendarController.swift in Sources */,
 				A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */,
+				A46D74DC1FEDBAEE004306BD /* RepeatMonthTableViewCell.swift in Sources */,
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
+				A46D74E21FEDE302004306BD /* CalendarCollectionViewCell.swift in Sources */,
 				A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
 				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,
 				A4BFAD291FBEBB0400F17D37 /* AddNotesViewController.swift in Sources */,
+				A46D74D61FEDBAD9004306BD /* RepeatCycleTableViewCell.swift in Sources */,
 				A421913D1FD6413D00F893AE /* ParentViewController.swift in Sources */,
 				A482FD8F1FE767EE00F353AC /* Helper.swift in Sources */,
 				A422DFCE1FC9079200B52728 /* HapticFeedbackVariableChange.swift in Sources */,
+				A46D74DA1FEDBAE8004306BD /* RepeatCalendarTableViewCell.swift in Sources */,
 				A42CC4A31FE1F7DB0024AB03 /* RemindersController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

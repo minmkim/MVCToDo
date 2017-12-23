@@ -34,6 +34,7 @@ enum segueIdentifiers {
   static let todayViewSegue = "TodayViewSegue"
   static let editFromTodaySegue = "EditFromTodaySegue"
   static let addFromTodaySegue = "AddFromTodaySegue"
+  static let customRepeatSegue = "CustomRepeatSegue"
 }
 
 enum checkMarkAsset {
