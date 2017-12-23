@@ -134,7 +134,6 @@ class RemindersController {
   func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, parent: String?,notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
     let reminder = reminder
     reminder.title = reminderTitle
-    
     var dateComponents: DateComponents? = nil
     if let date = dueDate {
       if let time = dueTime {

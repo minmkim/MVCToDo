@@ -56,8 +56,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     }
   }
   
-
-  
   @IBAction func repeatButtonPressed(_ sender: Any) {
     switch sender as! UIButton {
     case neverRepeatButton:
@@ -158,7 +156,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   
   func done() {
-    controller.savePressed(toDo: ReminderTitleField.text!, context: contextField.text ?? "", dueDate: dueDateField.text ?? "", dueTime: dueTimeField.text ?? "")
     if ReminderTitleField.isFirstResponder {
       ReminderTitleField.resignFirstResponder()
     }
@@ -583,7 +580,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       } else {
         if notificationSwitch.isOn {
           controller.setAlarmDate(dueDate: dueDateField.text!, dueTime: alarmTime.text!)
-          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: controller.endRepeatDate)
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: controller.alarmTime)
         } else {
           controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: nil)
         }
