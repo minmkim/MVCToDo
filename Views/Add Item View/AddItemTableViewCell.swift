@@ -65,14 +65,18 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       controller.isRepeat = false
     case dailyRepeatButton:
       repeatingField.text = "Every day"
+      controller.isRepeat = false
       controller.isRepeat = true
       controller.repeatCycle = Reminder.RepeatCycleValues.daily
     case weeklyRepeatButton:
       repeatingField.text = "Every week"
+      controller.isRepeat = false
       controller.isRepeat = true
-      controller.repeatCycle = Reminder.RepeatCycleValues.monthly
+      controller.repeatCycle = Reminder.RepeatCycleValues.weekly
+      
     case monthlyRepeatButton:
       repeatingField.text = "Every month"
+      controller.isRepeat = false
       controller.isRepeat = true
       controller.repeatCycle = Reminder.RepeatCycleValues.monthly
     default:
@@ -294,6 +298,44 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       if let alarmTime = reminder.notifyDate {
         self.alarmTime.text = Helper.formatDateToString(date: alarmTime, format: dateAndTime.hourMinute)
       }
+      
+      if reminder.isRepeat {
+        if reminder.repeatCustomRule == nil {
+          switch reminder.repeatCycle {
+          case .daily?:
+            if reminder.repeatCycleInterval == 1 {
+              repeatingField.text = "Every Day"
+            } else {
+              repeatingField.text = "Every \(reminder.repeatCycleInterval ?? 1) Days"
+            }
+          case .weekly?:
+            if reminder.repeatCycleInterval == 1 {
+              repeatingField.text = "Every Week"
+            } else {
+              repeatingField.text = "Every \(reminder.repeatCycleInterval ?? 1) Weeks"
+            }
+          case .monthly?:
+            if reminder.repeatCycleInterval == 1 {
+              repeatingField.text = "Every Month"
+            } else {
+              repeatingField.text = "Every \(reminder.repeatCycleInterval ?? 1) Months"
+            }
+          case .yearly?:
+            if reminder.repeatCycleInterval == 1 {
+              repeatingField.text = "Every Year"
+            } else {
+              repeatingField.text = "Every \(reminder.repeatCycleInterval ?? 1) Years"
+            }
+          default:
+            print("error showing repeat information")
+          }
+        } else {
+          repeatingField.text = "Custom"
+        }
+      }
+
+      
+      
       self.tableView.reloadData()
     } else {
       navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
@@ -499,6 +541,10 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 //    parentField.text = controller.updateParentField()
   }
   
+  @IBAction func unwindWithCustomRepeat(sender: UIStoryboardSegue) {
+    repeatingField.text = "Custom"
+  }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.noteSegue {
       let destination = segue.destination as! NotesViewController
@@ -512,6 +558,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else if segue.identifier == segueIdentifiers.customRepeatSegue {
       let destination = segue.destination as! CustomRepeatViewTableViewController
       destination.controller = RepeatController()
+      destination.controller.delegate = controller
+      destination.controller.repeatCycleInterval = controller.repeatCycleInterval
+      destination.controller.repeatCustomNumber = controller.repeatCustomNumber
+      destination.controller.repeatCustomRule = controller.repeatCustomRule
+      destination.controller.currentCycle = (controller.repeatCycle ?? .daily)
     } else if segue.identifier == "UnwindFromToDo" {
       let destination = segue.destination as! EventViewController
       controller.sendToEventControllerDelegate = destination.controller

@@ -7,17 +7,17 @@
 //
 
 import Foundation
+protocol SendCustomRepeatDelegate: class {
+  func sendCustomRepeat(repeatCycle: Reminder.RepeatCycleValues, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?)
+}
 
 class RepeatController {
   
-  enum DisplayCycle {
-    case daily
-    case weekly
-    case monthly
-    case yearly
-  }
-  
-  var currentCycle: DisplayCycle = .daily
+  weak var delegate: SendCustomRepeatDelegate?
+  var currentCycle: Reminder.RepeatCycleValues = .daily
+  var repeatCycleInterval: Int?
+  var repeatCustomNumber = [Int]()
+  var repeatCustomRule: Reminder.RepeatCustomRuleValues?
   
   func numberOfSections() -> Int {
     switch currentCycle {
@@ -49,14 +49,18 @@ class RepeatController {
     }
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  func savePressed(repeatCycleInterval: Int, repeatCustomNumber: [Int]) {
+    switch currentCycle {
+    case .daily:
+      delegate?.sendCustomRepeat(repeatCycle: currentCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: [], repeatCustomRule: nil)
+    case .weekly:
+      delegate?.sendCustomRepeat(repeatCycle: currentCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: .daysOfTheWeek)
+    case .monthly:
+      delegate?.sendCustomRepeat(repeatCycle: currentCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: .daysOfTheMonth)
+    case .yearly:
+      delegate?.sendCustomRepeat(repeatCycle: currentCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: .monthsOfTheYear)
+    }
+    
+  }
   
 }

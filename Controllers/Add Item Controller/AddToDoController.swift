@@ -68,6 +68,11 @@ class AddEditToDoController {
     repeatCustomRule = reminder?.repeatCustomRule
     endRepeatDate = reminder?.endRepeatDate
     isRepeat = (reminder?.isRepeat)!
+    repeatCycleInterval = reminder?.repeatCycleInterval
+    repeatCycle = reminder?.repeatCycle
+    repeatCustomNumber = reminder?.repeatCustomNumber ?? []
+    repeatCustomRule = reminder?.repeatCustomRule
+    endRepeatDate = reminder?.endRepeatDate
   }
   
   deinit {
@@ -76,7 +81,7 @@ class AddEditToDoController {
   }
   
   func donePressed(reminderTitle: String, context: String?, parent: String?, dueDate: String?, dueTime: String?, isNotify: Bool, alarmTime: Date?) {
-    
+    print(isRepeat)
     if let oldReminder = reminder {
       if dueDate != nil {
       let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
@@ -149,5 +154,18 @@ extension AddEditToDoController: SavedNoteDelegate {
   func returnSavedNote(_ notes: String) {
     self.notes = notes
   }
+}
+
+extension AddEditToDoController: SendCustomRepeatDelegate {
+  func sendCustomRepeat(repeatCycle: Reminder.RepeatCycleValues, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?) {
+    print("here")
+    self.repeatCycle = repeatCycle
+    self.repeatCycleInterval = repeatCycleInterval
+    self.repeatCustomNumber = repeatCustomNumber
+    self.repeatCustomRule = repeatCustomRule
+    self.isRepeat = true
+  }
+  
+  
 }
 

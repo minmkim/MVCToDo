@@ -615,18 +615,18 @@
         <scene sceneID="HBQ-AU-3kD">
             <objects>
                 <tableViewController title="Custom Repeat" id="amL-IH-rpO" customClass="CustomRepeatViewTableViewController" customModule="TestingNewArch" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="zIf-nH-CKK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="zIf-nH-CKK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="602"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection id="72K-Mn-bGQ">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatCycleCell" rowHeight="74" id="UuI-sb-UxH" customClass="RepeatCycleTableViewCell" customModule="TestingNewArch" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatCycleCell" rowHeight="74" id="UuI-sb-UxH">
                                         <rect key="frame" x="0.0" y="35" width="375" height="74"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UuI-sb-UxH" id="pTv-Fy-c7z">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="73.666666666666671"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gt8-xq-gWL">
@@ -648,28 +648,28 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="64" height="23.666666666666668"/>
                                                             <state key="normal" title="Daily"/>
                                                             <connections>
-                                                                <action selector="buttonPress:" destination="UuI-sb-UxH" eventType="touchUpInside" id="zOm-M4-csG"/>
+                                                                <action selector="cycleButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="MsO-gE-9an"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="74g-UR-nDv">
                                                             <rect key="frame" x="63.999999999999993" y="0.0" width="94.333333333333314" height="23.666666666666668"/>
                                                             <state key="normal" title="Weekly"/>
                                                             <connections>
-                                                                <action selector="buttonPress:" destination="UuI-sb-UxH" eventType="touchUpInside" id="cMA-HX-5NV"/>
+                                                                <action selector="cycleButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="aaD-el-hEf"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UNL-xl-GRI">
                                                             <rect key="frame" x="158.33333333333334" y="0.0" width="105.66666666666666" height="23.666666666666668"/>
                                                             <state key="normal" title="Monthly"/>
                                                             <connections>
-                                                                <action selector="buttonPress:" destination="UuI-sb-UxH" eventType="touchUpInside" id="BJM-OC-36Y"/>
+                                                                <action selector="cycleButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="pZ6-rH-JR4"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJu-vM-3iY">
                                                             <rect key="frame" x="264" y="0.0" width="79" height="23.666666666666668"/>
                                                             <state key="normal" title="Yearly"/>
                                                             <connections>
-                                                                <action selector="buttonPress:" destination="UuI-sb-UxH" eventType="touchUpInside" id="w0h-Ok-k5n"/>
+                                                                <action selector="cycleButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="LND-dg-y5I"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -686,20 +686,12 @@
                                                 <constraint firstItem="gt8-xq-gWL" firstAttribute="top" secondItem="pTv-Fy-c7z" secondAttribute="topMargin" id="nkh-4J-6kz"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="dailyButton" destination="Cse-x5-9kz" id="dgQ-yc-Zxf"/>
-                                            <outlet property="frequencyDisplayLabel" destination="sD5-Jx-GUL" id="e77-9t-kf2"/>
-                                            <outlet property="frequencyLabel" destination="gt8-xq-gWL" id="rcV-II-QTY"/>
-                                            <outlet property="monthlyButton" destination="UNL-xl-GRI" id="LNY-Mc-9WX"/>
-                                            <outlet property="weeklyButton" destination="74g-UR-nDv" id="RhE-Nm-Jqi"/>
-                                            <outlet property="yearlyButton" destination="EJu-vM-3iY" id="Pox-Er-GOU"/>
-                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatIntervalCell" rowHeight="44" id="JZ7-2c-dbU" customClass="RepeatIntervalTableViewCell" customModule="TestingNewArch" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatIntervalCell" rowHeight="44" id="JZ7-2c-dbU">
                                         <rect key="frame" x="0.0" y="109" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JZ7-2c-dbU" id="r2k-h1-n9Z">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hgl-pD-hlN">
@@ -710,6 +702,9 @@
                                                 </label>
                                                 <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="uUt-pk-aNj">
                                                     <rect key="frame" x="265" y="7.3333333333333321" width="94" height="28.999999999999996"/>
+                                                    <connections>
+                                                        <action selector="intervalStepperPress:" destination="amL-IH-rpO" eventType="valueChanged" id="ANi-hi-MG2"/>
+                                                    </connections>
                                                 </stepper>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Every Day" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YSo-4e-c4V">
                                                     <rect key="frame" x="180" y="11.333333333333336" width="77" height="21"/>
@@ -728,25 +723,20 @@
                                                 <constraint firstItem="hgl-pD-hlN" firstAttribute="centerY" secondItem="r2k-h1-n9Z" secondAttribute="centerY" id="mD6-mv-GKa"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="everyLabel" destination="hgl-pD-hlN" id="pGf-lf-7kE"/>
-                                            <outlet property="intervalDisplayLabel" destination="YSo-4e-c4V" id="Az6-0F-IkH"/>
-                                            <outlet property="intervalStepper" destination="uUt-pk-aNj" id="NhE-76-he9"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="ARx-Wo-oLU">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="KrF-zU-kQr" customClass="RepeatWeeklyTableViewCell" customModule="TestingNewArch" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="KrF-zU-kQr">
                                         <rect key="frame" x="0.0" y="189" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KrF-zU-kQr" id="3An-7R-YuL">
-                                            <rect key="frame" x="0.0" y="0.0" width="335" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tju-oV-VxL">
-                                                    <rect key="frame" x="16" y="11" width="62" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sunday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tju-oV-VxL">
+                                                    <rect key="frame" x="16" y="11" width="58" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -757,15 +747,132 @@
                                                 <constraint firstItem="Tju-oV-VxL" firstAttribute="leading" secondItem="3An-7R-YuL" secondAttribute="leadingMargin" id="Xzo-uF-Hts"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="weekLabel" destination="Tju-oV-VxL" id="pKf-SP-5Wt"/>
-                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatCalendarCell" rowHeight="200" id="Lx7-qZ-muH" customClass="RepeatCalendarTableViewCell" customModule="TestingNewArch" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="233" width="375" height="200"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="ipk-nk-tA7">
+                                        <rect key="frame" x="0.0" y="233" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ipk-nk-tA7" id="rN8-NK-HEQ">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lIS-vW-n8v">
+                                                    <rect key="frame" x="16" y="11" width="62" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="lIS-vW-n8v" firstAttribute="centerY" secondItem="rN8-NK-HEQ" secondAttribute="centerY" id="2IZ-Nd-Rgs"/>
+                                                <constraint firstItem="lIS-vW-n8v" firstAttribute="leading" secondItem="rN8-NK-HEQ" secondAttribute="leadingMargin" id="7X9-rS-vAh"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="UZO-35-9gf">
+                                        <rect key="frame" x="0.0" y="277" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UZO-35-9gf" id="VPm-AK-bYo">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tuesday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ffA-FB-5wq">
+                                                    <rect key="frame" x="16" y="11" width="65" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ffA-FB-5wq" firstAttribute="centerY" secondItem="VPm-AK-bYo" secondAttribute="centerY" id="Isc-69-ay6"/>
+                                                <constraint firstItem="ffA-FB-5wq" firstAttribute="leading" secondItem="VPm-AK-bYo" secondAttribute="leadingMargin" id="lSl-QO-Dd5"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="QhN-9H-XDN">
+                                        <rect key="frame" x="0.0" y="321" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QhN-9H-XDN" id="kTI-oo-Yd7">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wednesday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="shw-qJ-kLU">
+                                                    <rect key="frame" x="16" y="11" width="90" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="shw-qJ-kLU" firstAttribute="leading" secondItem="kTI-oo-Yd7" secondAttribute="leadingMargin" id="ZD6-dc-lYp"/>
+                                                <constraint firstItem="shw-qJ-kLU" firstAttribute="centerY" secondItem="kTI-oo-Yd7" secondAttribute="centerY" id="j6b-AR-gvA"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="yRn-3k-G62">
+                                        <rect key="frame" x="0.0" y="365" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yRn-3k-G62" id="Ozk-ed-vvh">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thursday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yJg-mv-cc8">
+                                                    <rect key="frame" x="16" y="11" width="72" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="yJg-mv-cc8" firstAttribute="centerY" secondItem="Ozk-ed-vvh" secondAttribute="centerY" id="8gq-f7-ws7"/>
+                                                <constraint firstItem="yJg-mv-cc8" firstAttribute="leading" secondItem="Ozk-ed-vvh" secondAttribute="leadingMargin" id="ZFV-G7-K8O"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="YSH-8s-sPe">
+                                        <rect key="frame" x="0.0" y="409" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YSH-8s-sPe" id="qhL-pE-Uut">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Friday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pd2-wz-jbc">
+                                                    <rect key="frame" x="16" y="11" width="47" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Pd2-wz-jbc" firstAttribute="centerY" secondItem="qhL-pE-Uut" secondAttribute="centerY" id="4ZV-cs-tcj"/>
+                                                <constraint firstItem="Pd2-wz-jbc" firstAttribute="leading" secondItem="qhL-pE-Uut" secondAttribute="leadingMargin" id="ejV-ah-70X"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatWeeklyCell" rowHeight="44" id="KJ5-yB-bt0">
+                                        <rect key="frame" x="0.0" y="453" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KJ5-yB-bt0" id="J8n-Cw-kAw">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saturday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VIU-PB-GRM">
+                                                    <rect key="frame" x="16" y="11" width="69" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="VIU-PB-GRM" firstAttribute="leading" secondItem="J8n-Cw-kAw" secondAttribute="leadingMargin" id="08d-Sh-NkP"/>
+                                                <constraint firstItem="VIU-PB-GRM" firstAttribute="centerY" secondItem="J8n-Cw-kAw" secondAttribute="centerY" id="4dL-BQ-0y8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatCalendarCell" rowHeight="200" id="Lx7-qZ-muH">
+                                        <rect key="frame" x="0.0" y="497" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Lx7-qZ-muH" id="n3P-RQ-Qz6">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.66666666666666"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zOq-nc-4Wh">
@@ -825,33 +932,33 @@
                                                 <constraint firstAttribute="bottom" secondItem="zOq-nc-4Wh" secondAttribute="bottom" id="u2E-U9-GUc"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="calendarCollectionView" destination="zOq-nc-4Wh" id="WmM-cZ-sQe"/>
-                                        </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatMonthCell" rowHeight="140" id="8w6-E9-ZHb" customClass="RepeatMonthTableViewCell" customModule="TestingNewArch" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="433" width="375" height="140"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RepeatMonthCell" rowHeight="140" id="8w6-E9-ZHb">
+                                        <rect key="frame" x="0.0" y="697" width="375" height="140"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8w6-E9-ZHb" id="Pdl-oa-odq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="139.66666666666666"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="sgh-9m-z5G">
-                                                    <rect key="frame" x="16" y="11" width="343" height="118"/>
+                                                    <rect key="frame" x="8" y="11" width="359" height="118"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="j2i-cb-cwQ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="343" height="39.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="359" height="39.333333333333336"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WSm-ac-a1b">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="85.666666666666671" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="89.666666666666671" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pKn-fx-NFl">
-                                                                            <rect key="frame" x="23" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eA-Eb-5bx">
                                                                                     <rect key="frame" x="5" y="3.6666666666666643" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Jan"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="089-kh-nRq"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -870,15 +977,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YP9-JE-6Tj">
-                                                                    <rect key="frame" x="85.666666666666686" y="0.0" width="86" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="89.666666666666686" y="0.0" width="90" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPW-jb-NXe">
-                                                                            <rect key="frame" x="23" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Znz-yw-7pp">
-                                                                                    <rect key="frame" x="4.9999999999999858" y="4" width="30" height="33"/>
+                                                                                    <rect key="frame" x="5" y="4" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Feb"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="sUT-nT-hrg"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -897,15 +1007,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jsd-yL-s43">
-                                                                    <rect key="frame" x="171.66666666666666" y="0.0" width="85.666666666666657" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="179.66666666666666" y="0.0" width="89.666666666666657" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WbZ-qM-xoM">
-                                                                            <rect key="frame" x="22.666666666666686" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.666666666666686" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R3j-vs-uzQ">
                                                                                     <rect key="frame" x="5" y="3.6666666666666643" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Mar"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="P1R-tv-Bbu"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -924,15 +1037,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RHC-1B-Yk3">
-                                                                    <rect key="frame" x="257.33333333333331" y="0.0" width="85.666666666666686" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="269.33333333333331" y="0.0" width="89.666666666666686" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ka6-vW-kBq">
-                                                                            <rect key="frame" x="22.333333333333371" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.333333333333371" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZV1-l8-iIs">
                                                                                     <rect key="frame" x="5" y="3.6666666666666643" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Apr"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="2fm-3g-ObK"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -953,18 +1069,21 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Was-bd-AGx">
-                                                            <rect key="frame" x="0.0" y="39.333333333333329" width="343" height="39.333333333333329"/>
+                                                            <rect key="frame" x="0.0" y="39.333333333333329" width="359" height="39.333333333333329"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZeZ-Kg-kd6">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="85.666666666666671" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="89.666666666666671" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RYB-lC-2bp">
-                                                                            <rect key="frame" x="23" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kl4-HI-27S">
                                                                                     <rect key="frame" x="4.3333333333333357" y="3.6666666666666643" width="32" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="May"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="HdK-P2-hQM"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -983,15 +1102,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bxZ-gk-g9t">
-                                                                    <rect key="frame" x="85.666666666666686" y="0.0" width="86" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="89.666666666666686" y="0.0" width="90" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yrp-N3-vDW">
-                                                                            <rect key="frame" x="23" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCy-ya-oFR">
-                                                                                    <rect key="frame" x="4.9999999999999858" y="3.6666666666666643" width="30" height="33"/>
+                                                                                    <rect key="frame" x="5" y="3.6666666666666643" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Jun"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="ZOQ-lx-aXr"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1010,15 +1132,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DIG-Tc-ELz">
-                                                                    <rect key="frame" x="171.66666666666666" y="0.0" width="85.666666666666657" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="179.66666666666666" y="0.0" width="89.666666666666657" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4qf-Sl-ws6">
-                                                                            <rect key="frame" x="22.666666666666686" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.666666666666686" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERW-8E-zyG">
                                                                                     <rect key="frame" x="5" y="3.6666666666666643" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Jul"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="hsi-47-KA4"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1037,15 +1162,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ZN-Na-b2I">
-                                                                    <rect key="frame" x="257.33333333333331" y="0.0" width="85.666666666666686" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="269.33333333333331" y="0.0" width="89.666666666666686" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e8l-Qc-23V">
-                                                                            <rect key="frame" x="22.333333333333371" y="0.0" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.333333333333371" y="0.0" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r87-i7-YWO">
                                                                                     <rect key="frame" x="4.3333333333333144" y="3.6666666666666643" width="31" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Aug"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="Owg-6L-Jd4"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1066,18 +1194,21 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="wEp-Rw-hIb">
-                                                            <rect key="frame" x="0.0" y="78.666666666666671" width="343" height="39.333333333333329"/>
+                                                            <rect key="frame" x="0.0" y="78.666666666666671" width="359" height="39.333333333333329"/>
                                                             <subviews>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ior-rq-6nM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="85.666666666666671" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="89.666666666666671" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wle-Gl-esX">
-                                                                            <rect key="frame" x="23" y="-0.33333333333334281" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="-0.33333333333334281" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MLf-aX-Vbs">
                                                                                     <rect key="frame" x="5" y="3.6666666666666714" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Sep"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="u2B-QV-sbL"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1096,15 +1227,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jWJ-z6-vMK">
-                                                                    <rect key="frame" x="85.666666666666686" y="0.0" width="86" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="89.666666666666686" y="0.0" width="90" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sYC-uS-6zL">
-                                                                            <rect key="frame" x="23" y="-0.33333333333334281" width="40" height="40"/>
+                                                                            <rect key="frame" x="25" y="-0.33333333333334281" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vb1-It-kkO">
-                                                                                    <rect key="frame" x="4.9999999999999858" y="3.6666666666666714" width="30" height="33"/>
+                                                                                    <rect key="frame" x="5" y="3.6666666666666714" width="30" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Oct"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="Gk6-qz-hEp"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1123,15 +1257,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qOH-yU-zhz">
-                                                                    <rect key="frame" x="171.66666666666666" y="0.0" width="85.666666666666657" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="179.66666666666666" y="0.0" width="89.666666666666657" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zop-AN-zPx">
-                                                                            <rect key="frame" x="22.666666666666686" y="-0.33333333333334281" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.666666666666686" y="-0.33333333333334281" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wuj-KG-RXa">
                                                                                     <rect key="frame" x="4.3333333333333144" y="3.6666666666666714" width="31" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Nov"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="tET-rt-Th8"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1150,15 +1287,18 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="42f-iw-TIa">
-                                                                    <rect key="frame" x="257.33333333333331" y="0.0" width="85.666666666666686" height="39.333333333333336"/>
+                                                                    <rect key="frame" x="269.33333333333331" y="0.0" width="89.666666666666686" height="39.333333333333336"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xhu-on-mOc">
-                                                                            <rect key="frame" x="22.333333333333371" y="-0.33333333333334281" width="40" height="40"/>
+                                                                            <rect key="frame" x="24.333333333333371" y="-0.33333333333334281" width="40" height="40"/>
                                                                             <subviews>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eeb-cN-sdG">
                                                                                     <rect key="frame" x="4.3333333333333144" y="3.6666666666666714" width="31" height="33"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <state key="normal" title="Dec"/>
+                                                                                    <connections>
+                                                                                        <action selector="monthButtonPressed:" destination="amL-IH-rpO" eventType="touchUpInside" id="tGB-nU-6M8"/>
+                                                                                    </connections>
                                                                                 </button>
                                                                             </subviews>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1188,32 +1328,6 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="sgh-9m-z5G" secondAttribute="bottom" id="wW4-mP-97g"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outletCollection property="monthButton" destination="0eA-Eb-5bx" collectionClass="NSMutableArray" id="rGs-lG-0Cm"/>
-                                            <outletCollection property="monthButton" destination="Znz-yw-7pp" collectionClass="NSMutableArray" id="4xx-SV-WuC"/>
-                                            <outletCollection property="monthButton" destination="R3j-vs-uzQ" collectionClass="NSMutableArray" id="6Yz-H3-4jg"/>
-                                            <outletCollection property="monthButton" destination="ZV1-l8-iIs" collectionClass="NSMutableArray" id="tZu-ix-K4B"/>
-                                            <outletCollection property="monthButton" destination="kl4-HI-27S" collectionClass="NSMutableArray" id="8Uo-1V-hZR"/>
-                                            <outletCollection property="monthButton" destination="OCy-ya-oFR" collectionClass="NSMutableArray" id="TkM-Xp-nzE"/>
-                                            <outletCollection property="monthButton" destination="ERW-8E-zyG" collectionClass="NSMutableArray" id="Qv9-Gv-EU7"/>
-                                            <outletCollection property="monthButton" destination="r87-i7-YWO" collectionClass="NSMutableArray" id="lgt-bz-OGi"/>
-                                            <outletCollection property="monthButton" destination="MLf-aX-Vbs" collectionClass="NSMutableArray" id="wRQ-ds-lin"/>
-                                            <outletCollection property="monthButton" destination="Vb1-It-kkO" collectionClass="NSMutableArray" id="A1w-xB-ufW"/>
-                                            <outletCollection property="monthButton" destination="wuj-KG-RXa" collectionClass="NSMutableArray" id="FA9-hY-8ZY"/>
-                                            <outletCollection property="monthButton" destination="eeb-cN-sdG" collectionClass="NSMutableArray" id="FRk-GB-NY4"/>
-                                            <outletCollection property="indicatorView" destination="pKn-fx-NFl" collectionClass="NSMutableArray" id="TM6-px-HTA"/>
-                                            <outletCollection property="indicatorView" destination="FPW-jb-NXe" collectionClass="NSMutableArray" id="GDQ-gP-068"/>
-                                            <outletCollection property="indicatorView" destination="WbZ-qM-xoM" collectionClass="NSMutableArray" id="DG3-cg-M1r"/>
-                                            <outletCollection property="indicatorView" destination="Ka6-vW-kBq" collectionClass="NSMutableArray" id="zHU-EH-dbJ"/>
-                                            <outletCollection property="indicatorView" destination="RYB-lC-2bp" collectionClass="NSMutableArray" id="UhK-9Q-LFZ"/>
-                                            <outletCollection property="indicatorView" destination="Yrp-N3-vDW" collectionClass="NSMutableArray" id="aTj-jp-3Fo"/>
-                                            <outletCollection property="indicatorView" destination="4qf-Sl-ws6" collectionClass="NSMutableArray" id="b38-Kc-G5d"/>
-                                            <outletCollection property="indicatorView" destination="e8l-Qc-23V" collectionClass="NSMutableArray" id="riK-hx-wmd"/>
-                                            <outletCollection property="indicatorView" destination="wle-Gl-esX" collectionClass="NSMutableArray" id="9yU-UM-XVx"/>
-                                            <outletCollection property="indicatorView" destination="sYC-uS-6zL" collectionClass="NSMutableArray" id="Rjb-Mu-d4i"/>
-                                            <outletCollection property="indicatorView" destination="Zop-AN-zPx" collectionClass="NSMutableArray" id="56p-Ui-vSp"/>
-                                            <outletCollection property="indicatorView" destination="xhu-on-mOc" collectionClass="NSMutableArray" id="19O-9l-cIm"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1223,8 +1337,46 @@
                             <outlet property="delegate" destination="amL-IH-rpO" id="FaK-QO-ndJ"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="calendarCollectionView" destination="zOq-nc-4Wh" id="yMR-Dm-6gJ"/>
+                        <outlet property="dailyButton" destination="Cse-x5-9kz" id="H5Q-xC-cvF"/>
+                        <outlet property="frequencyDisplayLabel" destination="sD5-Jx-GUL" id="s5H-Tk-kEv"/>
+                        <outlet property="frequencyLabel" destination="gt8-xq-gWL" id="x2Q-T6-SB4"/>
+                        <outlet property="intervalDisplayLabel" destination="YSo-4e-c4V" id="8rF-eo-UJg"/>
+                        <outlet property="intervalLabel" destination="hgl-pD-hlN" id="xdS-hr-ycf"/>
+                        <outlet property="intervalStepper" destination="uUt-pk-aNj" id="pfb-Ud-3ZT"/>
+                        <outlet property="monthlyButton" destination="UNL-xl-GRI" id="Ky4-N7-WGD"/>
+                        <outlet property="weeklyButton" destination="74g-UR-nDv" id="yuL-zb-HnR"/>
+                        <outlet property="yearlyButton" destination="EJu-vM-3iY" id="nsU-gP-ca8"/>
+                        <outletCollection property="monthButton" destination="0eA-Eb-5bx" collectionClass="NSMutableArray" id="HNw-Ly-Kd7"/>
+                        <outletCollection property="monthButton" destination="Znz-yw-7pp" collectionClass="NSMutableArray" id="jwt-yA-10A"/>
+                        <outletCollection property="monthButton" destination="R3j-vs-uzQ" collectionClass="NSMutableArray" id="tO1-Ty-9sU"/>
+                        <outletCollection property="monthButton" destination="ZV1-l8-iIs" collectionClass="NSMutableArray" id="AlP-x4-7Iz"/>
+                        <outletCollection property="monthButton" destination="kl4-HI-27S" collectionClass="NSMutableArray" id="Z5K-5X-T5d"/>
+                        <outletCollection property="monthButton" destination="OCy-ya-oFR" collectionClass="NSMutableArray" id="ak4-0g-lsd"/>
+                        <outletCollection property="monthButton" destination="ERW-8E-zyG" collectionClass="NSMutableArray" id="Hj8-ef-UBm"/>
+                        <outletCollection property="monthButton" destination="r87-i7-YWO" collectionClass="NSMutableArray" id="poX-RO-Sb5"/>
+                        <outletCollection property="monthButton" destination="MLf-aX-Vbs" collectionClass="NSMutableArray" id="zHf-CV-3BH"/>
+                        <outletCollection property="monthButton" destination="Vb1-It-kkO" collectionClass="NSMutableArray" id="MOL-1g-iu8"/>
+                        <outletCollection property="monthButton" destination="wuj-KG-RXa" collectionClass="NSMutableArray" id="4Oh-la-lBE"/>
+                        <outletCollection property="monthButton" destination="eeb-cN-sdG" collectionClass="NSMutableArray" id="O1Y-Q5-9Qo"/>
+                        <outletCollection property="monthIndicatorView" destination="pKn-fx-NFl" collectionClass="NSMutableArray" id="osG-ZG-nfX"/>
+                        <outletCollection property="monthIndicatorView" destination="FPW-jb-NXe" collectionClass="NSMutableArray" id="HA1-Rk-lfG"/>
+                        <outletCollection property="monthIndicatorView" destination="WbZ-qM-xoM" collectionClass="NSMutableArray" id="1FL-35-P8U"/>
+                        <outletCollection property="monthIndicatorView" destination="Ka6-vW-kBq" collectionClass="NSMutableArray" id="Qvb-uN-aqu"/>
+                        <outletCollection property="monthIndicatorView" destination="RYB-lC-2bp" collectionClass="NSMutableArray" id="pF1-FO-PjU"/>
+                        <outletCollection property="monthIndicatorView" destination="Yrp-N3-vDW" collectionClass="NSMutableArray" id="aMa-LW-Js0"/>
+                        <outletCollection property="monthIndicatorView" destination="4qf-Sl-ws6" collectionClass="NSMutableArray" id="bEx-LT-v2Y"/>
+                        <outletCollection property="monthIndicatorView" destination="e8l-Qc-23V" collectionClass="NSMutableArray" id="SCy-AA-ncQ"/>
+                        <outletCollection property="monthIndicatorView" destination="wle-Gl-esX" collectionClass="NSMutableArray" id="pXF-zg-QWh"/>
+                        <outletCollection property="monthIndicatorView" destination="sYC-uS-6zL" collectionClass="NSMutableArray" id="UFv-bw-Xng"/>
+                        <outletCollection property="monthIndicatorView" destination="Zop-AN-zPx" collectionClass="NSMutableArray" id="usS-bl-2A9"/>
+                        <outletCollection property="monthIndicatorView" destination="xhu-on-mOc" collectionClass="NSMutableArray" id="z5i-cG-i4q"/>
+                        <segue destination="hHC-XT-Pjw" kind="unwind" identifier="UnwindWithCustomRepeatSegue" unwindAction="unwindWithCustomRepeatWithSender:" id="KIZ-M4-EuV"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2TG-or-7n6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="hHC-XT-Pjw" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1724" y="891.87192118226608"/>
         </scene>

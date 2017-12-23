@@ -1,34 +1,15 @@
 //
-//  RepeatCalendarTableViewCell.swift
+//  CustomRepeatViewTableViewController + Collection.swift
 //  TestingNewArch
 //
 //  Created by Min Kim on 12/22/17.
 //  Copyright © 2017 Min Kim. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class RepeatCalendarTableViewCell: UITableViewCell {
-
-
-  @IBOutlet weak var calendarCollectionView: UICollectionView!
-  
-  var pressedDays = [Int]()
-  override func awakeFromNib() {
-        super.awakeFromNib()
-    calendarCollectionView.delegate = self
-    calendarCollectionView.dataSource = self
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-
-}
-
-extension RepeatCalendarTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension CustomRepeatViewTableViewController: UICollectionViewDelegate, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let width = ((calendarCollectionView.frame.width - 100) / 7)
@@ -53,6 +34,40 @@ extension RepeatCalendarTableViewCell: UICollectionViewDelegate, UICollectionVie
     let number = (indexPath.section * 7) + indexPath.row + 1
     cell.dayNumberLabel.text = String(describing: number)
     cell.indicatorView.layer.cornerRadius = 15
+    
+    if pressedDays.count != 0 {
+      for day in pressedDays {
+        var section = 0
+        switch (day - 1) {
+        case 0...6:
+          section = 0
+        case 7...13:
+          section = 1
+        case 14...20:
+          section = 2
+        case 21...27:
+          section = 3
+        default:
+          section = 4
+        }
+        var row = 0
+        switch (day - 1) {
+        case 0...6:
+          row = (day - 1)
+        case 7...13:
+          row = (day - 8)
+        case 14...20:
+          row = (day - 15)
+        case 21...27:
+          row = (day - 22)
+        default:
+          row = (day - 29)
+        }
+        if indexPath.row == row && indexPath.section == section {
+          cell.indicatorView.backgroundColor = .red
+        }
+      }
+    }
     return cell
   }
   
@@ -65,9 +80,11 @@ extension RepeatCalendarTableViewCell: UICollectionViewDelegate, UICollectionVie
     } else {
       cell.indicatorView.backgroundColor = .white
       cell.dayNumberLabel.textColor = .black
-      guard let index = pressedDays.index(where: {$0 == Int(cell.dayNumberLabel.text!)!}) else {return}
+      guard let index = pressedDays.index(where: {$0 == (Int(cell.dayNumberLabel.text!)!) }) else {return}
       pressedDays.remove(at: index)
     }
   }
+  
+  
   
 }

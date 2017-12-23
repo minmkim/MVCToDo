@@ -10,162 +10,296 @@ import UIKit
 
 class CustomRepeatViewTableViewController: UITableViewController {
 
-  var controller: RepeatController!
   
-    override func viewDidLoad() {
-        super.viewDidLoad()
+  //first row
+  @IBOutlet weak var frequencyLabel: UILabel!
+  @IBOutlet weak var frequencyDisplayLabel: UILabel!
+  
+  // second row
+  @IBOutlet weak var intervalLabel: UILabel!
+  @IBOutlet weak var intervalDisplayLabel: UILabel!
+  @IBOutlet weak var intervalStepper: UIStepper!
+  @IBAction func intervalStepperPress(_ sender: Any) {
+    if intervalStepper.value == 1 {
+      switch controller.currentCycle {
+      case .daily:
+        intervalDisplayLabel.text = "Every Day"
+      case .weekly:
+        intervalDisplayLabel.text = "Every Week"
+      case .monthly:
+        intervalDisplayLabel.text = "Every Month"
+      case .yearly:
+        intervalDisplayLabel.text = "Every Year"
+      }
+    } else {
+      switch controller.currentCycle {
+      case .daily:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Days"
+      case .weekly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Weeks"
+      case .monthly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Months"
+      case .yearly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Years"
+      }
     }
+  }
+  
+  //days of week
+  var pressedDaysOfWeek = [Int]()
+  
+  //calendar
+  var controller: RepeatController!
+  var pressedDays = [Int]()
+  
+  //months
+  var pressedMonths = [Int]()
+  @IBOutlet var monthButton: [UIButton]!
+  @IBOutlet var monthIndicatorView: [UIView]!
+  @IBAction func monthButtonPressed(_ sender: UIButton) {
+        switch sender.title(for: .normal)! {
+        case "Jan":
+          if monthIndicatorView[0].backgroundColor != .red {
+            pressedMonths.append(1)
+            monthIndicatorView[0].backgroundColor = .red
+          } else {
+            monthIndicatorView[0].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 1}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Feb":
+          if monthIndicatorView[1].backgroundColor != .red {
+            pressedMonths.append(2)
+            monthIndicatorView[1].backgroundColor = .red
+          } else {
+            monthIndicatorView[1].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 2}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Mar":
+          if monthIndicatorView[2].backgroundColor != .red {
+            pressedMonths.append(3)
+            monthIndicatorView[2].backgroundColor = .red
+          } else {
+            monthIndicatorView[2].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 3}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Apr":
+          if monthIndicatorView[3].backgroundColor != .red {
+            pressedMonths.append(4)
+            monthIndicatorView[3].backgroundColor = .red
+          } else {
+            monthIndicatorView[3].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 4}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "May":
+          if monthIndicatorView[4].backgroundColor != .red {
+            pressedMonths.append(5)
+            monthIndicatorView[4].backgroundColor = .red
+          } else {
+            monthIndicatorView[4].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 5}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Jun":
+          if monthIndicatorView[5].backgroundColor != .red {
+            pressedMonths.append(6)
+            monthIndicatorView[5].backgroundColor = .red
+          } else {
+            monthIndicatorView[5].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 6}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Jul":
+          if monthIndicatorView[6].backgroundColor != .red {
+            pressedMonths.append(7)
+            monthIndicatorView[6].backgroundColor = .red
+          } else {
+            monthIndicatorView[6].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 7}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Aug":
+          if monthIndicatorView[7].backgroundColor != .red {
+            pressedMonths.append(8)
+            monthIndicatorView[7].backgroundColor = .red
+          } else {
+            monthIndicatorView[7].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 8}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Sep":
+          if monthIndicatorView[8].backgroundColor != .red {
+            pressedMonths.append(9)
+            monthIndicatorView[8].backgroundColor = .red
+          } else {
+            monthIndicatorView[8].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 9}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Oct":
+          if monthIndicatorView[9].backgroundColor != .red {
+            pressedMonths.append(10)
+            monthIndicatorView[9].backgroundColor = .red
+          } else {
+            monthIndicatorView[9].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 10}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Nov":
+          if monthIndicatorView[10].backgroundColor != .red {
+            pressedMonths.append(11)
+            monthIndicatorView[10].backgroundColor = .red
+          } else {
+            monthIndicatorView[10].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 11}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        case "Dec":
+          if monthIndicatorView[11].backgroundColor != .red {
+            pressedMonths.append(12)
+            monthIndicatorView[11].backgroundColor = .red
+          } else {
+            monthIndicatorView[11].backgroundColor = .white
+            guard let index = pressedMonths.index(where: {$0 == 12}) else {return}
+            pressedMonths.remove(at: index)
+          }
+        default:
+          print("error")
+        }
+  }
+  
+  
+  
+  @IBOutlet weak var calendarCollectionView: UICollectionView!
+  override func viewDidLoad() {
+        super.viewDidLoad()
+    let saveButton : UIBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(save))
+    self.navigationItem.rightBarButtonItem = saveButton
+    calendarCollectionView.delegate = self
+    calendarCollectionView.dataSource = self
+    intervalStepper.minimumValue = 1
+    print(controller.repeatCustomRule)
+    if controller.repeatCycleInterval == 1 {
+      switch controller.currentCycle {
+      case .daily:
+        intervalDisplayLabel.text = "Every Day"
+      case .weekly:
+        intervalDisplayLabel.text = "Every Week"
+      case .monthly:
+        intervalDisplayLabel.text = "Every Month"
+      case .yearly:
+        intervalDisplayLabel.text = "Every Year"
+      }
+    } else {
+      intervalStepper.value = Double(controller.repeatCycleInterval ?? 1)
+      switch controller.currentCycle {
+      case .daily:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Days"
+      case .weekly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Weeks"
+      case .monthly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Months"
+      case .yearly:
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Years"
+      }
+    }
+    
+    if controller.repeatCustomRule != nil {
+      switch controller.repeatCustomRule! {
+      case .daysOfTheWeek:
+        pressedDaysOfWeek = controller.repeatCustomNumber
+        for number in pressedDaysOfWeek {
+          let index = IndexPath(row: (number - 1), section: 1)
+          let cell = tableView.cellForRow(at: index)
+          cell?.accessoryType = .checkmark
+        }
+      case .monthsOfTheYear:
+        pressedMonths = controller.repeatCustomNumber
+        for number in pressedMonths {
+          monthIndicatorView[number].backgroundColor = .red
+        }
+      default:
+        print("error")
+      }
+      tableView.beginUpdates()
+      tableView.endUpdates()
+    }
+    for indicator in monthIndicatorView {
+      indicator.layer.cornerRadius = 20
+    }
+  }
+
+  @objc func save() {
+    switch controller.currentCycle {
+    case .daily:
+      controller.savePressed(repeatCycleInterval: Int(intervalStepper.value), repeatCustomNumber: [])
+    case .weekly:
+      controller.savePressed(repeatCycleInterval: Int(intervalStepper.value), repeatCustomNumber: pressedDaysOfWeek)
+    case .monthly:
+      controller.savePressed(repeatCycleInterval: Int(intervalStepper.value), repeatCustomNumber: pressedDays)
+    case .yearly:
+      controller.savePressed(repeatCycleInterval: Int(intervalStepper.value), repeatCustomNumber: pressedMonths)
+    }
+    performSegue(withIdentifier: segueIdentifiers.unwindWithCustomRepeatSegue, sender: nil)
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return controller.numberOfSections()
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return controller.numberOfRowsPerSection(for: section)
-    }
   
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if indexPath.section == 0 {
-      if indexPath.row == 0 {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatCycleCell", for: indexPath) as! RepeatCycleTableViewCell
-        cell.dailyButton.addTarget(self, action: #selector(cycleButtonPress), for:.touchUpInside)
-        cell.weeklyButton.addTarget(self, action: #selector(cycleButtonPress), for:.touchUpInside)
-        cell.monthlyButton.addTarget(self, action: #selector(cycleButtonPress), for:.touchUpInside)
-        cell.yearlyButton.addTarget(self, action: #selector(cycleButtonPress), for:.touchUpInside)
-        return cell
-      } else {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatIntervalCell", for: indexPath) as! RepeatIntervalTableViewCell
-        return cell
-      }
-    } else {
-      switch controller.currentCycle {
-      case .daily:
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatCycleCell", for: indexPath)
-        return cell
-      case .weekly:
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatWeeklyCell", for: indexPath) as! RepeatWeeklyTableViewCell
-        cell.weekLabel.text = cell.daysOfTheWeek[indexPath.row]
-        return cell
-      case .monthly:
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatCalendarCell", for: indexPath) as! RepeatCalendarTableViewCell
-        return cell
-      case .yearly:
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RepeatMonthCell", for: indexPath) as! RepeatMonthTableViewCell
-        for indicator in cell.indicatorView {
-          indicator.backgroundColor = .white
-          indicator.layer.cornerRadius = 20
-        }
-        for button in cell.monthButton {
-          button.addTarget(self, action: #selector(monthButtonPress), for:.touchUpInside)
-        }
-        return cell
-      }
-    }
-  }
+  @IBOutlet weak var yearlyButton: UIButton!
+  @IBOutlet weak var monthlyButton: UIButton!
+  @IBOutlet weak var weeklyButton: UIButton!
+  @IBOutlet weak var dailyButton: UIButton!
   
-   @objc func monthButtonPress(sender: UIButton) {
-    let indexPath = IndexPath(row: 0, section: 1)
-    let cell = tableView.cellForRow(at: indexPath) as! RepeatMonthTableViewCell
-    switch sender.title(for: .normal)! {
-    case "Jan":
-      if cell.indicatorView[0].backgroundColor != .red {
-        cell.indicatorView[0].backgroundColor = .red
+  @IBAction func cycleButtonPressed(_ sender: UIButton) {
+    switch sender.currentTitle {
+    case "Daily"?:
+      controller.currentCycle = .daily
+      frequencyDisplayLabel.text = "Daily"
+      if intervalStepper.value == 1 {
+        intervalDisplayLabel.text = "Every Day"
       } else {
-        cell.indicatorView[0].backgroundColor = .white
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Days"
       }
-    case "Feb":
-      if cell.indicatorView[1].backgroundColor != .red {
-        cell.indicatorView[1].backgroundColor = .red
+    case "Weekly"?:
+      print(pressedDaysOfWeek)
+      controller.currentCycle = .weekly
+      frequencyDisplayLabel.text = "Weekly"
+      if intervalStepper.value == 1 {
+        intervalDisplayLabel.text = "Every Week"
       } else {
-        cell.indicatorView[1].backgroundColor = .white
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Weeks"
       }
-    case "Mar":
-      if cell.indicatorView[2].backgroundColor != .red {
-        cell.indicatorView[2].backgroundColor = .red
+    case "Monthly"?:
+      print(pressedDays)
+      controller.currentCycle = .monthly
+      frequencyDisplayLabel.text = "Monthly"
+      if intervalStepper.value == 1 {
+        intervalDisplayLabel.text = "Every Month"
       } else {
-        cell.indicatorView[2].backgroundColor = .white
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Months"
       }
-    case "Apr":
-      if cell.indicatorView[3].backgroundColor != .red {
-        cell.indicatorView[3].backgroundColor = .red
+    case "Yearly"?:
+      print(pressedMonths)
+      controller.currentCycle = .yearly
+      frequencyDisplayLabel.text = "Yearly"
+      if intervalStepper.value == 1 {
+        intervalDisplayLabel.text = "Every Year"
       } else {
-        cell.indicatorView[3].backgroundColor = .white
-      }
-    case "May":
-      if cell.indicatorView[4].backgroundColor != .red {
-        cell.indicatorView[4].backgroundColor = .red
-      } else {
-        cell.indicatorView[4].backgroundColor = .white
-      }
-    case "Jun":
-      if cell.indicatorView[5].backgroundColor != .red {
-        cell.indicatorView[5].backgroundColor = .red
-      } else {
-        cell.indicatorView[5].backgroundColor = .white
-      }
-    case "Jul":
-      if cell.indicatorView[6].backgroundColor != .red {
-        cell.indicatorView[6].backgroundColor = .red
-      } else {
-        cell.indicatorView[6].backgroundColor = .white
-      }
-    case "Aug":
-      if cell.indicatorView[7].backgroundColor != .red {
-        cell.indicatorView[7].backgroundColor = .red
-      } else {
-        cell.indicatorView[7].backgroundColor = .white
-      }
-    case "Sep":
-      if cell.indicatorView[8].backgroundColor != .red {
-        cell.indicatorView[8].backgroundColor = .red
-      } else {
-        cell.indicatorView[8].backgroundColor = .white
-      }
-    case "Oct":
-      if cell.indicatorView[9].backgroundColor != .red {
-        cell.indicatorView[9].backgroundColor = .red
-      } else {
-        cell.indicatorView[9].backgroundColor = .white
-      }
-    case "Nov":
-      if cell.indicatorView[10].backgroundColor != .red {
-        cell.indicatorView[10].backgroundColor = .red
-      } else {
-        cell.indicatorView[10].backgroundColor = .white
-      }
-    case "Dec":
-      if cell.indicatorView[11].backgroundColor != .red {
-        cell.indicatorView[11].backgroundColor = .red
-      } else {
-        cell.indicatorView[11].backgroundColor = .white
+        intervalDisplayLabel.text = "Every \(Int(intervalStepper.value)) Years"
       }
     default:
-      print("error")
+      print("sender: \(sender)")
     }
+    tableView.beginUpdates()
+    tableView.endUpdates()
   }
-  
-    @objc func cycleButtonPress(sender: UIButton) {
-      switch sender.currentTitle {
-      case "Daily"?:
-        controller.currentCycle = .daily
-      case "Weekly"?:
-        controller.currentCycle = .weekly
-      case "Monthly"?:
-        controller.currentCycle = .monthly
-      case "Yearly"?:
-        controller.currentCycle = .yearly
-      default:
-        print("sender: \(sender)")
-      }
-      tableView.reloadData()
-    }
     
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     if indexPath.section == 0 {
@@ -179,11 +313,30 @@ class CustomRepeatViewTableViewController: UITableViewController {
       case .daily:
         return 0
       case .weekly:
-        return 44
+        switch indexPath.row {
+        case 0...6:
+          return 44.0
+        default:
+          return 0
+        }
       case .monthly:
-        return 200
+        switch indexPath.row {
+        case 0...6:
+          return 0.0
+        case 7:
+          return 200.0
+        default:
+          return 0
+        }
       case .yearly:
-        return 150
+        switch indexPath.row {
+        case 0...6:
+          return 0.0
+        case 7:
+          return 0
+        default:
+          return 150.0
+        }
       }
     }
   }
@@ -191,6 +344,16 @@ class CustomRepeatViewTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let cell = tableView.cellForRow(at: indexPath)
     cell?.selectionStyle = .none
+    if indexPath.section == 1 &&  0...6 ~= indexPath.row {
+      if cell?.accessoryType == .checkmark {
+        cell?.accessoryType = .none
+        guard let index = pressedDaysOfWeek.index(where: {$0 == indexPath.row}) else {return}
+        pressedDaysOfWeek.remove(at: index)
+      } else {
+        pressedDaysOfWeek.append(indexPath.row)
+        cell?.accessoryType = .checkmark
+      }
+    }
   }
   
 }
