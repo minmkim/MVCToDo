@@ -20,7 +20,7 @@ extension CalendarViewController: UICollectionViewDropDelegate {
         return
     }
     let droppedDateString = controller.convertIndexPathRowToDateString(indexPathCalendar.row)
-    delegate?.toDoDroppedOnCalendarDate(droppedDateString)
+    delegate?.reminderDroppedOnCalendarDate(droppedDateString)
     calendarCollectionView.reloadData()
   }
   
@@ -29,22 +29,22 @@ extension CalendarViewController: UICollectionViewDropDelegate {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let previousCell = calendarCollectionView.cellForItem(at: testPath) as! CalendarCollectionViewCell
-//        previousCell.backgroundColor = themeController.backgroundColor
+        previousCell.backgroundColor = .white
         if indexPath.row == 0 {
           previousCell.dayIndicatorView.backgroundColor = .red
         } else {
-//          previousCell.dayIndicatorView.backgroundColor = themeController.backgroundColor
+          previousCell.dayIndicatorView.backgroundColor = .white
         }
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-//        cell.backgroundColor = themeController.mainThemeColor
-//        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
+        cell.backgroundColor = .red
+        cell.dayIndicatorView.backgroundColor  = .red
       }
     } else {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
-//        cell.backgroundColor = themeController.mainThemeColor
-//        cell.dayIndicatorView.backgroundColor  = themeController.mainThemeColor
+        cell.backgroundColor = .red
+        cell.dayIndicatorView.backgroundColor  = .red
       }
     }
       return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)

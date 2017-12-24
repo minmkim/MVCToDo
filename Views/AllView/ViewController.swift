@@ -10,7 +10,7 @@ import UIKit
 
 protocol InformEventTableDelegate: class {
   func sendCalendarPressInformation(_ Date: String)
-  func sendNewToDoDueDateAfterDropSession(_ newDate: String)
+  func sendNewReminderDueDateAfterDropSession(_ newDate: String)
 }
 
 protocol PassToDoModelToMainDelegate: class {
@@ -20,8 +20,8 @@ protocol PassToDoModelToMainDelegate: class {
 
 class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate {
   
-  func toDoDroppedOnCalendarDate(_ newDate: String) {
-    delegate?.sendNewToDoDueDateAfterDropSession(newDate)
+  func reminderDroppedOnCalendarDate(_ newDate: String) {
+    delegate?.sendNewReminderDueDateAfterDropSession(newDate)
   }
   
   weak var passToDoModelDelegate: PassToDoModelToMainDelegate?

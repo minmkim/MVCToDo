@@ -10,7 +10,7 @@ import UIKit
 
 protocol InformEventTableOfCalendarPressDelegate: class {
   func calendarDayPressed(_ Date: String)
-  func toDoDroppedOnCalendarDate(_ newDate: String)
+  func reminderDroppedOnCalendarDate(_ newDate: String)
 }
 
 class CalendarViewController: UIViewController {
@@ -20,7 +20,6 @@ class CalendarViewController: UIViewController {
   weak var delegate: InformEventTableOfCalendarPressDelegate?
   
   var controller = CalendarController()
-  //var themeController = ThemeController()
   var didInitialScroll = false // did user touch calendar yet?
   var previousSelectedCalendayIndexPath: IndexPath?
   var selectedCalendarIndexPath: IndexPath?

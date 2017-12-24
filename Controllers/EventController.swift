@@ -63,11 +63,6 @@ class EventController {
     toDoDates = toDoDatesDate.map( { Helper.formatDateToString(date: $0, format: dateAndTime.yearMonthDay)  })
     toDoDates = Array(Set(toDoDates))
     toDoDates.sort(by: { $0 < $1 })
-    
-//    for date in toDoDates {
-//      let listOfReminders = remindersController.incompleteReminderList.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
-//      datesRemindersList[date] = listOfReminders
-//    }
   }
   
   func returnReminder(for indexPath: IndexPath) -> Reminder? {
@@ -110,20 +105,6 @@ class EventController {
     return index ?? 0
   }
   
-//  func countItemsInToDoList() -> Int {
-//    return toDoModelController.toDoList.count
-//  }
-  
-  
-  func checkForItemsInDate(section: Int) -> Bool {
-    let rowsInSection = rowsPerSection(for: section)
-    if rowsInSection == 0 {
-      return true
-    } else {
-      return false
-    }
-  }
-  
   // MARK: Control functions
 
   func scrollToCalendarPressDate(_ Date: String) -> Int {
@@ -160,119 +141,6 @@ class EventController {
     return repeatNotification
   }
   
-//  func calculatePreviousIndexPath(_ toDoItem: ToDo) -> IndexPath {
-//    let date = toDoItem.dueDate!
-//    let formattedDate = formatStringToDate(date: formatDateToString(date: date, format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)
-//    let indexSection = toDoDatesDate.index(of: formattedDate)
-//    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-//    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID})
-//    let indexPath = IndexPath(row: indexRow!, section: indexSection!)
-//    return indexPath
-//  }
-//  
-//  func calculateNewIndexPath(toDoItem: ToDo, newDueDate: Date) -> IndexPath {
-//    let formattedDate = newDueDate
-//    setToDoDates()
-//    let indexSection = toDoDatesDate.index(of: formattedDate)
-//    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-//    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == toDoItem.calendarRecordID})
-//    let indexPath = IndexPath(row: indexRow!, section: indexSection!)
-//    return indexPath
-//  }
-//  
-//  func checkmarkButtonPressedController(_ ID: String) -> String {
-////    toDoModelController = ToDoModelController()
-//    let repeatNotification = checkRepeatNotification(ID)
-//    let checkmarkIcon = toDoModelController.checkmarkButtonPressedModel(ID)
-//    if checkmarkIcon == true {
-//      return themeController.checkedCheckmarkIcon
-//    } else {
-//      if repeatNotification {
-//        guard let toDoIndex = toDoModelController.toDoList.index(where: {$0.calendarRecordID == ID}) else {return themeController.checkedCheckmarkIcon}
-//        let toDoItem = toDoModelController.toDoList[toDoIndex]
-//        if toDoItem.notification {
-//          updateTableView(toDoItem)
-//        }
-//        return themeController.uncheckedCheckmarkIcon
-//      } else {
-//        return themeController.uncheckedCheckmarkIcon
-//      }
-//    }
-//  }
-//
-//  func updateTableView(_ toDoItem: ToDo) {
-//    let formattedDueDate = formatStringToDate(date: formatDateToString(date: toDoItem.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)
-//    let listOfItemsInDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDueDate} )
-//    let previousIndexPath = calculatePreviousIndexPath(toDoItem)
-//    let newDate = updateRepeatDueDate(toDoItem)
-//    let newIndexPath = calculateNewIndexPath(toDoItem: toDoItem, newDueDate: newDate)
-//    let listOfItemsInNewDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == newDate} )
-//    
-//    delegate?.beginUpdates()
-//    delegate?.deleteRow(previousIndexPath)
-//    if listOfItemsInDate.count == 1 {
-//      delegate?.deleteSection(previousIndexPath)
-//    }
-//    if listOfItemsInNewDate.count == 1 {
-//      delegate?.insertSection(newIndexPath)
-//    }
-//    delegate?.insertRow(newIndexPath)
-//    delegate?.endUpdates()
-//  }
-//  
-//  func updateRepeatDueDate(_ toDoItem: ToDo) -> Date {
-//    guard let dueDate = toDoItem.dueDate else {return Date()}
-//    guard let repeatCycle = toDoItem.repeatCycle else {return Date()}
-//    let repeatInt = toDoItem.repeatNumber
-//    var newDueDate: Date?
-//    switch repeatCycle {
-//    case "Days":
-//      newDueDate = calculateDateComponent(byAdding: .day, numberOf: repeatInt, date: dueDate, format: dateAndTime.monthDateYear)
-//    case "Weeks":
-//      newDueDate = calculateDateComponent(byAdding: .day, numberOf: (repeatInt * 7), date: dueDate, format: dateAndTime.monthDateYear)
-//    case "Months":
-//      newDueDate = calculateDateComponent(byAdding: .month, numberOf: repeatInt, date: dueDate, format: dateAndTime.monthDateYear)
-//    default:
-//      print("error")
-//    }
-//    guard let newDate = newDueDate else {return Date()}
-//    var newToDoItem = toDoItem
-//    newToDoItem.dueDate = newDate
-//    toDoModelController.editToDoItem(newToDoItem)
-//    return newDate
-//  }
-//  
-//  func calculateIndexPath(_ newDueDate: String) -> IndexPath {
-//    let formattedDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
-//    let listOfToDoForDate = toDoModelController.toDoList.filter( {(formatStringToDate(date: formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear), format: dateAndTime.monthDateYear)) == formattedDate})
-//    let indexRow = listOfToDoForDate.index(where: {$0.calendarRecordID == dragAndDropToDo?.calendarRecordID})
-//    
-//    var counter = -1
-//    var indexSection = 0
-//    for date in toDoDatesDate {
-//      counter += 1
-//      if formattedDate <= date {
-//        indexSection = counter
-//        break
-//      }
-//    }
-//    if indexSection == -1 {
-//      indexSection = 0
-//    }
-//    let indexPath = IndexPath(row: indexRow!, section: indexSection)
-//    return indexPath
-//  }
-//  
-//  func needToInsertSection(_ newDueDate: String) -> Bool {
-//    let formattedDate = formatStringToDate(date: newDueDate, format: dateAndTime.monthDateYear)
-//    let indexSection = toDoDatesDate.index(where: {$0 == formattedDate})
-//    if indexSection != nil {
-//      return true
-//    } else {
-//      return false
-//    }
-//  }
-  
   // MARK: Drag and Drop functions
   
   func returnDragIndexPath(_ indexPath: IndexPath) {
@@ -283,33 +151,79 @@ class EventController {
     dragAndDropReminder = Reminder
   }
   
-//  func updateDueDate(_ newDate: String) {
-//    let isDueDateDifferent = updateDueDateForToDoItem(newDate)
-//    guard let originalIndexPath = dragIndexPathOrigin else {return}
-//
-//    delegate?.beginUpdates()
-//    if isDueDateDifferent {
-//      if checkForItemsInDate(section: originalIndexPath.section) {
-//        delegate?.deleteSection(originalIndexPath)
-//      }
-//      setupControllerData()
-//      delegate?.deleteRow(originalIndexPath)
-//
-//      let indexPath = calculateIndexPath(newDate)
-//      if rowsPerSection(for: indexPath.section) == 1 {
-//        delegate?.insertSection(indexPath)
-//      }
-//      delegate?.insertRow(indexPath)
-//    }
-//    delegate?.endUpdates()
-//  }
+  func updateDueDate(_ newDate: String) {
+    guard let originalIndexPath = dragIndexPathOrigin else {return}
+    guard let reminder = dragAndDropReminder else {return}
+    if let originalDueDate = dragAndDropReminder?.dueDate {
+      let originalDueDateString = Helper.formatDateToString(date: originalDueDate, format: dateAndTime.yearMonthDay)
+      if newDate != originalDueDateString {
+        delegate?.beginUpdates()
+        guard var originalReminderList = datesRemindersList[originalDueDateString] else {return}
+        guard let index = originalReminderList.index(where: {$0.calendarRecordID == dragAndDropReminder?.calendarRecordID}) else {return}
+        originalReminderList.remove(at: index)
+        delegate?.deleteRow(originalIndexPath)
+        if originalReminderList.count == 0 {
+          datesRemindersList[originalDueDateString] = nil
+          guard let index = toDoDates.index(where: {$0 == originalDueDateString}) else {return}
+          toDoDates.remove(at: index)
+          delegate?.deleteSection(originalIndexPath)
+        } else {
+          datesRemindersList[originalDueDateString] = originalReminderList
+        }
+        let oldReminder = reminder.reminder
+        let newdueDate = Helper.formatStringToDate(date: newDate, format: dateAndTime.yearMonthDay)
+        if let dueTime = reminder.dueTime {
+          let newDateTime = remindersController.formatDateAndTime(dueDate: newdueDate, dueTime: dueTime)
+          oldReminder?.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: newDateTime)
+          remindersController.editReminder(reminder: oldReminder!)
+          
+          if var newReminderList = datesRemindersList[newDate] {
+            newReminderList.insert(Reminder(oldReminder!), at: 0)
+            datesRemindersList[newDate] = newReminderList
+            guard let section = toDoDates.index(where: {$0 == newDate}) else {return}
+            let indexPath = IndexPath(row: 0, section: section)
+            delegate?.insertRow(indexPath)
+          } else {
+            datesRemindersList[newDate] = [Reminder(oldReminder!)]
+            toDoDates.append(newDate)
+            toDoDates.sort(by: { $0 < $1 })
+            guard let section = toDoDates.index(where: {$0 == newDate}) else {return}
+            let indexPath = IndexPath(row: 0, section: section)
+            delegate?.insertSection(indexPath)
+            delegate?.insertRow(indexPath)
+          }
+        } else {
+          oldReminder?.dueDateComponents = remindersController.setDateComponentsForDueDateNoTime(for: Helper.formatStringToDate(date: newDate, format: dateAndTime.yearMonthDay))
+          guard var newReminderList = datesRemindersList[newDate] else {return}
+          remindersController.editReminder(reminder: oldReminder!)
+          newReminderList.insert(Reminder(oldReminder!), at: 0)
+          datesRemindersList[newDate] = newReminderList
+          
+          guard let section = toDoDates.index(where: {$0 == newDate}) else {return}
+          let indexPath = IndexPath(row: 0, section: section)
+          delegate?.insertRow(indexPath)
+        }
+      }
+      delegate?.endUpdates()
+    }
+  }
+  
   
   func updateDueDateWithDropInTableView(_ endIndexPath: IndexPath) {
     guard let originIndex = dragIndexPathOrigin else {return}
-    guard var reminder = dragAndDropReminder else {return}
+    guard let reminder = dragAndDropReminder else {return}
     let endIndex = endIndexPath
-    let numberOfItemsInOrigin = rowsPerSection(for: (originIndex.section))
     let newDueDate = toDoDates[endIndex.section]
+    
+    let oldDate = toDoDates[originIndex.section]
+    guard var oldList = datesRemindersList[oldDate] else {return}
+    oldList.remove(at: originIndex.row)
+    datesRemindersList[oldDate] = oldList
+    
+    guard var newList = datesRemindersList[newDueDate] else {return}
+    newList.insert(Reminder(reminder.reminder), at: endIndex.row)
+    datesRemindersList[newDueDate] = newList
+    
     reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: Helper.formatStringToDate(date: newDueDate, format: dateAndTime.yearMonthDay))
     remindersController.editReminder(reminder: reminder.reminder)
     DispatchQueue.main.async {
@@ -319,13 +233,6 @@ class EventController {
       self.delegate?.endUpdates()
     }
   }
-  
-  // TODO: finish this function to update todoitem
-//  func updateDueDateForToDoItem(_ newDueDate: String) -> Bool {
-//    guard let itemToEdit = dragAndDropToDo else {return false}
-//    let isDueDateDifferent = toDoModelController.editToDoItemAfterDragAndDrop(ToDo: itemToEdit, newDueDate: newDueDate)
-//    return isDueDateDifferent
-//  }
 
   
   func startCodableTestContext() {
@@ -344,16 +251,6 @@ class EventController {
   }
   
 }
-
-//extension EventController: CompletedDataLoadDelegate {
-//  func setData() {
-//    DispatchQueue.main.async {
-//      self.setupControllerData()
-//      self.delegate?.updateTableView()
-//    }
-//
-//  }
-//}
 
 extension EventController: RemindersUpdatedDelegate {
   func updateData() {
@@ -377,7 +274,6 @@ extension EventController: SendDataToEventControllerDelegate {
   
   func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) {
     var newReminder = remindersController.returnReminder()
-    print("1 endrepeatdate \(endRepeatDate)")
     newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
     remindersController.setNewReminder(ekReminder: newReminder)
     let date = Helper.formatDateToString(date: (dueDate ?? Date()), format: dateAndTime.yearMonthDay)
@@ -417,4 +313,3 @@ extension EventController: SendDataToEventControllerDelegate {
   }
   
 }
-

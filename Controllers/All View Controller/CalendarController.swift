@@ -35,8 +35,8 @@ class CalendarController {
   
   func convertIndexPathRowToDateString(_ indexPathRow: Int) -> String {
     let numberOfDaysFromToday = indexPathRow - 100
-    let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: dateAndTime.monthDateYear)
-    let formattedPressedDateString = formatDateToString(date: pressedDate, format: dateAndTime.monthDateYear)
+    let pressedDate = calculateDate(days: numberOfDaysFromToday, date: Date(), format: dateAndTime.yearMonthDay)
+    let formattedPressedDateString = Helper.formatDateToString(date: pressedDate, format: dateAndTime.yearMonthDay)
     return formattedPressedDateString
   }
   
@@ -62,19 +62,7 @@ class CalendarController {
       return ""
     }
   }
-  
-
-  
   // MARK: Date Formatting functions
-  
-  func formatDateToString(date: Date, format: String) -> String {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = format
-    let result = formatter.string(from: date)
-    return result
-  }
-  
   
   func calculateDate(days: Int, date: Date, format: String) -> Date {
     let formatter = DateFormatter()

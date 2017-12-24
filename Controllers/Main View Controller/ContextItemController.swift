@@ -177,7 +177,6 @@ class ContextItemController {
     let newParent = listOfContextHeaders[destinationIndex.section]
     var updatedReminder = originReminder
     updatedReminder.contextParent = newParent
-//    toDoModelController.editToDoItem(updatedToDo)
     updateContextReminderListWithNewParent(reminder: originReminder, newParent: newParent)
     updateDictionaryContext(originReminderItem: originReminder, newParent: newParent, updatedReminder: updatedReminder)
 

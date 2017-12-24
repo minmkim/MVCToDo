@@ -10,10 +10,6 @@ import UIKit
 
 
 class EventViewController: UIViewController, InformEventTableDelegate, UpdateTableViewDelegate {
-  func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
-  }
-  
-  
   // MARK: Delegate functions
   // UpdateTableViewDelegate functions
   func insertRow(_ indexPath: IndexPath) {
@@ -44,6 +40,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   }
   
   func moveRowAt(originIndex: IndexPath, destinationIndex: IndexPath) {
+    print("move row")
     eventTableView.moveRow(at: originIndex, to: destinationIndex)
   }
   
@@ -57,15 +54,16 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.endUpdates()
   }
   
-  func updateCell(originIndex: IndexPath, reminder: Reminder) {
+  func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
+    print("update cell")
     guard let cell = eventTableView.cellForRow(at: originIndex) as? EventTableViewCell else {return}
-    cell.reminder = reminder
+    cell.reminder = updatedReminder
   }
 
   // update duedate after drag and drop
-  func sendNewToDoDueDateAfterDropSession(_ newDate: String) {
+  func sendNewReminderDueDateAfterDropSession(_ newDate: String) {
     DispatchQueue.main.async() {
-//      self.controller.updateDueDate(newDate)
+      self.controller.updateDueDate(newDate)
     }
   }
   
