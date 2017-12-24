@@ -304,28 +304,21 @@ class EventController {
 //    delegate?.endUpdates()
 //  }
   
-//  func updateDueDateWithDropInTableView(_ endIndexPath: IndexPath) {
-//    guard let originIndex = dragIndexPathOrigin else {return}
-//    guard var toDoItem = dragAndDropToDo else {return}
-//    let endIndex = endIndexPath
-//    let numberOfItemsInOrigin = rowsPerSection(for: (originIndex.section))
-//    let newDueDate = toDoDates[endIndex.section]
-//    toDoItem.dueDate = newDueDate
-//    toDoModelController.editToDoItem(toDoItem)
-//    DispatchQueue.main.async {
-//      self.delegate?.beginUpdates()
-//      self.delegate?.updateCell(originIndex: originIndex, updatedToDo: toDoItem)
-//      if numberOfItemsInOrigin > 1 {
-////        self.toDoModelController = ToDoModelController()
-//        self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
-//        // delegate?.updateTableView()
-//      } else {
-//        self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
-//
-//      }
-//      self.delegate?.endUpdates()
-//    }
-//  }
+  func updateDueDateWithDropInTableView(_ endIndexPath: IndexPath) {
+    guard let originIndex = dragIndexPathOrigin else {return}
+    guard var reminder = dragAndDropReminder else {return}
+    let endIndex = endIndexPath
+    let numberOfItemsInOrigin = rowsPerSection(for: (originIndex.section))
+    let newDueDate = toDoDates[endIndex.section]
+    reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: Helper.formatStringToDate(date: newDueDate, format: dateAndTime.yearMonthDay))
+    remindersController.editReminder(reminder: reminder.reminder)
+    DispatchQueue.main.async {
+      self.delegate?.beginUpdates()
+      self.delegate?.updateCell(originIndex: originIndex, updatedReminder: reminder)
+      self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
+      self.delegate?.endUpdates()
+    }
+  }
   
   // TODO: finish this function to update todoitem
 //  func updateDueDateForToDoItem(_ newDueDate: String) -> Bool {

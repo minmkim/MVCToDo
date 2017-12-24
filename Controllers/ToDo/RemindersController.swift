@@ -356,11 +356,9 @@ class RemindersController {
   }
   
   func setDateComponentsForDueDateTime(for date: Date) -> DateComponents {
-    print("original \(date)")
     let calendar = Calendar.current
     let today = DateComponents(calendar: Calendar(identifier: .gregorian), timeZone: TimeZone.current
       , era: nil, year: calendar.component(.year, from: date), month: calendar.component(.month, from: date), day: calendar.component(.day, from: date), hour: calendar.component(.hour, from: date), minute: calendar.component(.minute, from: date), second: calendar.component(.second, from: date), nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil)
-    print("date \(today)")
     return today
   }
   

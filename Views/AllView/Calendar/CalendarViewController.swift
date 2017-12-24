@@ -66,7 +66,6 @@ class CalendarViewController: UIViewController {
   }
   
   override func viewWillDisappear(_ animated: Bool) {
-    print("calendar view disappear")
 //    self.navigationController?.navigationBar.removeGestureRecognizer(tapGestureRecognizer)
   }
   

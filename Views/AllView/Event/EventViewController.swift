@@ -113,9 +113,9 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     controller.delegate = self
     eventTableView.delegate = self
     eventTableView.dataSource = self
-//    eventTableView.dragDelegate = self
+    eventTableView.dragDelegate = self
     eventTableView.dragInteractionEnabled = true
-//    eventTableView.dropDelegate = self
+    eventTableView.dropDelegate = self
     self.eventTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
