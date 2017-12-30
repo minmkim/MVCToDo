@@ -149,10 +149,7 @@ class ContextItemController {
   
   func checkmarkPressed(cellID: String) {
     if let reminder = remindersController.incompleteReminderList.filter({$0.calendarRecordID == cellID}).first {
-      remindersController.incompleteReminderList = remindersController.incompleteReminderList.filter({$0.calendarRecordID != cellID})
-      
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.completeReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       
       if let parent = reminder.contextParent {
@@ -168,9 +165,7 @@ class ContextItemController {
       }
     } else {
       guard let reminder = remindersController.completeReminderList.filter({$0.calendarRecordID == cellID}).first else {return}
-      remindersController.completeReminderList = remindersController.completeReminderList.filter({$0.calendarRecordID != cellID})
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.incompleteReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       
       if let parent = reminder.contextParent {

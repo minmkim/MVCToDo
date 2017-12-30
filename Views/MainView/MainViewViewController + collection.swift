@@ -12,7 +12,7 @@ import UIKit
 extension MainViewViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 3
+    return 2
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -22,8 +22,6 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     case 1:
       let numberOfItems = controller.numberOfContext()
       return numberOfItems
-    case 2:
-      return 1
     default:
       return 0
       }
@@ -61,9 +59,6 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
       cell.addGestureRecognizer(gesture)
       return cell
     default:
-      cell.contextItemLabel.text = "Add Context"
-      cell.numberOfContextLabel.text = ""
-      cell.backView.backgroundColor =  controller.contextColors[indexPath.row]
       return cell
     }
   }
@@ -224,13 +219,6 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
         fakeBody.removeFromSuperview()
         fakeLabel.removeFromSuperview()
       }
-    case 2:
-      contextField.isEnabled = true
-      contextField.becomeFirstResponder()
-      contextField.text = ""
-      UIView.animate(withDuration: 0.3) {
-        self.addContextView.frame = CGRect(x: 8, y: ((self.view.frame.height / 2) - 250), width: (self.view.frame.width - 16), height: 200)
-      }
     default:
       return
     }
@@ -245,15 +233,15 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     let indexPath = contextCollectionView.indexPath(for: cell)
     if indexPath?.section == 0 && indexPath?.row == 0 {
       return
-    } else if indexPath?.section == 2 {
-      return
     }
+    addContextSaveButton.isEnabled = true
+    addContextField.isEnabled = true
     controller.editingContext = indexPath
-    contextField.text = cell.contextItemLabel.text
-    contextField.isEnabled = false
-    addContextView.backgroundColor = cell.backView.backgroundColor
+    addContextTopConstraint.constant = -550
+    addContextField.text = cell.contextItemLabel.text
+    addView.backgroundColor = cell.backView.backgroundColor
     UIView.animate(withDuration: 0.3) {
-      self.addContextView.frame = CGRect(x: 8, y: ((self.view.frame.height / 2) - 250), width: (self.view.frame.width - 16), height: 200)
+      self.view.layoutIfNeeded()
     }
   }
   

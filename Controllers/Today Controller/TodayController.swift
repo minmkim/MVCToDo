@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 protocol TodayTableViewDelegate: class {
+  func insertRow(_ indexPath: IndexPath)
+  func insertSection(_ indexPath: IndexPath)
   func deleteRows(_ index: IndexPath)
   func deleteSection(_ index: IndexPath)
   func beginUpdate()
@@ -78,10 +80,7 @@ class TodayController {
   
   func checkmarkButtonPressedController(_ cellID: String) {
     if let reminder = remindersController.incompleteReminderList.filter({$0.calendarRecordID == cellID}).first {
-      remindersController.incompleteReminderList = remindersController.incompleteReminderList.filter({$0.calendarRecordID != cellID})
-      
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.completeReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       let cal: Calendar = Calendar(identifier: .gregorian)
       let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
@@ -100,9 +99,7 @@ class TodayController {
       }
     } else {
       guard let reminder = remindersController.completeReminderList.filter({$0.calendarRecordID == cellID}).first else {return}
-      remindersController.completeReminderList = remindersController.completeReminderList.filter({$0.calendarRecordID != cellID})
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.incompleteReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       let cal: Calendar = Calendar(identifier: .gregorian)
       let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
@@ -142,36 +139,21 @@ extension TodayController: SendDataToTodayViewControllerDelegate {
     newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
     remindersController.setNewReminder(ekReminder: newReminder)
     delegate?.beginUpdate()
-//    if context == title {
-//      if let newParent = parent {
-//        if var parentList = dictionaryOfContexts[newParent] {
-//          parentList.append(Reminder(newReminder))
-//          dictionaryOfContexts[newParent] = parentList
-//          guard let index = listOfContextHeaders.index(where: {$0 == newParent}) else {return}
-//          let indexPath = IndexPath(row: (parentList.count - 1), section: index)
-//          delegate?.insertRow(indexPath)
-//        } else {
-//          dictionaryOfContexts[newParent] = [Reminder(newReminder)]
-//          listOfContextHeaders.append(newParent)
-//          let indexPath = IndexPath(row: 0, section: (listOfContextHeaders.count - 1))
-//          delegate?.insertSection(indexPath)
-//          delegate?.insertRow(indexPath)
-//        }
-//      } else {
-//        if var nilList = dictionaryOfContexts[""] {
-//          nilList.append(Reminder(newReminder))
-//          dictionaryOfContexts[""] = nilList
-//          let indexPath = IndexPath(row: (nilList.count - 1), section: 0)
-//          delegate?.insertRow(indexPath)
-//        } else {
-//          dictionaryOfContexts[""] = [Reminder(newReminder)]
-//          listOfContextHeaders.insert("", at: 0)
-//          let indexPath = IndexPath(row: 0, section: 0)
-//          delegate?.insertSection(indexPath)
-//          delegate?.insertRow(indexPath)
-//        }
-//      }
-//    }
+    if let dueDate = dueDate {
+      let cal = Calendar(identifier: .gregorian)
+      let newDate = cal.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+      if cal.isDateInToday(dueDate) {
+        listOfContext[1].append(Reminder(newReminder))
+        let row = (listOfContext[1].count - 1)
+        let indexPath = IndexPath(row: row, section: 1)
+        delegate?.insertRow(indexPath)
+      } else if dueDate < newDate {
+        listOfContext[0].append(Reminder(newReminder))
+        let row = (listOfContext[0].count - 1)
+        let indexPath = IndexPath(row: row, section: 0)
+        delegate?.insertRow(indexPath)
+      }
+    }
     delegate?.endUpdate()
   }
   
@@ -181,89 +163,39 @@ extension TodayController: SendDataToTodayViewControllerDelegate {
     editedReminder = remindersController.createReminder(reminder: originalReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
     remindersController.editReminder(reminder: editedReminder)
     
-////    guard let oldReminder = reminder else {return}
-////    delegate?.beginUpdate()
-////    contextReminderList = contextReminderList.filter({$0.calendarRecordID != oldReminder.calendarRecordID})
-////    if let parent = oldReminder.contextParent {
-////      if var oldList = dictionaryOfContexts[parent] {
-////        guard let index = oldList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
-////        oldList.remove(at: index)
-////        guard let section = listOfContextHeaders.index(where: {$0 == parent}) else {return}
-////        let indexPath = IndexPath(row: index, section: section)
-////        delegate?.deleteRow(indexPath)
-////        if oldList.count == 0 {
-////          listOfContextHeaders.remove(at: section)
-////          if listOfContextHeaders.count == 0 {
-////            listOfContextHeaders.append("")
-////            let newIndexPath = IndexPath(row: 0, section: 0)
-////            delegate?.insertSection(newIndexPath)
-////          }
-////          dictionaryOfContexts[parent] = nil
-////          delegate?.deleteSection(indexPath)
-////        } else {
-////          dictionaryOfContexts[parent] = oldList
-////        }
-////      }
-////    } else {
-////      if var oldList = dictionaryOfContexts[""] {
-////        guard let index = oldList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
-////        oldList.remove(at: index)
-////        print(oldList)
-////        let indexPath = IndexPath(row: index, section: 0)
-////        if oldList.count == 0 {
-////          dictionaryOfContexts[""] = nil
-////          if listOfContextHeaders.count == 1 {
-////            listOfContextHeaders.append("")
-////            delegate?.insertSection(indexPath)
-////          } else {
-////            listOfContextHeaders.remove(at: 0)
-////          }
-////          delegate?.deleteSection(indexPath)
-////        } else {
-////          dictionaryOfContexts[""] = oldList
-////        }
-////        print(indexPath)
-////        delegate?.deleteRow(indexPath)
-////      }
-////    }
-////
-////    if context == title {
-////      contextReminderList.append(Reminder(editedReminder))
-////      if let newParent = parent {
-////        if var newList = dictionaryOfContexts[newParent] {
-////          newList.append(Reminder(editedReminder))
-////          dictionaryOfContexts[newParent] = newList
-////          let row = (newList.count - 1)
-////          guard let section = listOfContextHeaders.index(where: {$0 == newParent}) else {return}
-////          let indexPath = IndexPath(row: row, section: section)
-////          delegate?.insertRow(indexPath)
-////        } else {
-////          dictionaryOfContexts[newParent] = [Reminder(editedReminder)]
-////          listOfContextHeaders.append(newParent)
-////          let section = (listOfContextHeaders.count - 1)
-////          let indexPath = IndexPath(row: 0, section: section)
-////          delegate?.insertSection(indexPath)
-////          delegate?.insertRow(indexPath)
-////        }
-////      } else {
-////        if var nilContext = dictionaryOfContexts[""] {
-////          nilContext.append(Reminder(editedReminder))
-////          dictionaryOfContexts[""] = nilContext
-////          let row = (nilContext.count - 1)
-////          let indexPath = IndexPath(row: row, section: 0)
-////          delegate?.insertRow(indexPath)
-////        } else {
-////          dictionaryOfContexts[""] = [Reminder(editedReminder)]
-////          listOfContextHeaders.insert("", at: 0)
-////          let indexPath = IndexPath(row: 0, section: 0)
-////          delegate?.insertSection(indexPath)
-////          delegate?.insertRow(indexPath)
-////        }
-////      }
-////    }
-//    delegate?.updateTableView()
-//    delegate?.endUpdate()
-//  }
-}
+    let cal = Calendar(identifier: .gregorian)
+    if let dueDate = oldReminder.dueDate {
+      if cal.isDateInToday(dueDate) {
+        var todayList = listOfContext[1]
+        guard let index = todayList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
+        todayList.remove(at: index)
+        listOfContext[1] = todayList
+        let indexPath = IndexPath(row: index, section: 1)
+        delegate?.deleteRows(indexPath)
+      } else {
+        var overdueList = listOfContext[0]
+        guard let index = overdueList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
+        overdueList.remove(at: index)
+        listOfContext[0] = overdueList
+        let indexPath = IndexPath(row: index, section: 0)
+        delegate?.deleteRows(indexPath)
+      }
+    }
+    
+    if let dueDate = dueDate {
+      let newDate = cal.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+      if cal.isDateInToday(dueDate) {
+        listOfContext[1].append(Reminder(editedReminder))
+        let row = (listOfContext[1].count - 1)
+        let indexPath = IndexPath(row: row, section: 1)
+        delegate?.insertRow(indexPath)
+      } else if dueDate < newDate {
+        listOfContext[0].append(Reminder(editedReminder))
+        let row = (listOfContext[0].count - 1)
+        let indexPath = IndexPath(row: row, section: 0)
+        delegate?.insertRow(indexPath)
+      }
+    }
+  }
 }
 

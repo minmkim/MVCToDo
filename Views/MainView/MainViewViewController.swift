@@ -8,63 +8,93 @@
 
 import UIKit
 
-class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
+class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
   
+  @IBOutlet weak var addContextField: UITextField!
+  @IBOutlet weak var addView: UIView!
   @IBOutlet weak var contextCollectionView: UICollectionView!
-  @IBOutlet weak var mainViewTable: UITableView!
   var controller: MainViewController!
   var themeController = ThemeController()
-  let addContextView: UIView = {
-    let view = UIView()
-    view.backgroundColor = colors.red
-    view.layer.cornerRadius = 22
-    view.layer.shadowColor = UIColor.black.cgColor
-    view.layer.shadowOffset = CGSize(width: 0, height: 4)
-    view.layer.shadowOpacity = 0.6
-    return view
-  }()
   
-  let addButton: UIButton = {
-    let button = UIButton()
-    button.setImage(UIImage(named: "PlusIcon"), for: .normal)
-    button.addTarget(self,action:#selector(addPressed), for:.touchUpInside)
-    return button
-  }()
+  @IBOutlet var addContextColorButtons: [UIButton]!
+  @IBOutlet weak var contextColorButtonBackView: UIView!
   
-  let contextField: UITextField = {
-    let textField = UITextField()
-    textField.font = UIFont.systemFont(ofSize: 20)
-    textField.backgroundColor = .clear
-    textField.textColor = .white
-    return textField
-  }()
+  @IBAction func addContextColorButtonPress(_ sender: UIButton) {
+    UIView.animate(withDuration: 0.3, animations: {
+      self.addView.backgroundColor = sender.backgroundColor
+      let scaleTransform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+      sender.transform = scaleTransform
+    }) { (_) in
+      UIView.animate(withDuration: 0.3, animations: {
+        sender.transform = CGAffineTransform.identity
+      })
+    }
+  }
   
-  let contextLabel: UILabel = {
-    let textLabel = UILabel()
-    textLabel.font = UIFont.systemFont(ofSize: 20)
-    textLabel.text = "Context:"
-    textLabel.textColor = .white
-    return textLabel
-  }()
+  @IBOutlet weak var addContextSaveButton: UIButton!
+  @IBAction func addContextSavePressed(_ sender: Any) {
+    addPressed()
+    addContextTopConstraint.constant = -44
+    addContextSaveButton.isEnabled = false
+    addContextField.text = "Add Context"
+    addContextField.resignFirstResponder()
+    UIView.animate(withDuration: 0.3) {
+      self.view.layoutIfNeeded()
+    }
+  }
   
-  let viewForStack: UIView = {
-    let view = UIView()
-    view.backgroundColor = .white
-    view.layer.cornerRadius = 10
-    view.layer.shadowColor = UIColor.black.cgColor
-    view.layer.shadowOffset = CGSize(width: 0, height: 2)
-    view.layer.shadowOpacity = 0.6
-    return view
-  }()
+  @IBAction func addContextCancelPressed(_ sender: Any) {
+    addContextTopConstraint.constant = -44
+    addContextField.text = "Add Context"
+    addContextSaveButton.isEnabled = false
+    addContextField.resignFirstResponder()
+    UIView.animate(withDuration: 0.3) {
+      self.view.layoutIfNeeded()
+    }
+  }
   
-  let verticalStackView: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.distribution = .equalSpacing
-    stackView.alignment = .fill
-    stackView.spacing = 6
-    return stackView
-  }()
+  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    let value = NSString(string: addContextField.text!).replacingCharacters(in: range, with: string)
+    // if value.characters.count > 0 {
+    if value.count > 0 {
+      addContextSaveButton.isEnabled = true
+    } else {
+      addContextSaveButton.isEnabled = false
+    }
+    return true
+  }
+  
+  @IBOutlet var addSwipeDown: UISwipeGestureRecognizer!
+  @IBOutlet weak var addContextTopConstraint: NSLayoutConstraint!
+  @IBOutlet var addSwipe: UISwipeGestureRecognizer!
+  
+  @IBAction func addSwipeUpGesture(_ sender: Any) {
+    addContextField.isEnabled = true
+    addContextField.becomeFirstResponder()
+    addContextField.text = ""
+    addContextField.attributedPlaceholder = NSAttributedString(string: "Add Context", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    addContextSaveButton.isEnabled = false
+    if addSwipe.state == .ended {
+      self.addContextTopConstraint.constant = -550
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
+    }
+  }
+  
+  @IBAction func addSwipeDownGesture(_ sender: Any) {
+    addContextField.text = "Add Context"
+    addContextField.resignFirstResponder()
+    addContextField.isEnabled = false
+    addContextSaveButton.isEnabled = false
+    if addSwipeDown.state == .ended {
+      self.addContextTopConstraint.constant = -44
+      UIView.animate(withDuration: 0.3) {
+        self.view.layoutIfNeeded()
+      }
+    }
+  }
+  
   
   override func viewDidAppear(_ animated: Bool) {
     controller.updateCollectionViewDelegate = self
@@ -74,100 +104,66 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     super.viewDidLoad()
     view.backgroundColor = themeController.backgroundColor
     contextCollectionView.backgroundColor = themeController.backgroundColor
-    navigationItem.title = "Contexts"
-    navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-    navigationItem.backBarButtonItem?.tintColor = .white
-    addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: (self.view.frame.width - 16), height: 200)
     
-    let gesture = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureSwipeDown))
-    gesture.delegate = self
-    gesture.direction = .down
-    addContextView.addGestureRecognizer(gesture)
-    self.view.addSubview(addContextView)
-    addContextView.addSubview(contextField)
-    addContextView.addSubview(contextLabel)
-    addContextView.addSubview(addButton)
-    addContextView.addSubview(viewForStack)
-    viewForStack.addSubview(verticalStackView)
-    updateConstraints()
+    setNavigationItemProperties()
+    layoutAddContextView()
+    addContextField.isEnabled = false
     if #available(iOS 11.0, *) {
       contextCollectionView?.contentInsetAdjustmentBehavior = .always
     }
-    DispatchQueue.main.async {
-      var index = -1
-      for _ in 0...2 {
-        let horizontalStackView = UIStackView()
-        horizontalStackView.axis = .horizontal
-        horizontalStackView.distribution = .equalCentering
-        horizontalStackView.alignment = .center
-        self.verticalStackView.addArrangedSubview(horizontalStackView)
-        
-        for _ in 0...5 {
-          index += 1
-          let circle = UIButton()
-          circle.backgroundColor = self.controller.contextColors[index]
-          circle.heightAnchor.constraint(equalToConstant: 25).isActive = true
-          circle.widthAnchor.constraint(equalToConstant: 25).isActive = true
-          circle.layer.cornerRadius = 12.5
-          circle.layer.shadowColor = UIColor.black.cgColor
-          circle.layer.shadowOffset = CGSize(width: 0, height: 2)
-          circle.layer.shadowOpacity = 0.6
-          horizontalStackView.addArrangedSubview(circle)
-          circle.addTarget(self,action:#selector(self.touchCircle), for:.touchUpInside)
-        }
-      }
-    }
+    contextCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+    addContextField.delegate = self
     contextCollectionView.delegate = self
     contextCollectionView.dataSource = self
     // Do any additional setup after loading the view.
   }
   
-  @objc func touchCircle(sender:UIButton) {
-    UIView.animate(withDuration: 0.3, animations: {
-      let scaleTransform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-      sender.transform = scaleTransform
-    }) { (_) in
-      UIView.animate(withDuration: 0.3, animations: {
-        sender.transform = CGAffineTransform.identity
-      })
-    }
-    UIView.animate(withDuration: 0.7) {
-      self.addContextView.backgroundColor = sender.backgroundColor
-    }
+  func setNavigationItemProperties() {
+    navigationItem.title = "Contexts"
+    navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+    navigationItem.backBarButtonItem?.tintColor = .white
   }
   
-  @objc func addPressed(sender:UIButton) {
-    if contextField.text != "" {
-      UIView.animate(withDuration: 0.2) {
-        self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
-      }
-      view.endEditing(true)
+  func layoutAddContextView() {
+    addView.layer.cornerRadius = 22.0
+    addView.layer.shadowColor = UIColor.black.cgColor
+    addView.layer.shadowOffset = CGSize(width: 0, height: 3)
+    addView.layer.shadowOpacity = 0.6
+    contextColorButtonBackView.layer.cornerRadius = 10
+    contextColorButtonBackView.layer.shadowColor = UIColor.black.cgColor
+    contextColorButtonBackView.layer.shadowOffset = CGSize(width: 0, height: 3)
+    contextColorButtonBackView.layer.shadowOpacity = 0.6
+    
+    var counter = 0
+    for button in addContextColorButtons {
+      button.backgroundColor = controller.contextColors[counter]
+      button.layer.cornerRadius = 12.5
+      button.layer.shadowColor = UIColor.black.cgColor
+      button.layer.shadowOffset = CGSize(width: 0, height: 3)
+      button.layer.shadowOpacity = 0.6
+      counter += 1
+    }
+  }
+
+  
+  func addPressed() {
+    if addContextField.text != "" {
       if controller.checkIfEditing() {
-        controller.setCalendarColor(color: addContextView.backgroundColor!, context: contextField.text!)
+        controller.setCalendarColor(color: addView.backgroundColor!, context: addContextField.text!)
         let indexPath = controller.returnEditingIndexPath()
         let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
         UIView.animate(withDuration: 0.3) {
-          cell.backView.backgroundColor = self.addContextView.backgroundColor
+          cell.backView.backgroundColor = self.addView.backgroundColor
         }
         controller.editingContext = nil
       } else {
-        controller.setCalendarColor(color: addContextView.backgroundColor!, context: contextField.text!)
-        controller.newCalendarContext = contextField.text!
+        controller.setCalendarColor(color: addView.backgroundColor!, context: addContextField.text!)
+        controller.newCalendarContext = addContextField.text!
       }
       controller.setContextList()
       contextCollectionView.reloadData()
     }
     
-  }
-  
-  @objc func gestureSwipeDown(sender: UISwipeGestureRecognizer) {
-    if controller.checkIfEditing() {
-      controller.editingContext = nil
-    }
-    UIView.animate(withDuration: 0.3) {
-      self.addContextView.frame = CGRect(x: 0.0, y: self.view.frame.height, width: self.view.frame.width, height: 200)
-    }
-    view.endEditing(true)
   }
   
   override func didReceiveMemoryWarning() {
@@ -180,13 +176,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     themeController = ThemeController()
     self.navigationController?.setNavigationBarHidden(true, animated: animated)
     DispatchQueue.main.async() { // update contexts
-   //   self.controller = MainViewController()
       self.contextCollectionView.reloadData()
     }
     if themeController.isDarkTheme {
-      contextField.keyboardAppearance = .dark
+      addContextField.keyboardAppearance = .dark
     } else {
-      contextField.keyboardAppearance = .light
+      addContextField.keyboardAppearance = .light
     }
     contextCollectionView.backgroundColor = themeController.backgroundColor
     self.view.backgroundColor = themeController.backgroundColor
@@ -208,7 +203,6 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
     contextCollectionView.collectionViewLayout.invalidateLayout()
   }
   
-  //this does not work, sends wrote title
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "ContextItemSegue" {
       let destination = segue.destination as! ContextItemViewController
@@ -225,46 +219,12 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate {
       destination.passToDoModelDelegate = self
       destination.remindersController = controller.remindersController
       UIApplication.shared.statusBarStyle = .lightContent
-      
     }
-  }
-  
-  func updateConstraints() {
-    addButton.translatesAutoresizingMaskIntoConstraints = false
-    addButton.centerYAnchor.constraint(equalTo: contextField.centerYAnchor).isActive = true
-    addButton.trailingAnchor.constraint(equalTo: addContextView.trailingAnchor, constant: -16.0).isActive = true
-    addButton.heightAnchor.constraint(equalToConstant: 20.0).isActive = true
-    addButton.widthAnchor.constraint(equalToConstant: 20.0).isActive = true
-    
-    contextLabel.translatesAutoresizingMaskIntoConstraints = false
-    contextLabel.topAnchor.constraint(equalTo: addContextView.topAnchor, constant: 12.0).isActive = true
-    contextLabel.leadingAnchor.constraint(equalTo: addContextView.leadingAnchor, constant: 16.0).isActive = true
-    contextLabel.widthAnchor.constraint(lessThanOrEqualToConstant: contextLabel.intrinsicContentSize.width).isActive = true
-    contextLabel.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
-    
-    contextField.translatesAutoresizingMaskIntoConstraints = false
-    contextField.topAnchor.constraint(equalTo: addContextView.topAnchor, constant: 12.0).isActive = true
-    contextField.leadingAnchor.constraint(equalTo: contextLabel.trailingAnchor, constant: 8.0).isActive = true
-    contextField.trailingAnchor.constraint(equalTo: addButton.leadingAnchor, constant: -8.0).isActive = true
-    contextField.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
-    
-    viewForStack.translatesAutoresizingMaskIntoConstraints = false
-    viewForStack.topAnchor.constraint(equalTo: contextField.bottomAnchor, constant: 8.0).isActive = true
-    viewForStack.leadingAnchor.constraint(equalTo: addContextView.leadingAnchor, constant: 16).isActive = true
-    viewForStack.trailingAnchor.constraint(equalTo: addContextView.trailingAnchor, constant: -16).isActive = true
-    viewForStack.bottomAnchor.constraint(equalTo: addContextView.bottomAnchor, constant: -16).isActive = true
-    
-    verticalStackView.translatesAutoresizingMaskIntoConstraints = false
-    verticalStackView.topAnchor.constraint(equalTo: viewForStack.topAnchor, constant: 8.0).isActive = true
-    verticalStackView.leadingAnchor.constraint(equalTo: viewForStack.leadingAnchor, constant: 8.0).isActive = true
-    verticalStackView.trailingAnchor.constraint(equalTo: viewForStack.trailingAnchor, constant: -8.0).isActive = true
-    verticalStackView.bottomAnchor.constraint(equalTo: viewForStack.bottomAnchor, constant: -8.0).isActive = true
   }
   
   @IBAction func unwindToMainViewFromAll(sender: UIStoryboardSegue) {
     print("unwind")
   }
-  
 }
 
 extension MainViewViewController: PassToDoModelToMainDelegate {

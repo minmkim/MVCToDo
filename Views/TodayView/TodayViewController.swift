@@ -98,4 +98,11 @@ extension TodayViewController: TodayTableViewDelegate {
     print("update table")
     todayTableView.reloadData()
   }
+  func insertRow(_ indexPath: IndexPath) {
+    print("insert row")
+    todayTableView.insertRows(at: [indexPath], with: .fade)
+  }
+  func insertSection(_ indexPath: IndexPath) {
+    todayTableView.insertSections([indexPath.section], with: .fade)
+  }
 }

@@ -85,9 +85,21 @@ class AddEditToDoController {
   func donePressed(reminderTitle: String, context: String?, parent: String?, dueDate: String?, dueTime: String?, isNotify: Bool, alarmTime: Date?) {
     switch segueIdentity {
     case segueIdentifiers.editFromTodaySegue?:
-      print("editfromtoday")
+      if let oldReminder = reminder {
+        if dueDate != nil {
+          let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
+          sendDataToTodayViewControllerDelegate?.editReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: date, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate, oldReminder: oldReminder)
+        } else {
+          sendDataToTodayViewControllerDelegate?.editReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: nil, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate, oldReminder: oldReminder)
+        }
+      }
     case segueIdentifiers.addFromTodaySegue?:
-      print("addfromtoday")
+      if dueDate != nil {
+        let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)
+        sendDataToTodayViewControllerDelegate?.addNewReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: date, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+      } else {
+        sendDataToTodayViewControllerDelegate?.addNewReminder(reminderTitle: reminderTitle, context: context, parent: parent, dueDate: nil, dueTime: dueTime, notes: notes, isNotify: isNotify, alarmTime: alarmTime, isRepeat: isRepeat, repeatCycleInterval: repeatCycleInterval, repeatCycle: repeatCycle, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+      }
     case segueIdentifiers.addFromContextSegue?:
       if dueDate != nil {
         let date = Helper.formatStringToDate(date: dueDate!, format: dateAndTime.monthDateYear)

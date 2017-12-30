@@ -142,10 +142,7 @@ class EventController {
   
   func checkmarkPressed(for cellID: String) {
     if let reminder = remindersController.incompleteReminderList.filter({$0.calendarRecordID == cellID}).first {
-      remindersController.incompleteReminderList = remindersController.incompleteReminderList.filter({$0.calendarRecordID != cellID})
-      
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.completeReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       if let dueDate = reminder.dueDate {
         let dueDateString = Helper.formatDateToString(date: dueDate, format: dateAndTime.yearMonthDay)
@@ -162,9 +159,7 @@ class EventController {
       }
     } else {
       guard let reminder = remindersController.completeReminderList.filter({$0.calendarRecordID == cellID}).first else {return}
-      remindersController.completeReminderList = remindersController.completeReminderList.filter({$0.calendarRecordID != cellID})
       reminder.reminder.isCompleted = !reminder.reminder.isCompleted
-      remindersController.incompleteReminderList.append(Reminder(reminder.reminder))
       remindersController.editReminder(reminder: reminder.reminder)
       if let dueDate = reminder.dueDate {
         let dueDateString = Helper.formatDateToString(date: dueDate, format: dateAndTime.yearMonthDay)

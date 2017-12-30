@@ -61,6 +61,14 @@ class RemindersController {
     do {
       try eventStore.save(reminder, commit: true)
       lastUpdate = Date()
+      
+      completeReminderList = completeReminderList.filter({$0.calendarRecordID != reminder.calendarItemIdentifier})
+      incompleteReminderList = incompleteReminderList.filter({$0.calendarRecordID != reminder.calendarItemIdentifier})
+      if reminder.isCompleted {
+        completeReminderList.append(Reminder(reminder))
+      } else{
+        incompleteReminderList.append(Reminder(reminder))
+      }
     } catch let error {
       print("Reminder failed with error \(error.localizedDescription)")
     }
