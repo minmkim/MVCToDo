@@ -155,6 +155,7 @@ struct Reminder {
     var parent: String?
     if var note = notes {
       if note.hasSuffix("}#@{!}") {
+        print(note)
         let rangeOfZero = note.range(of: "{!}@#{", options: .backwards)
         let suffix = String(describing: note.prefix(upTo:  (rangeOfZero?.lowerBound)!))
         print("suffix: \(suffix)")

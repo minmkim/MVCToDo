@@ -112,7 +112,6 @@ class EventController {
     let pressDateString = Helper.formatDateToString(date: datePressedDate, format: dateAndTime.yearMonthDay)
     var counter = -1
     var tempSection: Int?
-    print(toDoDates)
     for date in toDoDates {
       counter += 1
       if pressDateString <= date {
@@ -141,6 +140,50 @@ class EventController {
     return repeatNotification
   }
   
+  func checkmarkPressed(for cellID: String) {
+    if let reminder = remindersController.incompleteReminderList.filter({$0.calendarRecordID == cellID}).first {
+      remindersController.incompleteReminderList = remindersController.incompleteReminderList.filter({$0.calendarRecordID != cellID})
+      
+      reminder.reminder.isCompleted = !reminder.reminder.isCompleted
+      remindersController.completeReminderList.append(Reminder(reminder.reminder))
+      remindersController.editReminder(reminder: reminder.reminder)
+      if let dueDate = reminder.dueDate {
+        let dueDateString = Helper.formatDateToString(date: dueDate, format: dateAndTime.yearMonthDay)
+        guard var listOfReminders = datesRemindersList[dueDateString] else {return}
+        guard let index = listOfReminders.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        listOfReminders[index] = Reminder(reminder.reminder)
+        datesRemindersList[dueDateString] = listOfReminders
+      } else {
+        let dueDateString = Helper.formatDateToString(date: Date(), format: dateAndTime.yearMonthDay)
+        guard var listOfReminders = datesRemindersList[dueDateString] else {return}
+        guard let index = listOfReminders.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        listOfReminders[index] = Reminder(reminder.reminder)
+        datesRemindersList[dueDateString] = listOfReminders
+      }
+    } else {
+      guard let reminder = remindersController.completeReminderList.filter({$0.calendarRecordID == cellID}).first else {return}
+      remindersController.completeReminderList = remindersController.completeReminderList.filter({$0.calendarRecordID != cellID})
+      reminder.reminder.isCompleted = !reminder.reminder.isCompleted
+      remindersController.incompleteReminderList.append(Reminder(reminder.reminder))
+      remindersController.editReminder(reminder: reminder.reminder)
+      if let dueDate = reminder.dueDate {
+        let dueDateString = Helper.formatDateToString(date: dueDate, format: dateAndTime.yearMonthDay)
+        guard var listOfReminders = datesRemindersList[dueDateString] else {return}
+        guard let index = listOfReminders.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        listOfReminders[index] = Reminder(reminder.reminder)
+        datesRemindersList[dueDateString] = listOfReminders
+      } else {
+        let dueDateString = Helper.formatDateToString(date: Date(), format: dateAndTime.yearMonthDay)
+        guard var listOfReminders = datesRemindersList[dueDateString] else {return}
+        guard let index = listOfReminders.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        listOfReminders[index] = Reminder(reminder.reminder)
+        datesRemindersList[dueDateString] = listOfReminders
+      }
+    }
+    
+    delegate?.updateTableView()
+  }
+  
   // MARK: Drag and Drop functions
   
   func returnDragIndexPath(_ indexPath: IndexPath) {
@@ -154,6 +197,7 @@ class EventController {
   func updateDueDate(_ newDate: String) {
     guard let originalIndexPath = dragIndexPathOrigin else {return}
     guard let reminder = dragAndDropReminder else {return}
+    
     if let originalDueDate = dragAndDropReminder?.dueDate {
       let originalDueDateString = Helper.formatDateToString(date: originalDueDate, format: dateAndTime.yearMonthDay)
       if newDate != originalDueDateString {
@@ -175,6 +219,11 @@ class EventController {
         if let dueTime = reminder.dueTime {
           let newDateTime = remindersController.formatDateAndTime(dueDate: newdueDate, dueTime: dueTime)
           oldReminder?.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: newDateTime)
+          if reminder.isNotification {
+            let newAlarm = remindersController.formatDateAndTime(dueDate: newdueDate, dueTime: dueTime)
+            let newEKAlarm = remindersController.setAlarm(alarmDate: newAlarm)
+            oldReminder?.alarms = [newEKAlarm]
+          }
           remindersController.editReminder(reminder: oldReminder!)
           
           if var newReminderList = datesRemindersList[newDate] {
@@ -205,6 +254,34 @@ class EventController {
         }
       }
       delegate?.endUpdates()
+    } else {
+      reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateNoTime(for: Helper.formatStringToDate(date: newDate, format: dateAndTime.yearMonthDay))
+      remindersController.editReminder(reminder: reminder.reminder)
+      
+      delegate?.beginUpdates()
+      let originalDate = Helper.formatDateToString(date: Date(), format: dateAndTime.yearMonthDay)
+      guard var originalList = datesRemindersList[originalDate] else {return}
+      originalList = originalList.filter({$0.calendarRecordID != reminder.calendarRecordID})
+      datesRemindersList[originalDate] = originalList
+      if let newSection = toDoDates.index(where: {$0 == newDate}) {
+        guard var newList = datesRemindersList[newDate] else {return}
+        newList.append(Reminder(reminder.reminder))
+        datesRemindersList[newDate] = newList
+        let newIndexPath = IndexPath(row: (newList.count - 1), section: newSection)
+        delegate?.moveRowAt(originIndex: originalIndexPath, destinationIndex: newIndexPath)
+        delegate?.endUpdates()
+      } else {
+        datesRemindersList[newDate] = [Reminder(reminder.reminder)]
+        toDoDates.append(newDate)
+        toDoDates.sort(by: {$0 < $1})
+        print("1")
+        guard let newSection = toDoDates.index(where: {$0 == newDate}) else {return}
+        let newIndexPath = IndexPath(row: 0, section: newSection)
+        print("2")
+        delegate?.insertSection(newIndexPath)
+        delegate?.moveRowAt(originIndex: originalIndexPath, destinationIndex: newIndexPath)
+        delegate?.endUpdates()
+      }
     }
   }
   
@@ -223,24 +300,23 @@ class EventController {
     guard var newList = datesRemindersList[newDueDate] else {return}
     newList.insert(Reminder(reminder.reminder), at: endIndex.row)
     datesRemindersList[newDueDate] = newList
+    if let dueTime = reminder.dueTime {
+      let newAlarm = remindersController.formatDateAndTime(dueDate: Helper.formatStringToDate(date: newDueDate, format: dateAndTime.yearMonthDay), dueTime: dueTime)
+      reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: newAlarm)
+      if reminder.isNotification {
+        let newEKAlarm = remindersController.setAlarm(alarmDate: newAlarm)
+        reminder.reminder.alarms = [newEKAlarm]
+      }
+    } else {
+      reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateNoTime(for: Helper.formatStringToDate(date: newDueDate, format: dateAndTime.yearMonthDay))
+    }
     
-    reminder.reminder.dueDateComponents = remindersController.setDateComponentsForDueDateTime(for: Helper.formatStringToDate(date: newDueDate, format: dateAndTime.yearMonthDay))
     remindersController.editReminder(reminder: reminder.reminder)
     DispatchQueue.main.async {
       self.delegate?.beginUpdates()
       self.delegate?.updateCell(originIndex: originIndex, updatedReminder: reminder)
       self.delegate?.moveRowAt(originIndex: originIndex, destinationIndex: endIndex)
       self.delegate?.endUpdates()
-    }
-  }
-
-  
-  func startCodableTestContext() {
-    if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
-      let decoder = JSONDecoder()
-      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String: Int]{
-        listOfContextAndColors = contextList
-      }
     }
   }
   
@@ -302,9 +378,12 @@ extension EventController: SendDataToEventControllerDelegate {
         guard let index = list.index(where: {$0.calendarRecordID == originalReminder.calendarItemIdentifier}) else {return}
         list.remove(at: index)
         list.append(Reminder(originalReminder))
-        print(remindersController.incompleteReminderList)
       }
     } else {
+      guard let oldReminder = dragAndDropReminder else {return}
+      guard var oldList = datesRemindersList[Helper.formatDateToString(date: dragAndDropReminder?.dueDate ?? Date(), format: dateAndTime.yearMonthDay)] else {return}
+      oldList = oldList.filter({$0.calendarRecordID == oldReminder.calendarRecordID})
+      datesRemindersList[Helper.formatDateToString(date: dragAndDropReminder?.dueDate ?? Date(), format: dateAndTime.yearMonthDay)] = oldList
       datesRemindersList[date] = [Reminder(originalReminder)]
       toDoDates.append(date)
       toDoDates.sort(by: { $0 < $1 })

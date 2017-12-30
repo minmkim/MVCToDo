@@ -26,10 +26,6 @@ class MainViewController {
   var newCalendarContext: String?
   weak var updateCollectionViewDelegate: UpdateCollectionViewDelegate?
   
-  init() {
-    //setContextList()
-  }
-  
   init(controller: RemindersController) {
     remindersController = controller
     remindersController.calandarCompleteDelegate = self
@@ -125,16 +121,10 @@ class MainViewController {
     return uiColor
   }
   
-  func makeContextListFromColors(_ list: [String:Int]) -> [String] {
-    let newList = list.keys.map({$0})
-    return newList
-  }
-  
 }
 
 extension MainViewController: CalandarCompleteDelegate {
   func calendarUpdateCompleted() {
-    print("delegate calendarupdate")
     let newIndex = updateContextAndInsertNewContext()
     if newCalendarContext != nil {
       updateCollectionViewDelegate?.insertContext(at: newIndex)

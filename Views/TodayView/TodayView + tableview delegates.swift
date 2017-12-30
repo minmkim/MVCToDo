@@ -19,20 +19,12 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
       if cell.reminder.dueDate != nil {
         cell.dueLabel.text = todayController.returnDueDate(cell.reminder.dueDate!)
       }
-      
-    }
-    cell.toDoLabel.textColor = themeController.mainTextColor
-//    cell.contextColor.backgroundColor = todayController.returnContextColor(cell.toDoItem?.context ?? "")
-    cell.contextColor.layer.cornerRadius = 3.0
-    if cell.reminder.isChecked {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
     } else {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+      cell.dueLabel.text = ""
     }
-    cell.checkmarkButton.setTitle(cell.reminder.calendarRecordID, for: .normal)
+//    cell.contextColor.backgroundColor = todayController.returnContextColor(cell.toDoItem?.context ?? "")
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     cell.backgroundColor = themeController.backgroundColor
-    
     return cell
   }
   
@@ -48,11 +40,10 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     let generator = UISelectionFeedbackGenerator()
     let peek = SystemSoundID(1519)
     guard let cellID = sender.title(for: .normal) else {return}
-    let image = todayController.checkmarkButtonPressedController(cellID)
+    todayController.checkmarkButtonPressedController(cellID)
     generator.prepare()
     AudioServicesPlaySystemSound(peek)
     generator.selectionChanged()
-    sender.setImage(UIImage(named: image), for: .normal)
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

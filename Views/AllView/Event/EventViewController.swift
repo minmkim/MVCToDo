@@ -62,6 +62,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
 
   // update duedate after drag and drop
   func sendNewReminderDueDateAfterDropSession(_ newDate: String) {
+    print("update due date")
     DispatchQueue.main.async() {
       self.controller.updateDueDate(newDate)
     }
@@ -153,7 +154,6 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
       let destination = segue.destination as! AddItemTableViewController
       destination.controller = AddEditToDoController(ItemToEdit: cell.reminder)
-//      destination.controller.toDoModelController = self.controller.toDoModelController
     } else if segue.identifier == segueIdentifiers.addToDoSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
       var vc = AddItemTableViewController.init()

@@ -57,7 +57,6 @@ extension CalendarViewController: UICollectionViewDelegate, UICollectionViewData
 //      }
    //   cell.numberOfMonthLabel.textColor = themeController.mainTextColor
     }
-    
     return cell
   }
   

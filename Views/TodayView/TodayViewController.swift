@@ -60,8 +60,8 @@ class TodayViewController: UIViewController {
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.editFromTodaySegue {
       let destination = segue.destination as! AddItemTableViewController
-      guard let toDoItem = todayController.returnEditingToDo() else {return}
-//      destination.controller = AddEditToDoController(ItemToEdit: toDoItem)
+      guard let reminder = todayController.returnEditingToDo() else {return}
+      destination.controller = AddEditToDoController(ItemToEdit: reminder)
       destination.controller.segueIdentity = segueIdentifiers.editFromTodaySegue
     } else if segue.identifier == segueIdentifiers.addFromTodaySegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
@@ -93,5 +93,9 @@ extension TodayViewController: TodayTableViewDelegate {
   func endUpdate() {
     print("end update")
     todayTableView.endUpdates()
+  }
+  func updateTableView() {
+    print("update table")
+    todayTableView.reloadData()
   }
 }

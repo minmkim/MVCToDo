@@ -72,7 +72,11 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.unwindContextSegue {
       let destination = segue.destination as! AddItemTableViewController
-      destination.contextField.text = controller.chosenContext
+      if controller.chosenContext == "None" {
+        destination.contextField.text = ""
+      } else {
+        destination.contextField.text = controller.chosenContext
+      }
     }
   }
   

@@ -26,19 +26,19 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
     guard let reminder = controller.returnReminder(for: indexPath) else {return cell}
     cell.reminder = reminder
+    cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     return cell
   }
   
-//  @objc func checkmarkButtonPress(sender: UIButton) {
-//    let generator = UISelectionFeedbackGenerator()
-//    let peek = SystemSoundID(1519)
-//    guard let cellID = sender.title(for: .normal) else {return}
+  @objc func checkmarkButtonPress(sender: UIButton) {
+    let generator = UISelectionFeedbackGenerator()
+    let peek = SystemSoundID(1519)
+    controller.checkmarkPressed(for: sender.title(for: .normal)!)
 //    let image = controller.checkmarkButtonPressedController(cellID)
-//    generator.prepare()
-//    AudioServicesPlaySystemSound(peek)
-//    generator.selectionChanged()
-//    sender.setImage(UIImage(named: image), for: .normal)
-//  }
+    generator.prepare()
+    AudioServicesPlaySystemSound(peek)
+    generator.selectionChanged()
+  }
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 32

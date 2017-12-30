@@ -12,7 +12,15 @@ class EventTableViewCell: UITableViewCell {
   
   var reminder: Reminder! {
     didSet {
-      toDoLabel.text = reminder.reminderTitle
+      if reminder.isChecked {
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: reminder.reminderTitle)
+        attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+        toDoLabel.attributedText = attributeString
+      } else {
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: reminder.reminderTitle)
+        toDoLabel.attributedText = attributeString
+      }
+      
       if let context = reminder.context {
         if let parent = reminder.contextParent {
           contextLabel.text = ("\(context): \(parent)")
@@ -48,6 +56,7 @@ class EventTableViewCell: UITableViewCell {
       } else {
         checkmarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
       }
+      checkmarkButton.setTitle(reminder.calendarRecordID, for: .normal)
       contextColor.backgroundColor = UIColor(cgColor: reminder.reminder.calendar.cgColor)
       contextColor.layer.cornerRadius = 3
     }

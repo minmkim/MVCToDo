@@ -181,7 +181,6 @@ class CustomRepeatViewTableViewController: UITableViewController {
     calendarCollectionView.delegate = self
     calendarCollectionView.dataSource = self
     intervalStepper.minimumValue = 1
-    print(controller.repeatCustomRule)
     if controller.repeatCycleInterval == 1 {
       switch controller.currentCycle {
       case .daily:

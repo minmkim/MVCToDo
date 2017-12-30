@@ -15,16 +15,12 @@ protocol ChosenParentDelegate: class {
 class ParentController {
   
   var filteredList: [String]?
-  var listOfParents = [String]()
+  var listOfParents = ["None"]
   weak var delegate: ChosenParentDelegate?
   var chosenParent = ""
   
   init(context: String) {
-    weak var reminderController = RemindersController()
-    let remindersList = reminderController?.incompleteReminderList
-    reminderController = nil
-    guard let list = remindersList else {return}
-    listOfParents = list.flatMap({$0.contextParent})
+    filteredList = listOfParents
   }
   
   func returnCellLabel(_ index: Int) -> String {

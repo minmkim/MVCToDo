@@ -57,10 +57,9 @@ class ContextItemViewController: UIViewController {
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == segueIdentifiers.editFromContextSegue {
-      guard let indexPath = contextItemTableView.indexPath(for: sender as! ContextItemTableViewCell) else {return}
-       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
+      guard let reminder = controller.reminder else {return}
       let destination = segue.destination as! AddItemTableViewController
-      destination.controller = AddEditToDoController(ItemToEdit: cell.reminder)
+      destination.controller = AddEditToDoController(ItemToEdit: reminder)
       destination.controller.segueIdentity = segueIdentifiers.editFromContextSegue
     } else if segue.identifier == segueIdentifiers.addFromContextSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
@@ -75,9 +74,10 @@ class ContextItemViewController: UIViewController {
   }
 
   @IBAction func unwindToContextToDo(sender: UIStoryboardSegue) {
-    controller.toDoItemsInContext()
-    controller.returnContextHeaders()
-    contextItemTableView.reloadData()
+    print("unwinded")
+//    controller.remindersInContext()
+//    controller.returnContextHeaders()
+//    contextItemTableView.reloadData()
   }
 
 }
@@ -112,5 +112,10 @@ extension ContextItemViewController: UpdateContextItemTableViewDelegate {
   func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
     let cell = contextItemTableView.cellForRow(at: originIndex) as! ContextItemTableViewCell
     cell.reminder = updatedReminder
+  }
+  func updateTableView() {
+    DispatchQueue.main.async {
+      self.contextItemTableView.reloadData()
+    }
   }
 }

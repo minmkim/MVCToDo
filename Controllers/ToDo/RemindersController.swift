@@ -18,6 +18,7 @@ class RemindersController {
   var completeReminderList = [Reminder]()
   weak var remindersUpdatedDelegate: RemindersUpdatedDelegate?
   weak var calandarCompleteDelegate: CalandarCompleteDelegate?
+  var lastUpdate: Date?
   
   init() {
     print("init reminderscontroller")
@@ -33,52 +34,49 @@ class RemindersController {
 
   
   @objc func storeChanged(_ notification: Notification) {
-    print("store changed")
-    completeReminderList = []
-    calendars = eventStore.calendars(for: EKEntityType.reminder)
-    remindersUpdatedDelegate?.updateData()
-    calandarCompleteDelegate?.calendarNotificationUpdate()
+    let timeDifference = Helper.calculateTimeBetweenDates(originalDate: lastUpdate, finalDate: Date())
+    if timeDifference > 3 {
+      print("time difference more than 3")
+      completeReminderList = []
+      calendars = eventStore.calendars(for: EKEntityType.reminder)
+      remindersUpdatedDelegate?.updateData()
+      calandarCompleteDelegate?.calendarNotificationUpdate()
+    }
   }
   
   func setNewReminder(ekReminder: EKReminder) {
-    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     do {
       try eventStore.save(ekReminder,
                           commit: true)
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+      lastUpdate = Date()
       let newReminder = Reminder(ekReminder)
       incompleteReminderList.append(newReminder)
     } catch let error {
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
     
   }
   
   func editReminder(reminder: EKReminder) {
-    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     do {
       try eventStore.save(reminder, commit: true)
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+      lastUpdate = Date()
     } catch let error {
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
   }
   
   func removeReminder(reminder: Reminder) {
-    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     guard let reminderToDelete = reminder.reminder else {return}
     do {
       try eventStore.remove(reminderToDelete, commit: true)
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
+      lastUpdate = Date()
       if reminder.isChecked {
         completeReminderList = completeReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
       } else {
         incompleteReminderList = incompleteReminderList.filter( {$0.calendarRecordID != reminderToDelete.calendarItemIdentifier})
       }
     } catch let error {
-      NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
       print("Reminder failed with error \(error.localizedDescription)")
     }
   }
@@ -131,7 +129,7 @@ class RemindersController {
     return reminder
   }
   
-  func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, parent: String?,notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
+  func createReminder(reminder: EKReminder, reminderTitle: String, dueDate: Date?, dueTime: String?, context: String?, parent: String?, notes: String?, notification: Bool, notifyDate: Date?, isRepeat: Bool, repeatCycle: Reminder.RepeatCycleValues?, repeatCycleInterval: Int?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) -> EKReminder {
     let reminder = reminder
     reminder.title = reminderTitle
     var dateComponents: DateComponents? = nil
@@ -175,21 +173,23 @@ class RemindersController {
       reminder.calendar = eventStore.defaultCalendarForNewReminders()
     }
     
-    if var newNote = notes {
+    if let newNote = notes {
       if newNote.hasSuffix("}#@{!}") {
         let rangeOfZero = newNote.range(of: "{!}@#{", options: .backwards)
         // Get the characters after the last 0
         let suffix = String(describing: newNote.prefix(upTo: (rangeOfZero?.lowerBound)!))
-        newNote = String(newNote.dropLast(suffix.count))
+        reminder.notes = suffix
+      } else {
+        reminder.notes = newNote
       }
-      reminder.notes = newNote
+    } else {
+      reminder.notes = nil
     }
     
     if let contextParent = parent {
       if var note = reminder.notes {
-        note.append("\n{!}@#{\(contextParent)}#@{!}")
+        note.append("{!}@#{\(contextParent)}#@{!}")
         reminder.notes = note
-        
       } else {
         let note = "{!}@#{\(contextParent)}#@{!}"
         reminder.notes = note
@@ -315,7 +315,6 @@ class RemindersController {
   }
   
   func editOrCreateCalendar(context: String, color: UIColor) {
-    NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
     if let calendar = calendars.filter({$0.title == context}).first {
       calendar.cgColor = color.cgColor
       do {
@@ -352,7 +351,6 @@ class RemindersController {
         print("cal \(newCalendar.source.title) failed : \(error)")
       }
     }
-    NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
   }
   
   func setDateComponentsForDueDateTime(for date: Date) -> DateComponents {

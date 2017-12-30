@@ -44,13 +44,11 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   
   @objc func checkmarkButtonPress(sender:UIButton) {
     let generator = UISelectionFeedbackGenerator()
-    guard let cellID = sender.title(for: .normal) else {return}
-//    let image = controller.checkmarkButtonPressedController(cellID)
+    controller.checkmarkPressed(cellID: sender.title(for: .normal)!)
     let peek = SystemSoundID(1519)
     generator.prepare()
     AudioServicesPlaySystemSound(peek)
     generator.selectionChanged()
-    sender.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal) // fix this!!!
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,8 +76,8 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       let cell = contextItemTableView.cellForRow(at: indexPath) as! ContextItemTableViewCell
-      let cloudID = cell.reminder.calendarRecordID
-//      controller.deleteItem(ID: cloudID, index: indexPath)
+      guard let reminder = cell.reminder else {return}
+      controller.deleteItem(reminder: reminder, index: indexPath)
     }
   }
   

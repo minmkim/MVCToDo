@@ -17,24 +17,29 @@ class ContextItemTableViewCell: UITableViewCell {
   
   var reminder: Reminder! {
     didSet {
-      toDoItemLabel.text = reminder.reminderTitle
+      if reminder.isChecked {
+        checkMarkButton.setImage(UIImage(named: "CheckedCircle"), for: .normal)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: reminder.reminderTitle)
+        attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+        toDoItemLabel.attributedText = attributeString
+      } else {
+        checkMarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: reminder.reminderTitle)
+        toDoItemLabel.attributedText = attributeString
+      }
       if let dueDate = reminder.dueDate {
         let date = Helper.formatDateToString(date: dueDate, format: dateAndTime.monthDateYear)
         dueDateLabel.text = date
       } else {
         dueDateLabel.text = ""
       }
-      if reminder.notes != nil {
+      if reminder.notes != nil && reminder.notes != "" {
         noteImage.isHidden = false
         noteImage.image = UIImage(named: "NoteIcon")
       } else {
         noteImage.isHidden = true
       }
-      if reminder.isChecked {
-        checkMarkButton.setImage(UIImage(named: "CheckedCircle"), for: .normal)
-      } else {
-        checkMarkButton.setImage(UIImage(named: "BlankCircle"), for: .normal)
-      }
+      checkMarkButton.setTitle(reminder.calendarRecordID, for: .normal)
     }
   }
   

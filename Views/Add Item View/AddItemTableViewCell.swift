@@ -40,7 +40,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   
   @IBOutlet weak var alarmTimeStepper: UIStepper!
   @IBAction func alarmTimeStepperPress(_ sender: UIStepper) {
-    print(alarmTimeStepper.value)
     if alarmTime.text != "" {
       let time = Helper.formatStringToDate(date: alarmTime.text!, format: dateAndTime.hourMinute)
       if Int(alarmTimeStepper.value) < previousStepperValue {
@@ -113,7 +112,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   }
   @IBAction func NotificationPressed(_ sender: Any) {
     let notificationPermission = UserDefaults.standard.bool(forKey: "NotificationPermission")
-    
+    if notificationSwitch.isOn {
+      alarmTime.text = dueTimeField.text!
+    }
     if notificationPermission {
 //      if notificationSwitch.isOn {
 //        controller.setNotification(true)
@@ -271,6 +272,12 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 //  }
   
   func updateLabels() {
+    if let context = controller.contextString {
+      contextField.text = context
+    }
+    if controller.todayDate {
+     dueDateField.text = Helper.formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
+    }
     if let reminder = controller.reminder {
       ReminderTitleField.text = reminder.reminderTitle
       contextField.text = reminder.context
@@ -551,6 +558,7 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     } else if segue.identifier == "ParentSegue" {
       let controller = segue.destination as! ParentViewController
       controller.controller = ParentController(context: contextField.text ?? "")
+      print("parentsegue")
       controller.controller.delegate = self
     } else if segue.identifier == segueIdentifiers.customRepeatSegue {
       let destination = segue.destination as! CustomRepeatViewTableViewController
@@ -560,9 +568,60 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       destination.controller.repeatCustomNumber = controller.repeatCustomNumber
       destination.controller.repeatCustomRule = controller.repeatCustomRule
       destination.controller.currentCycle = (controller.repeatCycle ?? .daily)
+    } else if segue.identifier == segueIdentifiers.unwindToTodayView {
+      let destination = segue.destination as! TodayViewController
+      controller.sendDataToTodayViewControllerDelegate = destination.todayController
+      var context: String?
+      if contextField.text != "" {
+        context = contextField.text
+      }
+      var parent: String?
+      if parentField.text != "" {
+        parent = parentField.text
+      }
+      var dueTime: String?
+      if dueTimeField.text != "" {
+        dueTime = dueTimeField.text
+      }
+      if dueDateField.text == "" {
+        controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: nil, dueTime: nil, isNotify: notificationSwitch.isOn, alarmTime: nil)
+      } else {
+        if notificationSwitch.isOn {
+          controller.setAlarmDate(dueDate: dueDateField.text!, dueTime: alarmTime.text!)
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: controller.alarmTime)
+        } else {
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: nil)
+        }
+      }
     } else if segue.identifier == "UnwindFromToDo" {
       let destination = segue.destination as! EventViewController
       controller.sendToEventControllerDelegate = destination.controller
+      var context: String?
+      if contextField.text != "" {
+        context = contextField.text
+      }
+      var parent: String?
+      if parentField.text != "" {
+        parent = parentField.text
+      }
+      var dueTime: String?
+      if dueTimeField.text != "" {
+        dueTime = dueTimeField.text
+      }
+      if dueDateField.text == "" {
+        controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: nil, dueTime: nil, isNotify: notificationSwitch.isOn, alarmTime: nil)
+      } else {
+        if notificationSwitch.isOn {
+          controller.setAlarmDate(dueDate: dueDateField.text!, dueTime: alarmTime.text!)
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: controller.alarmTime)
+        } else {
+          controller.donePressed(reminderTitle: (ReminderTitleField.text ?? ""), context: context, parent: parent, dueDate: dueDateField.text, dueTime: dueTime, isNotify: notificationSwitch.isOn, alarmTime: nil)
+        }
+      }
+    } else if segue.identifier == "UnwindToContextToDo" {
+      print("preparing to segue")
+      let destination = segue.destination as! ContextItemViewController
+      controller.sendDataToContextItemControllerDelegate = destination.controller
       var context: String?
       if contextField.text != "" {
         context = contextField.text
@@ -592,7 +651,11 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
 
 extension AddItemTableViewController: ChosenParentDelegate {
   func returnChosenParent(_ parent: String) {
-    parentField.text = parent
+    if parent == "None" {
+      parentField.text = ""
+    } else {
+      parentField.text = parent
+    }
   }
 }
 

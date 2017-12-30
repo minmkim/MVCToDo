@@ -2,4 +2,54 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Controllers/EventController.swift"
+            timestampString = "536308414.315599"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "checkmarkPressed(for:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TestingNewArch.EventController.checkmarkPressed(for: Swift.String) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/EventController.swift"
+                  timestampString = "536308414.435269"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "1888">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (TestingNewArch.Reminder) -&gt; Swift.Bool in TestingNewArch.EventController.checkmarkPressed(for: Swift.String) -&gt; ()"
+                  moduleName = "TestingNewArch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/minkim/Documents/Swift%20Apps/TestingNewArch/Controllers/EventController.swift"
+                  timestampString = "536308414.438325"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
+                  offsetFromSymbolStart = "548">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

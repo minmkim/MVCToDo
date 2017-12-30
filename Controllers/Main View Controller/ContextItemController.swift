@@ -18,6 +18,7 @@ protocol UpdateContextItemTableViewDelegate: class {
   func beginUpdate()
   func endUpdate()
   func updateCell(originIndex: IndexPath, updatedReminder: Reminder)
+  func updateTableView()
 }
 
 class ContextItemController {
@@ -34,21 +35,20 @@ class ContextItemController {
   init(remindersController: RemindersController, title: String) {
     self.remindersController = remindersController
     self.title = title
-    startCodableTestContext()
-    makeContextListFromColors()
-    toDoItemsInContext()
+    remindersInContext()
     returnContextHeaders()
   }
- 
-  var listOfContextAndColors = ["None": 0, "Inbox": 2, "Home": 4, "Work": 6, "Personal": 8]
-  var listOfContext = ["None", "Inbox", "Home", "Work", "Personal"]
-  let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   
   var contextReminderList = [Reminder]()
   var listOfContextHeaders = [String]()
   var dictionaryOfContexts = [String:[Reminder]]()
   var reminder: Reminder?
   
+  func remindersInContext() {
+    let uncheckedList = remindersController.incompleteReminderList
+    guard let context = title else {return}
+    contextReminderList = uncheckedList.filter({$0.context == context})
+  }
   
   func returnContextHeaders() {
     listOfContextHeaders = contextReminderList.flatMap( {$0.contextParent} )
@@ -113,7 +113,6 @@ class ContextItemController {
   
   func returnNavigationBarColor() -> UIColor {
     guard let calendar = remindersController.calendars.filter({$0.title == title}).first else {return colors.gray}
-    print("color here")
     return UIColor(cgColor: calendar.cgColor)
   }
   
@@ -125,40 +124,68 @@ class ContextItemController {
     return reminder
   }
   
-//  func deleteItem(ID: String, index: IndexPath) {
-//    guard let toDoIndex = contextToDoList.index(where: {$0.calendarRecordID == ID}) else {return}
-//    contextToDoList.remove(at: toDoIndex)
-//    toDoModelController.deleteToDoItem(ID: ID)
-//    let parent = listOfContextHeaders[index.section]
-//    let contextList = dictionaryOfContexts[parent]
-//    guard let filteredContextList = contextList?.filter( {$0.calendarRecordID != ID}) else {return}
-//    dictionaryOfContexts[parent] = filteredContextList
-//    if filteredContextList.count == 0 {
-//      dictionaryOfContexts[parent] = nil
-//      listOfContextHeaders.remove(at: index.section)
-//      delegate?.beginUpdate()
-//      delegate?.deleteSection(index)
-//      delegate?.deleteRow(index)
-//      if listOfContextHeaders.count == 0 {
-//        listOfContextHeaders.append("")
-//        delegate?.insertSection(index)
-//      }
-//      delegate?.endUpdate()
-//    } else {
-//      delegate?.deleteRow(index)
-//    }
-//  }
-  
-  // MARK: - Setting data
-  
-  func toDoItemsInContext() {
-    let uncheckedList = remindersController.incompleteReminderList
-    guard let context = title else {return}
-    contextReminderList = uncheckedList.filter({$0.context == context})
+  func deleteItem(reminder: Reminder, index: IndexPath) {
+    
+    let parent = listOfContextHeaders[index.section]
+    let contextList = dictionaryOfContexts[parent]
+    guard let filteredContextList = contextList?.filter( {$0.calendarRecordID != reminder.calendarRecordID}) else {return}
+    dictionaryOfContexts[parent] = filteredContextList
+    if filteredContextList.count == 0 {
+      dictionaryOfContexts[parent] = nil
+      listOfContextHeaders.remove(at: index.section)
+      delegate?.beginUpdate()
+      delegate?.deleteSection(index)
+      delegate?.deleteRow(index)
+      if listOfContextHeaders.count == 0 {
+        listOfContextHeaders.append("")
+        delegate?.insertSection(index)
+      }
+      delegate?.endUpdate()
+    } else {
+      delegate?.deleteRow(index)
+    }
+    remindersController.removeReminder(reminder: reminder)
   }
   
-  func makeContextListFromColors() {
-    listOfContext = listOfContextAndColors.keys.map({$0})
+  func checkmarkPressed(cellID: String) {
+    if let reminder = remindersController.incompleteReminderList.filter({$0.calendarRecordID == cellID}).first {
+      remindersController.incompleteReminderList = remindersController.incompleteReminderList.filter({$0.calendarRecordID != cellID})
+      
+      reminder.reminder.isCompleted = !reminder.reminder.isCompleted
+      remindersController.completeReminderList.append(Reminder(reminder.reminder))
+      remindersController.editReminder(reminder: reminder.reminder)
+      
+      if let parent = reminder.contextParent {
+        guard var list = dictionaryOfContexts[parent] else {return}
+        guard let index = list.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        list[index] = Reminder(reminder.reminder)
+        dictionaryOfContexts[parent] = list
+      } else {
+        guard var list = dictionaryOfContexts[""] else {return}
+        guard let index = list.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        list[index] = Reminder(reminder.reminder)
+        dictionaryOfContexts[""] = list
+      }
+    } else {
+      guard let reminder = remindersController.completeReminderList.filter({$0.calendarRecordID == cellID}).first else {return}
+      remindersController.completeReminderList = remindersController.completeReminderList.filter({$0.calendarRecordID != cellID})
+      reminder.reminder.isCompleted = !reminder.reminder.isCompleted
+      remindersController.incompleteReminderList.append(Reminder(reminder.reminder))
+      remindersController.editReminder(reminder: reminder.reminder)
+      
+      if let parent = reminder.contextParent {
+        guard var list = dictionaryOfContexts[parent] else {return}
+        guard let index = list.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        list[index] = Reminder(reminder.reminder)
+        dictionaryOfContexts[parent] = list
+      } else {
+        guard var list = dictionaryOfContexts[""] else {return}
+        guard let index = list.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
+        list[index] = Reminder(reminder.reminder)
+        dictionaryOfContexts[""] = list
+      }
+    }
+    delegate?.updateTableView()
   }
   
   // MARK: Drag and Drop functions
@@ -177,37 +204,185 @@ class ContextItemController {
     let newParent = listOfContextHeaders[destinationIndex.section]
     var updatedReminder = originReminder
     updatedReminder.contextParent = newParent
-    updateContextReminderListWithNewParent(reminder: originReminder, newParent: newParent)
+    if let newNote = updatedReminder.reminder.notes {
+      if newNote.hasSuffix("}#@{!}") {
+        let rangeOfZero = newNote.range(of: "{!}@#{", options: .backwards)
+        // Get the characters after the last 0
+        let suffix = String(describing: newNote.prefix(upTo: (rangeOfZero?.lowerBound)!))
+        if suffix.hasSuffix("\n") {
+          let newSuffix = String(suffix.dropLast())
+          updatedReminder.reminder.notes = newSuffix
+        } else {
+          updatedReminder.reminder.notes = suffix
+        }
+      } else {
+        updatedReminder.reminder.notes = newNote
+      }
+    }
+    if newParent != "" {
+      if updatedReminder.contextParent != nil {
+        if var note = updatedReminder.reminder.notes {
+          note.append("{!}@#{\(newParent)}#@{!}")
+          updatedReminder.reminder.notes = note
+        } else {
+          let note = "{!}@#{\(newParent)}#@{!}"
+          updatedReminder.reminder.notes = note
+        }
+      }
+    }
+    updateContextReminderListWithNewReminder(reminder: updatedReminder)
     updateDictionaryContext(originReminderItem: originReminder, newParent: newParent, updatedReminder: updatedReminder)
-
+    remindersController.editReminder(reminder: updatedReminder.reminder)
     delegate?.beginUpdate()
     delegate?.updateCell(originIndex: originIndex, updatedReminder: updatedReminder)
     delegate?.moveRowAt(originIndex: originIndex, destinationIndex: destinationIndex)
     delegate?.endUpdate()
   }
   
-  func updateContextReminderListWithNewParent(reminder: Reminder, newParent: String) {
+  func updateContextReminderListWithNewReminder(reminder: Reminder) {
     guard let index = contextReminderList.index(where: {$0.calendarRecordID == reminder.calendarRecordID}) else {return}
-    contextReminderList[index].contextParent = newParent
+    contextReminderList[index].reminder = reminder.reminder
   }
   
   func updateDictionaryContext(originReminderItem: Reminder, newParent: String, updatedReminder: Reminder) {
-    guard var listOfReminderInContext = dictionaryOfContexts[originReminderItem.calendarRecordID] else {return}
+    guard var listOfReminderInContext = dictionaryOfContexts[originReminderItem.contextParent ?? ""] else {return}
     listOfReminderInContext = listOfReminderInContext.filter( {$0.calendarRecordID != originReminderItem.calendarRecordID})
     dictionaryOfContexts[originReminderItem.contextParent ?? ""] = listOfReminderInContext
-    guard var newListOfReminderInContext = dictionaryOfContexts[newParent] else {return}
-    newListOfReminderInContext.append(updatedReminder)
-    dictionaryOfContexts[newParent] = newListOfReminderInContext
-    }
-  
-  func startCodableTestContext() {
-    if let memoryList = UserDefaults.standard.value(forKey: "contextList") as? Data{
-      let decoder = JSONDecoder()
-      if let contextList = try? decoder.decode(Dictionary.self, from: memoryList) as [String: Int]{
-        listOfContextAndColors = contextList
-      }
+    if dictionaryOfContexts[newParent] != nil {
+      guard var newListOfReminderInContext = dictionaryOfContexts[newParent] else {return}
+      newListOfReminderInContext.append(Reminder(updatedReminder.reminder))
+      dictionaryOfContexts[newParent] = newListOfReminderInContext
+    } else {
+      dictionaryOfContexts[newParent] = [Reminder(updatedReminder.reminder)]
     }
   }
   
-  // MARK: - Formatting Dates
+}
+
+extension ContextItemController: SendDataToContextItemControllerDelegate {
+  func addNewReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?) {
+    print("add reminder delegate")
+    var newReminder = remindersController.returnReminder()
+    newReminder = remindersController.createReminder(reminder: newReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    remindersController.setNewReminder(ekReminder: newReminder)
+    delegate?.beginUpdate()
+    if context == title {
+      if let newParent = parent {
+        if var parentList = dictionaryOfContexts[newParent] {
+          parentList.append(Reminder(newReminder))
+          dictionaryOfContexts[newParent] = parentList
+          guard let index = listOfContextHeaders.index(where: {$0 == newParent}) else {return}
+          let indexPath = IndexPath(row: (parentList.count - 1), section: index)
+          delegate?.insertRow(indexPath)
+        } else {
+          dictionaryOfContexts[newParent] = [Reminder(newReminder)]
+          listOfContextHeaders.append(newParent)
+          let indexPath = IndexPath(row: 0, section: (listOfContextHeaders.count - 1))
+          delegate?.insertSection(indexPath)
+          delegate?.insertRow(indexPath)
+        }
+      } else {
+        if var nilList = dictionaryOfContexts[""] {
+          nilList.append(Reminder(newReminder))
+          dictionaryOfContexts[""] = nilList
+          let indexPath = IndexPath(row: (nilList.count - 1), section: 0)
+          delegate?.insertRow(indexPath)
+        } else {
+          dictionaryOfContexts[""] = [Reminder(newReminder)]
+          listOfContextHeaders.insert("", at: 0)
+          let indexPath = IndexPath(row: 0, section: 0)
+          delegate?.insertSection(indexPath)
+          delegate?.insertRow(indexPath)
+        }
+      }
+    }
+    delegate?.endUpdate()
+  }
+  
+  func editReminder(reminderTitle: String, context: String?, parent: String?, dueDate: Date?, dueTime: String?, notes: String?, isNotify: Bool, alarmTime: Date?, isRepeat: Bool, repeatCycleInterval: Int?, repeatCycle: Reminder.RepeatCycleValues?, repeatCustomNumber: [Int], repeatCustomRule: Reminder.RepeatCustomRuleValues?, endRepeatDate: Date?, oldReminder: Reminder) {
+    guard let originalReminder = oldReminder.reminder else {return}
+    var editedReminder = originalReminder
+    editedReminder = remindersController.createReminder(reminder: originalReminder, reminderTitle: reminderTitle, dueDate: dueDate, dueTime: dueTime, context: context, parent: parent, notes: notes, notification: isNotify, notifyDate: alarmTime, isRepeat: isRepeat, repeatCycle: repeatCycle, repeatCycleInterval: repeatCycleInterval, repeatCustomNumber: repeatCustomNumber, repeatCustomRule: repeatCustomRule, endRepeatDate: endRepeatDate)
+    remindersController.editReminder(reminder: editedReminder)
+    
+    guard let oldReminder = reminder else {return}
+    delegate?.beginUpdate()
+    contextReminderList = contextReminderList.filter({$0.calendarRecordID != oldReminder.calendarRecordID})
+    if let parent = oldReminder.contextParent {
+      if var oldList = dictionaryOfContexts[parent] {
+        guard let index = oldList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
+        oldList.remove(at: index)
+        guard let section = listOfContextHeaders.index(where: {$0 == parent}) else {return}
+        let indexPath = IndexPath(row: index, section: section)
+        delegate?.deleteRow(indexPath)
+        if oldList.count == 0 {
+          listOfContextHeaders.remove(at: section)
+          if listOfContextHeaders.count == 0 {
+            listOfContextHeaders.append("")
+            let newIndexPath = IndexPath(row: 0, section: 0)
+            delegate?.insertSection(newIndexPath)
+          }
+          dictionaryOfContexts[parent] = nil
+          delegate?.deleteSection(indexPath)
+        } else {
+          dictionaryOfContexts[parent] = oldList
+        }
+      }
+    } else {
+      if var oldList = dictionaryOfContexts[""] {
+        guard let index = oldList.index(where: {$0.calendarRecordID == oldReminder.calendarRecordID}) else {return}
+        oldList.remove(at: index)
+        let indexPath = IndexPath(row: index, section: 0)
+        if oldList.count == 0 {
+          dictionaryOfContexts[""] = nil
+          if listOfContextHeaders.count > 1 && listOfContextHeaders.contains("") {
+            listOfContextHeaders.remove(at: 0)
+          }
+          delegate?.deleteSection(indexPath)
+        } else {
+          dictionaryOfContexts[""] = oldList
+        }
+        delegate?.deleteRow(indexPath)
+      }
+    }
+    
+    if context == title {
+      contextReminderList.append(Reminder(editedReminder))
+      if let newParent = parent {
+        
+        if var newList = dictionaryOfContexts[newParent] {
+          newList.append(Reminder(editedReminder))
+          dictionaryOfContexts[newParent] = newList
+          let row = (newList.count - 1)
+          guard let section = listOfContextHeaders.index(where: {$0 == newParent}) else {return}
+          let indexPath = IndexPath(row: row, section: section)
+          delegate?.insertRow(indexPath)
+        } else {
+          dictionaryOfContexts[newParent] = [Reminder(editedReminder)]
+          listOfContextHeaders.append(newParent)
+          let section = (listOfContextHeaders.count - 1)
+          let indexPath = IndexPath(row: 0, section: section)
+          delegate?.insertSection(indexPath)
+          delegate?.insertRow(indexPath)
+        }
+      } else {
+        
+        if var nilContext = dictionaryOfContexts[""] {
+          nilContext.append(Reminder(editedReminder))
+          dictionaryOfContexts[""] = nilContext
+          let row = (nilContext.count - 1)
+          let indexPath = IndexPath(row: row, section: 0)
+          delegate?.insertRow(indexPath)
+        } else {
+          dictionaryOfContexts[""] = [Reminder(editedReminder)]
+          let indexPath = IndexPath(row: 0, section: 0)
+          delegate?.insertSection(indexPath)
+          delegate?.insertRow(indexPath)
+        }
+      }
+    }
+    delegate?.updateTableView()
+    delegate?.endUpdate()
+  }
+  
 }

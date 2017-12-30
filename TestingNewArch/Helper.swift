@@ -73,4 +73,12 @@ class Helper {
     return formattedDateAndTime
   }
   
+  static func calculateTimeBetweenDates(originalDate: Date?, finalDate: Date) -> Int {
+    let calendar = Calendar.current
+    guard let originalDate = originalDate else {return 100}
+    let timeDifference = calendar.dateComponents([.second], from: originalDate, to: finalDate)
+    guard let seconds = timeDifference.second else {return 1000}
+    return seconds
+  }
+  
 }
