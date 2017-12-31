@@ -29,9 +29,9 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = contextCollectionView.dequeueReusableCell(withReuseIdentifier: "ContextCards", for: indexPath) as! ContextItemCollectionViewCell
-    cell.backView.layer.cornerRadius = 22
+//    cell.backView.layer.cornerRadius = 22
     cell.backView.layer.shadowColor = UIColor.black.cgColor
-    cell.backView.layer.shadowOffset = CGSize(width: 0, height: 3)
+    cell.backView.layer.shadowOffset = CGSize(width: 0, height: -3)
     cell.backView.layer.shadowOpacity = 0.6
     cell.contextItemLabel.textColor = .white
     cell.numberOfContextLabel.textColor = .white
@@ -65,7 +65,7 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
-    switch indexPath.section {
+    switch indexPath.row {
     case 0:
       if indexPath.row == 0 {
         let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
@@ -224,8 +224,24 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     }
   }
   
+//  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//    return -10
+//  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    return -245
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    if section == 1 {
+      return CGSize(width: 0, height: -245)
+    } else {
+      return CGSize(width: 0, height: 0)
+    }
+  }
+  
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (contextCollectionView.frame.width - 25), height: 75.0)
+    return CGSize(width: (contextCollectionView.frame.width - 25), height: 300.0)
   }
   
   @objc func editColor(sender: UILongPressGestureRecognizer) {
