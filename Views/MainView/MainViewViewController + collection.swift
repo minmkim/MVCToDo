@@ -10,261 +10,189 @@ import Foundation
 import UIKit
 
 extension MainViewViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+  
   func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 2
+    return 1
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    switch section {
-    case 0:
-      return 2
-    case 1:
-      let numberOfItems = controller.numberOfContext()
-      return numberOfItems
-    default:
-      return 0
-      }
-    }
+    let numberOfItems = controller.numberOfRows()
+    return numberOfItems
+  }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = contextCollectionView.dequeueReusableCell(withReuseIdentifier: "ContextCards", for: indexPath) as! ContextItemCollectionViewCell
-//    cell.backView.layer.cornerRadius = 22
-    cell.backView.layer.shadowColor = UIColor.black.cgColor
-    cell.backView.layer.shadowOffset = CGSize(width: 0, height: -3)
-    cell.backView.layer.shadowOpacity = 0.6
-    cell.contextItemLabel.textColor = .white
-    cell.numberOfContextLabel.textColor = .white
-    cell.backView.clipsToBounds = false
-    cell.layer.masksToBounds = false
+    let cell = themedCell(for: indexPath)
     let gesture = UILongPressGestureRecognizer(target: self, action: #selector(self.editColor))
-    switch indexPath.section {
+    cell.saveButton.addTarget(self,action:#selector(saveButtonPress), for:.touchUpInside)
+    cell.cancelButton.addTarget(self,action:#selector(cancelButtonPress), for:.touchUpInside)
+    cell.deleteButton.addTarget(self,action:#selector(deleteButtonPress), for:.touchUpInside)
+    switch indexPath.row {
     case 0:
-      if indexPath.row == 0 {
-        cell.contextItemLabel.text = "All"
-        cell.numberOfContextLabel.text = ""
-        cell.backView.backgroundColor =  themeController.mainThemeColor
-        return cell
-      } else {
-        cell.contextItemLabel.text = "Today"
-        cell.numberOfContextLabel.text = controller.returnCellNumberOfToday()
-        cell.backView.backgroundColor =  colors.darkRed
-        return cell
-      }
-      
+      cell.contextItemLabel.text = "All"
+      cell.numberOfContextLabel.text = ""
+      cell.backView.backgroundColor =  themeController.mainThemeColor
+      return cell
     case 1:
-      cell.contextItemLabel.text = controller.returnContextString(indexPath.row)
-      cell.numberOfContextLabel.text = controller.returnCellNumberOfContextString(indexPath.row)
-      cell.backView.backgroundColor = controller.returnColor(cell.contextItemLabel.text!)
-      cell.addGestureRecognizer(gesture)
+      cell.contextItemLabel.text = "Today"
+//      cell.numberOfContextLabel.text = controller.returnCellNumberOfToday()
+      cell.backView.backgroundColor =  colors.darkRed
+      return cell
+    case (controller.listOfContext.count + 2):
+      cell.contextItemLabel.text = ""
+      cell.contextItemLabel.attributedPlaceholder = NSAttributedString(string: "Add Context", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+      cell.numberOfContextLabel.text = ""
+      cell.isEditing = true
+      cell.backView.backgroundColor = .red
       return cell
     default:
+      cell.contextItemLabel.text = controller.returnContextString(indexPath.row - 2)
+      cell.numberOfContextLabel.text = controller.returnCellNumberOfContextString(indexPath.row - 2)
+      cell.backView.backgroundColor = controller.returnColor(cell.contextItemLabel.text!)
+      cell.addGestureRecognizer(gesture)
       return cell
     }
   }
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let cell = contextCollectionView.cellForItem(at: indexPath) as! ContextItemCollectionViewCell
-    switch indexPath.row {
-    case 0:
-      if indexPath.row == 0 {
-        let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-        guard let color = cell.backView.backgroundColor else {return}
-        let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
-        let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
-        let fakeBody = returnTemporaryBody()
-        self.view.addSubview(fakeHeader)
-        self.view.bringSubview(toFront: fakeHeader)
-        self.view.addSubview(fakeLabel)
-        self.view.addSubview(fakeBody)
-        self.view.bringSubview(toFront: fakeBody)
-        
-        let width = self.view.frame.width
-        var headerHeight: Double = 0.0
-        var labelHeight: Double = 0.0
-        
-        if self.view.frame.height == 812 { //iPhone x
-          headerHeight = 141.0
-          labelHeight = 92.0
-        } else {
-          headerHeight = 116.0
-          labelHeight = 68.0
-        }
-        let originalColor = cell.backView.backgroundColor
-        let originalShadow = cell.backView.layer.shadowColor
-        let originalLabelColor = cell.contextItemLabel.textColor
-        cell.backView.backgroundColor = self.themeController.backgroundColor
-        cell.backView.layer.shadowColor = self.themeController.backgroundColor.cgColor
-        cell.contextItemLabel.textColor = self.themeController.backgroundColor
-        
-        UIView.animate(withDuration: 0.2, animations: {
-          UIApplication.shared.statusBarStyle = .lightContent
-          if self.themeController.isDarkTheme {
-            fakeHeader.backgroundColor = .black
-          } else {
-            fakeHeader.backgroundColor = self.themeController.mainThemeColor
-          }
-          
-          fakeLabel.frame = CGRect(x: 15.667, y: labelHeight, width: Double(self.view.frame.width - 31.334), height: 40.0)
-          fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double(width), height: headerHeight)
-          fakeHeader.layer.cornerRadius = 0
-          fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double(width), height: Double(self.view.frame.height))
-          
-        }) { (_) in
-          DispatchQueue.main.async {
-//            self.navigationController?.pushViewController(self.allViewController!, animated: false)
-            self.performSegue(withIdentifier: segueIdentifiers.allSegue, sender: nil)
-          }
-          cell.backView.backgroundColor = originalColor
-          cell.backView.layer.shadowColor = originalShadow
-          cell.contextItemLabel.textColor = originalLabelColor
-          DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-            fakeHeader.removeFromSuperview()
-            fakeBody.removeFromSuperview()
-            fakeLabel.removeFromSuperview()
-          }
-
-        }
-        
-      } else {
-        let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-        guard let color = cell.backView.backgroundColor else {return}
-        let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
-        let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
-        let fakeBody = returnTemporaryBody()
-        self.view.addSubview(fakeHeader)
-        self.view.bringSubview(toFront: fakeHeader)
-        self.view.addSubview(fakeLabel)
-        self.view.addSubview(fakeBody)
-        self.view.bringSubview(toFront: fakeBody)
-        
-        let width = self.view.frame.width
-        var headerHeight: Double = 0.0
-        var labelHeight: Double = 0.0
-        
-        if self.view.frame.height == 812 { //iPhone x
-          headerHeight = 141.0
-          labelHeight = 92.0
-        } else {
-          headerHeight = 116.0
-          labelHeight = 68.0
-        }
-        let originalColor = cell.backView.backgroundColor
-        let originalShadow = cell.backView.layer.shadowColor
-        let originalLabelColor = cell.contextItemLabel.textColor
-        cell.backView.backgroundColor = self.themeController.backgroundColor
-        cell.backView.layer.shadowColor = self.themeController.backgroundColor.cgColor
-        cell.contextItemLabel.textColor = self.themeController.backgroundColor
-        
-        UIView.animate(withDuration: 0.3, animations: {
-          UIApplication.shared.statusBarStyle = .lightContent
-          fakeLabel.frame = CGRect(x: 15.667, y: labelHeight, width: Double(self.view.frame.width - 31.334), height: 40.0)
-          fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double(width), height: headerHeight)
-          fakeHeader.layer.cornerRadius = 0
-          fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double(width), height: Double(self.view.frame.height))
-          
-        }) { (_) in
-          cell.backView.backgroundColor = originalColor
-          cell.backView.layer.shadowColor = originalShadow
-          cell.contextItemLabel.textColor = originalLabelColor
-          self.performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: self)
-          fakeHeader.removeFromSuperview()
-          fakeBody.removeFromSuperview()
-          fakeLabel.removeFromSuperview()
-        }
-      }
-      
-    case 1:
-      controller.setIndexPathForContextSelect(indexPath.row)
+    if indexPath.row != (controller.listOfContext.count + 2) {
       let size = self.view.convert(cell.backView.frame, from: cell.backView.superview)
-      guard let color = cell.backView.backgroundColor else {return}
-      let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
-      let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
-      let fakeBody = returnTemporaryBody()
-      self.view.addSubview(fakeHeader)
-      self.view.bringSubview(toFront: fakeHeader)
-      self.view.addSubview(fakeLabel)
-      self.view.addSubview(fakeBody)
-      self.view.bringSubview(toFront: fakeBody)
-      var headerHeight: Double = 0.0
-      var labelHeight: Double = 0.0
-      
-      if self.view.frame.height == 812 { //iPhone x
-        headerHeight = 141.0
-        labelHeight = 92.0
-      } else {
-        headerHeight = 116.0
-        labelHeight = 68.0
-      }
-      let originalColor = cell.backView.backgroundColor
-      let originalShadow = cell.backView.layer.shadowColor
-      let originalLabelColor = cell.contextItemLabel.textColor
-      cell.backView.backgroundColor = self.themeController.backgroundColor
-      cell.backView.layer.shadowColor = self.themeController.backgroundColor.cgColor
-      cell.contextItemLabel.textColor = self.themeController.backgroundColor
-      
-      UIView.animate(withDuration: 0.3, animations: {
-        UIApplication.shared.statusBarStyle = .lightContent
-        fakeLabel.frame = CGRect(x: 15.667, y: labelHeight, width: Double(self.view.frame.width - 34), height: 40.0)
-        fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double( self.view.frame.width), height: headerHeight)
-        fakeHeader.layer.cornerRadius = 0
-        fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double( self.view.frame.width), height: Double(self.view.frame.height))
-        
-      }) { (_) in
-        cell.backView.backgroundColor = originalColor
-        cell.backView.layer.shadowColor = originalShadow
-        cell.contextItemLabel.textColor = originalLabelColor
-        self.performSegue(withIdentifier: segueIdentifiers.contextItemSegue, sender: self)
-        fakeHeader.removeFromSuperview()
-        fakeBody.removeFromSuperview()
-        fakeLabel.removeFromSuperview()
-      }
-    default:
-      return
+      transitionViews(for: size, cell: cell, completion: {
+        DispatchQueue.main.async {
+        switch indexPath.row {
+        case 0:
+          self.performSegue(withIdentifier: segueIdentifiers.allSegue, sender: nil)
+        case 1:
+          self.performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: self)
+        default:
+          self.controller.setIndexPathForContextSelect(indexPath.row - 2)
+          self.performSegue(withIdentifier: segueIdentifiers.contextItemSegue, sender: self)
+          }
+        }
+      })
     }
   }
-  
-//  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//    return -10
-//  }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-    return -245
-  }
-  
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-    if section == 1 {
-      return CGSize(width: 0, height: -245)
-    } else {
-      return CGSize(width: 0, height: 0)
-    }
+    return -215
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (contextCollectionView.frame.width - 25), height: 300.0)
+    if let index = controller.previousEditedIndexPath {
+      if index == indexPath && index.row != (controller.listOfContext.count + 2) && indexPath.row != (controller.listOfContext.count + 1) {
+        return CGSize(width: (contextCollectionView.frame.width - 25), height: 475)
+      }
+    }
+    return CGSize(width: (contextCollectionView.frame.width - 25), height: 275)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    return UIEdgeInsetsMake(10, 0, 0, 0)
+  }
+  
+  func themedCell(for indexPath: IndexPath) -> ContextItemCollectionViewCell {
+    let cell = contextCollectionView.dequeueReusableCell(withReuseIdentifier: "ContextCards", for: indexPath) as! ContextItemCollectionViewCell
+    cell.contextItemLabel.isEnabled = false
+    cell.backView.layer.shadowColor = UIColor.black.cgColor
+    cell.backView.layer.shadowOffset = CGSize(width: 0, height: -3)
+    cell.backView.layer.shadowOpacity = 0.3
+    cell.backView.layer.cornerRadius = 10
+    cell.isEditing = false
+    cell.contextItemLabel.textColor = .white
+    cell.numberOfContextLabel.textColor = .white
+    cell.backView.clipsToBounds = false
+    cell.layer.masksToBounds = false
+    return cell
+  }
+  
+  @objc func saveButtonPress(sender: UIButton) {
+    controller.saveButtonPressed()
+  }
+  
+  @objc func cancelButtonPress(sender: UIButton) {
+    controller.setControllerModeToNormal()
+  }
+  
+  @objc func deleteButtonPress(sender: UIButton) {
+    let alertController = UIAlertController(title: "Deleting Context", message: "Deleting this context will also delete all the reminders associated with the context. Are you sure you want to delete?", preferredStyle: UIAlertControllerStyle.alert)
+    let okAction = UIAlertAction(title: "Yes", style: .default) { (result : UIAlertAction) -> Void in
+      self.controller.deleteButtonPressed()
+    }
+    let cancelAction = UIAlertAction(title: "No", style: .default) { (result : UIAlertAction) -> Void in
+      alertController.dismiss(animated: true, completion: nil)
+    }
+    
+    alertController.addAction(okAction)
+    alertController.addAction(cancelAction)
+    self.present(alertController, animated: true, completion: nil)
   }
   
   @objc func editColor(sender: UILongPressGestureRecognizer) {
     guard let cell = sender.view as? ContextItemCollectionViewCell else {return}
-    let indexPath = contextCollectionView.indexPath(for: cell)
-    if indexPath?.section == 0 && indexPath?.row == 0 {
-      return
+    guard let indexPath = contextCollectionView.indexPath(for: cell) else {return}
+    controller.editingContext(for: indexPath)
+  }
+  
+  func transitionViews(for size: CGRect, cell: ContextItemCollectionViewCell, completion: @escaping () -> Void) {
+    guard let color = cell.backView.backgroundColor else {return}
+    let fakeHeader = returnTemporaryHeaderView(frameSize: size, color: color)
+    let fakeLabel = returnTemporaryContextLabel(frameSize: size, contextString: cell.contextItemLabel.text ?? "")
+    let fakeBody = returnTemporaryBody(frameSize: size)
+    self.view.addSubview(fakeHeader)
+    self.view.bringSubview(toFront: fakeHeader)
+    self.view.addSubview(fakeLabel)
+    self.view.addSubview(fakeBody)
+    self.view.bringSubview(toFront: fakeBody)
+    
+    let width = self.view.frame.width
+    var headerHeight: Double = 0.0
+    var labelHeight: Double = 0.0
+    
+    if self.view.frame.height == 812 { //iPhone x
+      headerHeight = 141.0
+      labelHeight = 92.0
+    } else {
+      headerHeight = 116.0
+      labelHeight = 68.0
     }
-    addContextSaveButton.isEnabled = true
-    addContextField.isEnabled = true
-    controller.editingContext = indexPath
-    addContextTopConstraint.constant = -550
-    addContextField.text = cell.contextItemLabel.text
-    addView.backgroundColor = cell.backView.backgroundColor
-    UIView.animate(withDuration: 0.3) {
-      self.view.layoutIfNeeded()
+    let originalColor = cell.backView.backgroundColor
+    let originalShadow = cell.backView.layer.shadowColor
+    let originalLabelColor = cell.contextItemLabel.textColor
+    cell.backView.backgroundColor = self.themeController.backgroundColor
+    cell.backView.layer.shadowColor = self.themeController.backgroundColor.cgColor
+    cell.contextItemLabel.textColor = self.themeController.backgroundColor
+    
+    UIView.animate(withDuration: 0.2, animations: {
+      UIApplication.shared.statusBarStyle = .lightContent
+      if cell.contextItemLabel.text == "All" {
+        fakeLabel.text = "Due Life"
+        if self.themeController.isDarkTheme {
+          fakeHeader.backgroundColor = .black
+        } else {
+          fakeHeader.backgroundColor = self.themeController.mainThemeColor
+        }
+      }
+      fakeLabel.frame = CGRect(x: 15.667, y: labelHeight, width: Double(self.view.frame.width - 31.334), height: 40.0)
+      fakeHeader.frame = CGRect(x: 0.0, y: 0.0, width: Double(width), height: headerHeight)
+      fakeHeader.layer.cornerRadius = 0
+      fakeBody.frame = CGRect(x: 0.0, y: headerHeight, width: Double(width), height: Double(self.view.frame.height))
+    }) { (_) in
+      completion()
+      cell.backView.backgroundColor = originalColor
+      cell.backView.layer.shadowColor = originalShadow
+      cell.contextItemLabel.textColor = originalLabelColor
+      DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+        fakeHeader.removeFromSuperview()
+        fakeBody.removeFromSuperview()
+        fakeLabel.removeFromSuperview()
+      }
     }
   }
   
   func returnTemporaryHeaderView(frameSize: CGRect, color: UIColor) -> UIView {
     let fakeHeader = UIView()
     fakeHeader.frame = frameSize
-    fakeHeader.layer.cornerRadius = 22
+    fakeHeader.layer.cornerRadius = 10
     fakeHeader.backgroundColor = color
     return fakeHeader
   }
@@ -278,12 +206,11 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     return fakeLabel
   }
   
-  func returnTemporaryBody() -> UIView {
+  func returnTemporaryBody(frameSize: CGRect) -> UIView {
     let fakeBody = UIView()
-    fakeBody.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
+    fakeBody.frame = CGRect(x: 0, y: frameSize.maxY - 60, width: view.frame.width, height: view.frame.height)
     fakeBody.backgroundColor = themeController.backgroundColor
     return fakeBody
   }
   
 }
-

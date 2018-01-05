@@ -11,20 +11,37 @@ import UIKit
 
 protocol UpdateCollectionViewDelegate: class {
   func insertContext(at index: IndexPath)
+  func deleteContext(at index: IndexPath)
   func updateContext()
+  func insertSection(_ section: Int)
+  func deleteSections(_ section: Int)
+  func moveItem(fromIndex: IndexPath, toIndex: IndexPath)
+  func addContext()
+  func editToNormal(for indexPath: IndexPath)
+  func addToNormal()
+  func editContext(for indexPath: IndexPath)
+  func returnContextDataToEditOrAdd(for indexPath: IndexPath)
+  func returnContextDataToDelete(for indexPath: IndexPath)
 }
 
 class MainViewController {
   
+  enum mainViewMode {
+    case normal
+    case editing
+    case adding
+  }
+  
+  var controllerMode = mainViewMode.normal
   var remindersController: RemindersController!
   
-
   var listOfContext = ["Inbox", "Home", "Work", "Personal"]
   var selectedContextIndex = 0
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var editingContext: IndexPath?
   var newCalendarContext: String?
   weak var updateCollectionViewDelegate: UpdateCollectionViewDelegate?
+  var previousEditedIndexPath: IndexPath?
   
   init(controller: RemindersController) {
     remindersController = controller
@@ -33,8 +50,12 @@ class MainViewController {
   }
   
   
-  func numberOfContext() -> Int {
-    return listOfContext.count
+  func numberOfRows() -> Int {
+    if controllerMode == .adding {
+      return listOfContext.count + 3
+    } else {
+      return listOfContext.count + 2
+    }
   }
   
   func returnNumberOfItemInContext(_ index: Int) -> Int {
@@ -55,23 +76,6 @@ class MainViewController {
     }
   }
   
-  func returnCellNumberOfToday() -> String {
-//    let uncheckedListOfToDo = toDoModelController.toDoList.filter({$0.isChecked == false})
-//    let filteredUncheckedListOfToDo = uncheckedListOfToDo.filter({$0.dueDate != nil})
-//    let date: Date = Date()
-//    let cal: Calendar = Calendar(identifier: .gregorian)
-    
-//    let newDate: Date = cal.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-    
- //   let overDueItems = filteredUncheckedListOfToDo.filter({$0.dueDate! < newDate})
-  //  let todayItems = uncheckedListOfToDo.filter({
-//      formatDateToString(date: $0.dueDate ?? Date(), format: dateAndTime.monthDateYear) == formatDateToString(date: Date(), format: dateAndTime.monthDateYear)
-  //  })
-  //  let count = todayItems.count + overDueItems.count
-  //  return String(count)
-    return ""
-  }
-  
   func checkIfEditing() -> Bool {
     if editingContext != nil {
       return true
@@ -81,7 +85,7 @@ class MainViewController {
   }
   
   func setCalendarColor(color: UIColor, context: String) {
-    remindersController.editOrCreateCalendar(context: context, color: color)
+//    remindersController.createNewCalendar(context: context, color: color)
   }
   
   func returnEditingIndexPath() -> IndexPath {
@@ -109,6 +113,100 @@ class MainViewController {
     }
   }
   
+  func setControllerModeToNormal() {
+    switch controllerMode {
+    case .adding:
+      controllerMode = .normal
+      updateCollectionViewDelegate?.addToNormal()
+    case .editing:
+      controllerMode = .normal
+      guard let indexPath = previousEditedIndexPath else {return}
+      previousEditedIndexPath = nil
+      updateCollectionViewDelegate?.editToNormal(for: indexPath)
+    case .normal:
+      print("shouldnt be here")
+    }
+  }
+  
+  func saveButtonPressed() {
+    switch controllerMode {
+    case .adding:
+      let indexPath = IndexPath(row: (listOfContext.count + 2), section: 0)
+      updateCollectionViewDelegate?.returnContextDataToEditOrAdd(for: indexPath)
+    case .editing:
+      guard let indexPath = previousEditedIndexPath else {return}
+      updateCollectionViewDelegate?.returnContextDataToEditOrAdd(for: indexPath)
+    case .normal:
+      print("normal")
+    }
+  }
+  
+  func createOrEditCalendar(context: String, color: UIColor) {
+    switch controllerMode {
+    case .adding:
+      remindersController.createNewCalendar(context: context, color: color)
+      setControllerModeToNormal()
+      listOfContext.append(context)
+      let indexPath = IndexPath(row: (listOfContext.count + 1), section: 0)
+      updateCollectionViewDelegate?.insertContext(at: indexPath)
+    case .editing:
+      guard let indexPath = previousEditedIndexPath else {return}
+      remindersController.editCalendar(context: context, color: color, originalContext: listOfContext[indexPath.row - 2])
+      setControllerModeToNormal()
+      listOfContext[(indexPath.row - 2)] = context
+    case .normal:
+      print("normal")
+    }
+  }
+  
+  func editingContext(for indexPath: IndexPath) {
+    if indexPath.row == 0 || indexPath.row == 1 {
+      return
+    }
+    if previousEditedIndexPath != indexPath {
+      setControllerModeToNormal()
+      previousEditedIndexPath = indexPath
+      controllerMode = .editing
+      updateCollectionViewDelegate?.editContext(for: indexPath)
+    }
+  }
+  
+  func addContextButtonPressed() {
+    if controllerMode == .editing {
+      guard let indexPath = previousEditedIndexPath else {return}
+      previousEditedIndexPath = nil
+      updateCollectionViewDelegate?.editToNormal(for: indexPath)
+      controllerMode = .normal
+    }
+    if controllerMode != .adding {
+      controllerMode = .adding
+      updateCollectionViewDelegate?.addContext()
+    }
+  }
+  
+  func deleteButtonPressed() {
+    print("delete button pressed at: \(controllerMode)")
+    switch controllerMode {
+    case .adding:
+      setControllerModeToNormal()
+    case .editing:
+      guard let indexPath = previousEditedIndexPath else {return}
+      updateCollectionViewDelegate?.returnContextDataToDelete(for: indexPath)
+    case .normal:
+      print("normal")
+    }
+  }
+  
+  func deleteCalendar(context: String) {
+    print("deleting")
+    remindersController.removeCalendar(context: context)
+    guard let previousIndexPath = previousEditedIndexPath else {return}
+    listOfContext.remove(at: previousIndexPath.row - 2)
+    updateCollectionViewDelegate?.deleteContext(at: previousIndexPath)
+    controllerMode = .normal
+    previousEditedIndexPath = nil
+  }
+  
   func setContextList() {
     let contextList: [String] = remindersController.calendars.flatMap({$0.title})
     listOfContext = contextList.sorted(by: {$0 < $1})
@@ -120,17 +218,9 @@ class MainViewController {
     let uiColor = UIColor.init(cgColor: color)
     return uiColor
   }
-  
 }
 
 extension MainViewController: CalandarCompleteDelegate {
-  func calendarUpdateCompleted() {
-    let newIndex = updateContextAndInsertNewContext()
-    if newCalendarContext != nil {
-      updateCollectionViewDelegate?.insertContext(at: newIndex)
-    }
-  }
-  
   func calendarNotificationUpdate() {
     setContextList()
     updateCollectionViewDelegate?.updateContext()

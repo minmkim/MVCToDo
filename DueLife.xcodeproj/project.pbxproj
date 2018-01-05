@@ -33,6 +33,7 @@
 		A45CA23C1FC87102004F18A6 /* ContextController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45CA23B1FC87102004F18A6 /* ContextController.swift */; };
 		A45FE8791FCD961900E27C17 /* MainViewViewController + collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */; };
 		A45FE87B1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */; };
+		A46A41E71FFEE94D00765A41 /* MainView + ControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A41E61FFEE94D00765A41 /* MainView + ControllerDelegate.swift */; };
 		A46D74DE1FEDC08C004306BD /* RepeatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74DD1FEDC08C004306BD /* RepeatController.swift */; };
 		A46D74E21FEDE302004306BD /* CalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74E11FEDE302004306BD /* CalendarCollectionViewCell.swift */; };
 		A46D74E41FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46D74E31FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift */; };
@@ -107,6 +108,7 @@
 		A45CA23D1FC8C8C3004F18A6 /* TestingNewArch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestingNewArch.entitlements; sourceTree = "<group>"; };
 		A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewViewController + collection.swift"; sourceTree = "<group>"; };
 		A45FE87A1FCD97F300E27C17 /* ContextItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		A46A41E61FFEE94D00765A41 /* MainView + ControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView + ControllerDelegate.swift"; sourceTree = "<group>"; };
 		A46D74DD1FEDC08C004306BD /* RepeatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatController.swift; sourceTree = "<group>"; };
 		A46D74E11FEDE302004306BD /* CalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewCell.swift; sourceTree = "<group>"; };
 		A46D74E31FEDE33A004306BD /* RepeatingCalendarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingCalendarCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				A43FF2AE1FCA035000A5ECB4 /* MainViewViewController.swift */,
+				A46A41E61FFEE94D00765A41 /* MainView + ControllerDelegate.swift */,
 				A45FE8781FCD961900E27C17 /* MainViewViewController + collection.swift */,
 			);
 			path = MainView;
@@ -611,6 +614,7 @@
 				A4DD2CD21FBB3F3D008CF72E /* EventDelegate.swift in Sources */,
 				A46D74E21FEDE302004306BD /* CalendarCollectionViewCell.swift in Sources */,
 				A4147BFB1FD34A0100F67853 /* TodayController.swift in Sources */,
+				A46A41E71FFEE94D00765A41 /* MainView + ControllerDelegate.swift in Sources */,
 				A4DD2C8F1FB9AECB008CF72E /* AppDelegate.swift in Sources */,
 				A4DD2CD41FBB3F44008CF72E /* CalendarDelegate.swift in Sources */,
 				A4BA78441FC087E0007281F3 /* CalendarEventModel.swift in Sources */,

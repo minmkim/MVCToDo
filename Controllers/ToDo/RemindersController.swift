@@ -6,7 +6,6 @@ protocol RemindersUpdatedDelegate: class {
 }
 
 protocol CalandarCompleteDelegate: class {
-  func calendarUpdateCompleted()
   func calendarNotificationUpdate()
 }
 
@@ -23,7 +22,6 @@ class RemindersController {
   init() {
     print("init reminderscontroller")
     NotificationCenter.default.addObserver(self, selector: #selector(storeChanged), name: .EKEventStoreChanged, object: eventStore)
-    
   }
   
   deinit {
@@ -322,42 +320,56 @@ class RemindersController {
     return alarm
   }
   
-  func editOrCreateCalendar(context: String, color: UIColor) {
-    if let calendar = calendars.filter({$0.title == context}).first {
-      calendar.cgColor = color.cgColor
-      do {
-        try self.eventStore.saveCalendar(calendar, commit: true)
-        print("calendar creation successful")
-        completeReminderList = []
-        calendars = eventStore.calendars(for: EKEntityType.reminder)
-        calandarCompleteDelegate?.calendarUpdateCompleted()
-      } catch {
-        print("cal \(calendar.source.title) failed : \(error)")
+  func editCalendar(context: String, color: UIColor, originalContext: String) {
+    let filteredList = calendars.filter{$0.title == originalContext}
+    guard let calendar = filteredList.first else {return}
+    calendar.title = context
+    calendar.cgColor = color.cgColor
+    do {
+      try self.eventStore.saveCalendar(calendar, commit: true)
+      print("calendar edit successful")
+      lastUpdate = Date()
+      calendars = eventStore.calendars(for: EKEntityType.reminder)
+    } catch {
+      print("cal \(calendar.source.title) failed : \(error)")
+    }
+  }
+  
+  func removeCalendar(context: String) {
+    let filteredList = calendars.filter{$0.title == context}
+    guard let calendar = filteredList.first else {return}
+    do {
+      try self.eventStore.removeCalendar(calendar, commit: true)
+      print("calendar remove successful")
+      lastUpdate = Date()
+      calendars = calendars.filter{$0.title != context}
+    } catch {
+      print("cal \(calendar.source.title) failed : \(error)")
+    }
+  }
+  
+  func createNewCalendar(context: String, color: UIColor) {
+    let newCalendar = EKCalendar(for: .reminder, eventStore: eventStore)
+    newCalendar.title = context
+    newCalendar.cgColor = color.cgColor
+    let sourcesInEventStore = eventStore.sources
+    let filteredSources = sourcesInEventStore.filter { $0.sourceType == .calDAV }
+    
+    if let icloudSource = filteredSources.first {
+      newCalendar.source = icloudSource
+    } else {
+      let nextFilteredSource = sourcesInEventStore.filter { $0.sourceType == .local }
+      if let localSource = nextFilteredSource.first {
+        newCalendar.source = localSource
       }
-    } else { // if creating a new calendar
-      let newCalendar = EKCalendar(for: .reminder, eventStore: eventStore)
-      newCalendar.title = context
-      newCalendar.cgColor = color.cgColor
-      let sourcesInEventStore = eventStore.sources
-      let filteredSources = sourcesInEventStore.filter { $0.sourceType == .calDAV }
-      
-      if let icloudSource = filteredSources.first {
-        newCalendar.source = icloudSource
-      } else {
-        let nextFilteredSource = sourcesInEventStore.filter { $0.sourceType == .local }
-        if let localSource = nextFilteredSource.first {
-          newCalendar.source = localSource
-        }
-      }
-      do {
-        try self.eventStore.saveCalendar(newCalendar, commit: true)
-        print("calendar creation successful")
-        completeReminderList = []
-        calendars = eventStore.calendars(for: EKEntityType.reminder)
-        calandarCompleteDelegate?.calendarUpdateCompleted()
-      } catch {
-        print("cal \(newCalendar.source.title) failed : \(error)")
-      }
+    }
+    do {
+      try self.eventStore.saveCalendar(newCalendar, commit: true)
+      print("calendar creation successful")
+      lastUpdate = Date()
+      calendars = eventStore.calendars(for: EKEntityType.reminder)
+    } catch {
+      print("cal \(newCalendar.source.title) failed : \(error)")
     }
   }
   
