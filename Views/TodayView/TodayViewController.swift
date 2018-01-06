@@ -8,9 +8,13 @@
 
 import UIKit
 
+protocol ReturnRemindersControllerFromTodayDelegate: class {
+  func delegateRemindersController(_ remindersController: RemindersController)
+}
+
 class TodayViewController: UIViewController {
 
-  
+  weak var returnRemindersControllerDelegate: ReturnRemindersControllerFromTodayDelegate?
   @IBOutlet weak var addItemButton: UIButton!
   var todayController: TodayController!
   var themeController = ThemeController()
@@ -46,6 +50,12 @@ class TodayViewController: UIViewController {
     addItemButton.setImage(UIImage(named: themeController.addCircle) , for: .normal)
         // Do any additional setup after loading the view.
     }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    if isMovingFromParentViewController {
+      returnRemindersControllerDelegate?.delegateRemindersController(todayController.remindersController)
+    }
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

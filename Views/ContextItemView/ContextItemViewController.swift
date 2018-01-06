@@ -8,11 +8,17 @@
 
 import UIKit
 
+protocol ReturnRemindersControllerDelegate: class {
+  func returnRemindersController(_ remindersController: RemindersController)
+}
+
 class ContextItemViewController: UIViewController {
 
   @IBOutlet weak var contextItemTableView: UITableView!
   @IBOutlet weak var footerView: UIView!
+  weak var returnRemindersControllerDelegate: ReturnRemindersControllerDelegate?
   var controller: ContextItemController!
+  var themeController = ThemeController()
   var shownIndexes : [IndexPath] = []
   
   @IBOutlet weak var addItemButton: UIButton!
@@ -26,13 +32,13 @@ class ContextItemViewController: UIViewController {
     controller.delegate = self
     let color = controller.returnNavigationBarColor()
     navigationController?.navigationBar.barTintColor = color
-//    contextItemTableView.backgroundColor = themeController.backgroundColor
-//    view.backgroundColor = themeController.backgroundColor
-//    footerView.backgroundColor = themeController.backgroundColor
+    contextItemTableView.backgroundColor = themeController.backgroundColor
+    view.backgroundColor = themeController.backgroundColor
+    footerView.backgroundColor = themeController.backgroundColor
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
-    addItemButton.setImage(UIImage(named: checkMarkAsset.addCircle), for: .normal)
+    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
   }
   
   override func didReceiveMemoryWarning() {
@@ -52,6 +58,12 @@ class ContextItemViewController: UIViewController {
     }
     DispatchQueue.main.async {
       self.performSegue(withIdentifier: segueIdentifiers.addFromContextSegue, sender: self)
+    }
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    if isMovingFromParentViewController {
+      returnRemindersControllerDelegate?.returnRemindersController(controller.remindersController)
     }
   }
   
@@ -112,6 +124,11 @@ extension ContextItemViewController: UpdateContextItemTableViewDelegate {
   func updateCell(originIndex: IndexPath, updatedReminder: Reminder) {
     let cell = contextItemTableView.cellForRow(at: originIndex) as! ContextItemTableViewCell
     cell.reminder = updatedReminder
+    if cell.reminder.isChecked {
+      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
+    } else {
+      cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+    }
   }
   func updateTableView() {
     DispatchQueue.main.async {

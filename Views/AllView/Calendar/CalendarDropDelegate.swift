@@ -29,11 +29,11 @@ extension CalendarViewController: UICollectionViewDropDelegate {
       if let indexPath = destinationIndexPath {
         previousDragIndexPath = indexPath
         let previousCell = calendarCollectionView.cellForItem(at: testPath) as! CalendarCollectionViewCell
-        previousCell.backgroundColor = .white
+        previousCell.backgroundColor = themeController.backgroundColor
         if indexPath.row == 0 {
           previousCell.dayIndicatorView.backgroundColor = .red
         } else {
-          previousCell.dayIndicatorView.backgroundColor = .white
+          previousCell.dayIndicatorView.backgroundColor = themeController.backgroundColor
         }
         let cell = calendarCollectionView.cellForItem(at: indexPath) as! CalendarCollectionViewCell
         cell.backgroundColor = .red

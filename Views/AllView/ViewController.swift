@@ -40,7 +40,6 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     if isMovingFromParentViewController {
       passToDoModelDelegate?.returnToDoModel(remindersController)
     }
-    
   }
   
   override func viewDidLoad() {
@@ -52,12 +51,6 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
     navigationController?.navigationBar.tintColor = .white
     view.backgroundColor = themeController.backgroundColor
-  }
-  
-  private func addContentController(_ child: UIViewController, to container: UIView) {
-    addChildViewController(child)
-    container.addSubview(child.view)
-    child.didMove(toParentViewController: self)
   }
   
   override func didReceiveMemoryWarning() {
@@ -83,17 +76,4 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     }
   }
   
-  private func buildFromStoryboard<T>(_ name: String) -> T {
-    print("adding2")
-    let storyboard = UIStoryboard(name: name, bundle: nil)
-    let identifier = String(describing: T.self)
-    guard let viewController = storyboard.instantiateViewController(withIdentifier: identifier) as? T else {
-      fatalError("Missing \(identifier) in Storyboard")
-    }
-    print("adding3")
-    return viewController
-  }
-  
 }
-
-

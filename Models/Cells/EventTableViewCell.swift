@@ -62,6 +62,28 @@ class EventTableViewCell: UITableViewCell {
     }
   }
   
+  var isDarkTheme: Bool! {
+    didSet {
+      if isDarkTheme {
+        toDoLabel.textColor = .white
+        backgroundColor = .black
+        if checkmarkButton.image(for: .normal) == UIImage(named: "BlankCircle") {
+          checkmarkButton.setImage(UIImage(named: checkMarkAsset.darkUncheckedCircle), for: .normal)
+        } else {
+          checkmarkButton.setImage(UIImage(named: checkMarkAsset.darkCheckedCircle), for: .normal)
+        }
+      } else {
+        toDoLabel.textColor = .black
+        backgroundColor = .white
+        if checkmarkButton.image(for: .normal) == UIImage(named: "BlankCircle") {
+          checkmarkButton.setImage(UIImage(named: checkMarkAsset.uncheckedCircle), for: .normal)
+        } else {
+          checkmarkButton.setImage(UIImage(named: checkMarkAsset.checkedCircle), for: .normal)
+        }
+      }
+    }
+  }
+  
   @IBOutlet weak var contextColor: UIView!
   @IBOutlet weak var noteImage: UIImageView!
   @IBOutlet weak var repeatCycleImage: UIImageView!

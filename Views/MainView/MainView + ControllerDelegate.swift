@@ -78,7 +78,6 @@ extension MainViewViewController: UpdateCollectionViewDelegate {
     cell.isEditing = true
     self.contextCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 350, right: 0)
     contextCollectionView.performBatchUpdates(nil, completion: nil)
-//    self.contextCollectionView.scrollToItem(at: indexPath, at: .top, animated: true)
   }
   
   func returnContextDataToEditOrAdd(for indexPath: IndexPath) {
@@ -94,4 +93,18 @@ extension MainViewViewController: UpdateCollectionViewDelegate {
     controller.deleteCalendar(context: context)
   }
   
+}
+
+extension MainViewViewController: ReturnRemindersControllerDelegate {
+  func returnRemindersController(_ remindersController: RemindersController) {
+    print("delegated controller")
+    controller.remindersController = remindersController
+  }
+}
+
+extension MainViewViewController: ReturnRemindersControllerFromTodayDelegate {
+  func delegateRemindersController(_ remindersController: RemindersController) {
+    print("delegated controller")
+    controller.remindersController = remindersController
+  }
 }

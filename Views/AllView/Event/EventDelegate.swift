@@ -26,6 +26,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     let cell = eventTableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventTableViewCell
     guard let reminder = controller.returnReminder(for: indexPath) else {return cell}
     cell.reminder = reminder
+    cell.isDarkTheme = themeController.isDarkTheme
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     return cell
   }
@@ -51,7 +52,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     separator.backgroundColor = .groupTableViewBackground
     returnedView.addSubview(separator)
     returnedView.addSubview(label)
-    returnedView.backgroundColor = .white
+    returnedView.backgroundColor = themeController.backgroundColor
     label.textColor = .lightGray
     label.text = controller.headerTitleOfSections(for: section)
     label.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.semibold)

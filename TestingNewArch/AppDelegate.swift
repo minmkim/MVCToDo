@@ -46,8 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     UINavigationBar.appearance().tintColor = .white
     UINavigationBar.appearance().barStyle = .black
-
- //   let controller = MainViewController()
     let rootNavigationViewController = window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
     let remindersController = RemindersController()
@@ -66,21 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           UserDefaults.standard.set(true, forKey: "ReminderPermission")
         }
     })
-
-    let center = UNUserNotificationCenter.current()
-    center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
-      if granted {
-        UserDefaults.standard.set(true, forKey: "NotificationPermission")
-        DispatchQueue.main.async {
-          UIApplication.shared.registerForRemoteNotifications()
-        }
-      } else {
-        UserDefaults.standard.set(false, forKey: "NotificationPermission")
-        print("error!")
-        // handle the error
-      }
-    }
-    UNUserNotificationCenter.current().delegate = self
     return true
   }
 
@@ -108,38 +91,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
 
-}
-
-extension AppDelegate: UNUserNotificationCenterDelegate {
-  
-  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-    completionHandler([.alert, .sound, .badge])
-  }
-  
-  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-    let identifierString = response.notification.request.identifier
-    var ID = ""
-    print(identifierString)
-    print(identifierString.count)
-    if identifierString.count == 37 {
-      print("here1")
-      ID = String(identifierString.dropLast())
-    } else {
-      print("here2")
-      ID = identifierString
-    }
-    print(ID)
-    switch response.actionIdentifier {
-    case "Complete":
-      print("complete")
-      //toDoModelController.checkmarkButtonPressedModel(ID)
-    case "Postpone One Hour":
-      print("Postpone One Hour")
-//      toDoModelController.postponeNotifications(ID: ID, numberHours: 1)
-    case "Postpone One Day":
-      print("Postpone One Day")
-//      toDoModelController.postponeNotifications(ID: ID, numberHours: 24)
-    default: print("Unknown Action")
-    }
-  }
 }

@@ -11,6 +11,7 @@ import UIKit
 import AudioToolbox.AudioServices
 
 extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
+  
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = todayTableView.dequeueReusableCell(withIdentifier: "ContextItem", for: indexPath) as! EventTableViewCell
     let reminder = todayController.returnReminderInCell(index: indexPath)
@@ -21,6 +22,12 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
       }
     } else {
       cell.dueLabel.text = ""
+    }
+    cell.toDoLabel.textColor = themeController.mainTextColor
+    if cell.reminder.isChecked {
+      cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
+    } else {
+      cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
     }
 //    cell.contextColor.backgroundColor = todayController.returnContextColor(cell.toDoItem?.context ?? "")
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)

@@ -93,6 +93,11 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
   func themedCell(for indexPath: IndexPath) -> ContextItemCollectionViewCell {
     let cell = contextCollectionView.dequeueReusableCell(withReuseIdentifier: "ContextCards", for: indexPath) as! ContextItemCollectionViewCell
     cell.contextItemLabel.isEnabled = false
+    if themeController.isDarkTheme {
+      cell.contextItemLabel.keyboardAppearance = .dark
+    } else {
+      cell.contextItemLabel.keyboardAppearance = .default
+    }
     cell.backView.layer.shadowColor = UIColor.black.cgColor
     cell.backView.layer.shadowOffset = CGSize(width: 0, height: -3)
     cell.backView.layer.shadowOpacity = 0.3

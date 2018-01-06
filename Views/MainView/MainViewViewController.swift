@@ -27,6 +27,7 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.6
     addItemButton.layer.shadowColor = UIColor.black.cgColor
+    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
     setNavigationItemProperties()
     if #available(iOS 11.0, *) {
       contextCollectionView?.contentInsetAdjustmentBehavior = .always
@@ -34,6 +35,11 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     contextCollectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     contextCollectionView.delegate = self
     contextCollectionView.dataSource = self
+    if themeController.isDarkTheme {
+      UIApplication.shared.statusBarStyle = .lightContent
+    } else {
+      UIApplication.shared.statusBarStyle = .default
+    }
   }
   
   func setNavigationItemProperties() {
@@ -59,13 +65,19 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
 //    } else {
 //      addContextField.keyboardAppearance = .light
 //    }
-    contextCollectionView.backgroundColor = themeController.backgroundColor
-    self.view.backgroundColor = themeController.backgroundColor
-    if themeController.isDarkTheme {
-      UIApplication.shared.statusBarStyle = .lightContent
-    } else {
-      UIApplication.shared.statusBarStyle = .default
+    themeController.checkTheme()
+    if contextCollectionView.backgroundColor != themeController.backgroundColor {
+      addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+      contextCollectionView.backgroundColor = themeController.backgroundColor
+      self.view.backgroundColor = themeController.backgroundColor
+      if themeController.isDarkTheme {
+        UIApplication.shared.statusBarStyle = .lightContent
+      } else {
+        UIApplication.shared.statusBarStyle = .default
+      }
     }
+    
+    
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -84,11 +96,13 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
       let destination = segue.destination as! ContextItemViewController
       let title = controller.returnContextString(controller.selectedContextIndex)
       destination.controller = ContextItemController(remindersController: controller.remindersController, title: title)
+      destination.returnRemindersControllerDelegate = self
       destination.navigationItem.title = title
     } else if segue.identifier == segueIdentifiers.todayViewSegue {
        let destination = segue.destination as! TodayViewController
       let todayController = TodayController(controller: controller.remindersController)
       destination.todayController = todayController
+      destination.returnRemindersControllerDelegate = self
       navigationController?.navigationBar.barTintColor = colors.darkRed
     } else if segue.identifier == segueIdentifiers.allSegue {
       let destination = segue.destination as! ViewController

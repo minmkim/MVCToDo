@@ -30,15 +30,15 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
 //      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
 //    }
     cell.reminder = reminder
-//    cell.toDoItemLabel.textColor = themeController.mainTextColor
+    cell.toDoItemLabel.textColor = themeController.mainTextColor
 //    cell.checkMarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkMarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
-//    if cell.toDoItem?.isChecked ?? false {
-//      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
-//    } else {
-//      cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
-//    }
-//    cell.backgroundColor = themeController.backgroundColor
+    if cell.reminder.isChecked {
+      cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
+    } else {
+      cell.checkMarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+    }
+    cell.backgroundColor = themeController.backgroundColor
     return cell
   }
   
@@ -92,7 +92,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     separator.backgroundColor = .groupTableViewBackground
     returnedView.addSubview(separator)
     returnedView.addSubview(label)
-//    returnedView.backgroundColor = themeController.backgroundColor
+    returnedView.backgroundColor = themeController.backgroundColor
     label.textColor = navigationController?.navigationBar.barTintColor
     label.text = controller.returnContextHeader(section)
     label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)

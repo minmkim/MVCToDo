@@ -9,7 +9,6 @@
 import UIKit
 
 class CustomRepeatViewTableViewController: UITableViewController {
-
   
   //first row
   @IBOutlet weak var frequencyLabel: UILabel!
@@ -170,8 +169,6 @@ class CustomRepeatViewTableViewController: UITableViewController {
           print("error")
         }
   }
-  
-  
   
   @IBOutlet weak var calendarCollectionView: UICollectionView!
   override func viewDidLoad() {

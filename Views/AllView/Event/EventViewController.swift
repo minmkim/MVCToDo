@@ -58,6 +58,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     print("update cell")
     guard let cell = eventTableView.cellForRow(at: originIndex) as? EventTableViewCell else {return}
     cell.reminder = updatedReminder
+    cell.isDarkTheme = themeController.isDarkTheme
   }
 
   // update duedate after drag and drop
@@ -90,7 +91,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
   @IBOutlet weak var addItemButton: UIButton!
   var didInitialScroll = false
   var controller: EventController!
- // var themeController = ThemeController()
+  var themeController = ThemeController()
   var shownIndexes : [IndexPath] = []
   
   @IBAction func buttonPress(_ sender: Any) {
@@ -119,14 +120,19 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.6
     addItemButton.layer.shadowColor = UIColor.black.cgColor
+    eventTableView.backgroundColor = themeController.backgroundColor
+    footerView.backgroundColor = themeController.backgroundColor
+    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    //themeController = ThemeController()
-    eventTableView.reloadData()
-//    eventTableView.backgroundColor = themeController.backgroundColor
-//    footerView.backgroundColor = themeController.backgroundColor
-//    addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+    themeController.checkTheme()
+    if eventTableView.backgroundColor != themeController.backgroundColor {
+      eventTableView.backgroundColor = themeController.backgroundColor
+      footerView.backgroundColor = themeController.backgroundColor
+      addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+      eventTableView.reloadData()
+    }
   }
   
   // need to move this to after completion handler of reminders load
@@ -154,13 +160,20 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       let cell = eventTableView.cellForRow(at: indexPath) as! EventTableViewCell
       let destination = segue.destination as! AddItemTableViewController
       destination.controller = AddEditToDoController(ItemToEdit: cell.reminder)
+      if themeController.isDarkTheme {
+        destination.navigationController?.navigationBar.tintColor = .black
+      }
     } else if segue.identifier == segueIdentifiers.addToDoSegue {
       let navigation: UINavigationController = segue.destination as! UINavigationController
       var vc = AddItemTableViewController.init()
       vc = navigation.viewControllers[0] as! AddItemTableViewController
       vc.controller = AddEditToDoController()
       vc.controller.segueIdentity = segueIdentifiers.addToDoSegue
-//      vc.navigationController?.navigationBar.barTintColor = themeController.navigationBarColor
+      if themeController.isDarkTheme {
+        vc.navigationController?.navigationBar.tintColor = .black
+      } else {
+        vc.navigationController?.navigationBar.barTintColor = self.navigationController?.navigationBar.barTintColor
+      }
     }
   }
   
