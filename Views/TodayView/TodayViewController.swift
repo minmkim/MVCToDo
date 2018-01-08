@@ -17,10 +17,10 @@ class TodayViewController: UIViewController {
   weak var returnRemindersControllerDelegate: ReturnRemindersControllerFromTodayDelegate?
   @IBOutlet weak var addItemButton: UIButton!
   var todayController: TodayController!
-  var themeController = ThemeController()
   @IBOutlet weak var footerView: UIView!
   @IBOutlet weak var todayTableView: UITableView!
   var shownIndexes : [IndexPath] = []
+  var isDarkTheme = false
   
   @IBAction func addItemButtonPressed(_ sender: Any) {
     let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -37,19 +37,31 @@ class TodayViewController: UIViewController {
     }
   }
   override func viewDidLoad() {
-        super.viewDidLoad()
+    super.viewDidLoad()
     todayController.delegate = self
     todayTableView.delegate = self
     todayTableView.dataSource = self
-      footerView.backgroundColor = themeController.backgroundColor
-    view.backgroundColor = themeController.backgroundColor
-    todayTableView.backgroundColor = themeController.backgroundColor
+    if isDarkTheme {
+      footerView.backgroundColor = darkTheme.backgroundColor
+      view.backgroundColor = darkTheme.backgroundColor
+      todayTableView.backgroundColor = darkTheme.backgroundColor
+      addItemButton.setImage(UIImage(named: darkTheme.addCircle), for: .normal)
+    } else {
+      footerView.backgroundColor = lightTheme.backgroundColor
+      view.backgroundColor = lightTheme.backgroundColor
+      todayTableView.backgroundColor = lightTheme.backgroundColor
+      addItemButton.setImage(UIImage(named: lightTheme.addCircle), for: .normal)
+    }
+    
     addItemButton.layer.shadowOffset = CGSize(width: 0, height: 3)
     addItemButton.layer.shadowOpacity = 0.7
     addItemButton.layer.shadowColor = UIColor.black.cgColor
-    addItemButton.setImage(UIImage(named: themeController.addCircle) , for: .normal)
-        // Do any additional setup after loading the view.
     }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    isDarkTheme = UserDefaults.standard.bool(forKey: "DarkTheme")
+    print(isDarkTheme)
+  }
   
   override func viewWillDisappear(_ animated: Bool) {
     if isMovingFromParentViewController {

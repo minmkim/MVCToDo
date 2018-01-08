@@ -69,3 +69,29 @@ enum colors {
   static let brown = UIColor(red:0.43, green:0.30, blue:0.25, alpha:1.0)
   static let gray = UIColor(red:0.62, green:0.62, blue:0.62, alpha:1.0)
 }
+
+enum lightTheme {
+  static let backgroundColor = UIColor.black
+  static let mainTextColor = UIColor.white
+  static let headerBackgroundColor = UIColor(red: 0.137, green: 0.137, blue: 0.137, alpha: 1)
+  static let needShadow = false
+  static let navigationBarColor = UIColor.black
+  static let uncheckedCheckmarkIcon = checkMarkAsset.darkUncheckedCircle
+  static let checkedCheckmarkIcon = checkMarkAsset.darkCheckedCircle
+  static let addCircle = checkMarkAsset.darkAddCircle
+  static let addBackgroundColor = UIColor.black
+  static let addTextFieldColor = UIColor(red: 0.137, green: 0.137, blue: 0.137, alpha: 1)
+}
+
+enum darkTheme {
+  static let backgroundColor = UIColor.white
+  static let mainTextColor = UIColor.black
+  static let headerBackgroundColor = UIColor.groupTableViewBackground
+  static let needShadow = true
+  static let navigationBarColor = UIColor(red: 1, green: 0.427, blue: 0.397, alpha: 1)
+  static let uncheckedCheckmarkIcon = checkMarkAsset.uncheckedCircle
+  static let checkedCheckmarkIcon = checkMarkAsset.checkedCircle
+  static let addCircle = checkMarkAsset.addCircle
+  static let addBackgroundColor = UIColor.groupTableViewBackground
+  static let addTextFieldColor = UIColor.white
+}

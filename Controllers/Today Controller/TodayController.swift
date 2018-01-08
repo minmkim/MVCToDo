@@ -22,7 +22,7 @@ protocol TodayTableViewDelegate: class {
 class TodayController {
   
   var remindersController: RemindersController!
-  var delegate: TodayTableViewDelegate?
+  weak var delegate: TodayTableViewDelegate?
   
   let contextColors = [colors.red, colors.darkRed, colors.purple, colors.lightPurple, colors.darkBlue, colors.lightBlue, colors.teal, colors.turqoise, colors.hazel, colors.green, colors.lightGreen, colors.greenYellow, colors.lightOrange, colors.orange, colors.darkOrange, colors.thaddeus, colors.brown, colors.gray]
   var overDueItems = [Reminder]()

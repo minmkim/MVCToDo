@@ -23,14 +23,30 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     } else {
       cell.dueLabel.text = ""
     }
-    cell.toDoLabel.textColor = themeController.mainTextColor
-    if cell.reminder.isChecked {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
+    if isDarkTheme {
+      cell.toDoLabel.textColor = darkTheme.mainTextColor
+      cell.backgroundColor = darkTheme.backgroundColor
+      
+      if cell.reminder.isChecked {
+        cell.checkmarkButton.setImage(UIImage(named: darkTheme.checkedCheckmarkIcon), for: .normal)
+      } else {
+        cell.checkmarkButton.setImage(UIImage(named: darkTheme.uncheckedCheckmarkIcon), for: .normal)
+      }
     } else {
-      cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
+      cell.toDoLabel.textColor = lightTheme.mainTextColor
+      cell.backgroundColor = lightTheme.backgroundColor
+      
+      if cell.reminder.isChecked {
+        cell.checkmarkButton.setImage(UIImage(named: lightTheme.checkedCheckmarkIcon), for: .normal)
+      } else {
+        cell.checkmarkButton.setImage(UIImage(named: lightTheme.uncheckedCheckmarkIcon), for: .normal)
+      }
+      
     }
+    
+    
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
-    cell.backgroundColor = themeController.backgroundColor
+    
     return cell
   }
   
@@ -83,7 +99,7 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    return 48.0
+    return 32.0
   }
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -93,7 +109,13 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     separator.backgroundColor = .groupTableViewBackground
     returnedView.addSubview(separator)
     returnedView.addSubview(label)
-    returnedView.backgroundColor = themeController.backgroundColor
+    print(isDarkTheme)
+    if isDarkTheme {
+      returnedView.backgroundColor = darkTheme.backgroundColor
+    } else {
+      returnedView.backgroundColor = lightTheme.backgroundColor
+    }
+    
     label.textColor = navigationController?.navigationBar.barTintColor
     label.text = todayController.returnContextHeader(section)
     label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)

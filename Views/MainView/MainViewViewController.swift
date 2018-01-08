@@ -69,7 +69,6 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    
     self.navigationController?.setNavigationBarHidden(true, animated: animated)
     if UserDefaults.standard.bool(forKey: "ReminderPermission") {
       DispatchQueue.main.async() { // update contexts
