@@ -11,6 +11,7 @@ import UIKit
 protocol InformEventTableDelegate: class {
   func sendCalendarPressInformation(_ Date: String)
   func sendNewReminderDueDateAfterDropSession(_ newDate: String)
+  func segueToAddToDo()
 }
 
 protocol PassToDoModelToMainDelegate: class {
@@ -32,18 +33,15 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
   weak var delegate: InformEventTableDelegate?
   var themeController = ThemeController()
   var buttonPressedBool = false // prevent user from pressing additembutton during transitions
-//
-//  var eventViewcontroller: EventViewController!
-//  var calendarViewController: CalendarViewController?
   
   override func viewWillDisappear(_ animated: Bool) {
-    if isMovingFromParentViewController {
-      passToDoModelDelegate?.returnToDoModel(remindersController)
+    if isMovingFromParentViewController { passToDoModelDelegate?.returnToDoModel(remindersController)
     }
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -62,12 +60,18 @@ class ViewController: UIViewController, InformEventTableOfCalendarPressDelegate 
     delegate?.sendCalendarPressInformation(Date) // send data to delegate to eventcontroller
   }
   
+  func delegateEventControllerToSegue() {
+    print("delegate start")
+    delegate?.segueToAddToDo()
+  }
+  
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     switch segue.identifier {
     case segueIdentifiers.calendarSegue?:
       let controller = segue.destination as! CalendarViewController
       controller.delegate = self // A receives notifications from B
     case segueIdentifiers.eventSegue?:
+      print("here1")
       let destination = segue.destination as! EventViewController
       destination.controller = EventController(controller: remindersController)
       self.delegate = destination as InformEventTableDelegate // sending information from A to C

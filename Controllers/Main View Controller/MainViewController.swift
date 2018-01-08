@@ -76,6 +76,20 @@ class MainViewController {
     }
   }
   
+  func returnCellNumberOfToday() -> String {
+    let filteredIncompleteReminders = remindersController.incompleteReminderList.filter({$0.dueDate != nil})
+    let cal = Calendar(identifier: .gregorian)
+    let newDate = cal.date(bySettingHour: 0, minute: 0, second: 0, of: Date())!
+    let overDueItems = filteredIncompleteReminders.filter({$0.dueDate! < newDate})
+    let todayItems = filteredIncompleteReminders.filter({ cal.isDateInToday($0.dueDate ?? Date()) })
+    let count = overDueItems.count + todayItems.count
+    if count == 0 {
+      return ""
+    } else {
+      return String(count)
+    }
+  }
+  
   func checkIfEditing() -> Bool {
     if editingContext != nil {
       return true
@@ -144,16 +158,20 @@ class MainViewController {
   func createOrEditCalendar(context: String, color: UIColor) {
     switch controllerMode {
     case .adding:
-      remindersController.createNewCalendar(context: context, color: color)
-      setControllerModeToNormal()
-      listOfContext.append(context)
-      let indexPath = IndexPath(row: (listOfContext.count + 1), section: 0)
-      updateCollectionViewDelegate?.insertContext(at: indexPath)
+      if context != "" {
+        remindersController.createNewCalendar(context: context, color: color)
+        setControllerModeToNormal()
+        listOfContext.append(context)
+        let indexPath = IndexPath(row: (listOfContext.count + 1), section: 0)
+        updateCollectionViewDelegate?.insertContext(at: indexPath)
+      }
     case .editing:
-      guard let indexPath = previousEditedIndexPath else {return}
-      remindersController.editCalendar(context: context, color: color, originalContext: listOfContext[indexPath.row - 2])
-      setControllerModeToNormal()
-      listOfContext[(indexPath.row - 2)] = context
+      if context != "" {
+        guard let indexPath = previousEditedIndexPath else {return}
+        remindersController.editCalendar(context: context, color: color, originalContext: listOfContext[indexPath.row - 2])
+        setControllerModeToNormal()
+        listOfContext[(indexPath.row - 2)] = context
+      }
     case .normal:
       print("normal")
     }
@@ -218,6 +236,15 @@ class MainViewController {
     let uiColor = UIColor.init(cgColor: color)
     return uiColor
   }
+  
+  func loadData() {
+    remindersController.loadReminderData { [unowned self] (Reminders) in
+      if !Reminders.isEmpty {
+        self.updateCollectionViewDelegate?.updateContext()
+      }
+    }
+  }
+  
 }
 
 extension MainViewController: CalandarCompleteDelegate {

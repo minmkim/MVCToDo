@@ -29,7 +29,6 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     } else {
       cell.checkmarkButton.setImage(UIImage(named: themeController.uncheckedCheckmarkIcon), for: .normal)
     }
-//    cell.contextColor.backgroundColor = todayController.returnContextColor(cell.toDoItem?.context ?? "")
     cell.checkmarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     cell.backgroundColor = themeController.backgroundColor
     return cell
@@ -110,4 +109,3 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     return returnedView
   }
 }
-

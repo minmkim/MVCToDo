@@ -50,4 +50,3 @@ extension CalendarViewController: UICollectionViewDropDelegate {
       return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
   }
 }
-

@@ -29,8 +29,6 @@ class RemindersController {
     NotificationCenter.default.removeObserver(self, name: .EKEventStoreChanged, object: nil)
   }
   
-
-  
   @objc func storeChanged(_ notification: Notification) {
     let timeDifference = Helper.calculateTimeBetweenDates(originalDate: lastUpdate, finalDate: Date())
     if timeDifference > 3 {
@@ -92,6 +90,10 @@ class RemindersController {
     calendars = []
     incompleteReminderList = []
     calendars = eventStore.calendars(for: EKEntityType.reminder)
+    
+    if calendars.count == 0 {
+      createNewCalendar(context: "Reminders", color: colors.lightBlue)
+    }
     let incompletePredicate = eventStore.predicateForIncompleteReminders(withDueDateStarting: nil, ending: nil, calendars: nil)
     eventStore.fetchReminders(matching: incompletePredicate, completion: { [unowned self](reminders: [EKReminder]?) -> Void in
       
@@ -350,6 +352,7 @@ class RemindersController {
   
   func createNewCalendar(context: String, color: UIColor) {
     let newCalendar = EKCalendar(for: .reminder, eventStore: eventStore)
+    print("here \(context)")
     newCalendar.title = context
     newCalendar.cgColor = color.cgColor
     let sourcesInEventStore = eventStore.sources
@@ -357,7 +360,9 @@ class RemindersController {
     
     if let icloudSource = filteredSources.first {
       newCalendar.source = icloudSource
+      print("icloud")
     } else {
+      print("local")
       let nextFilteredSource = sourcesInEventStore.filter { $0.sourceType == .local }
       if let localSource = nextFilteredSource.first {
         newCalendar.source = localSource

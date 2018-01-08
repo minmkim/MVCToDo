@@ -98,4 +98,3 @@ class ContextSearchViewController: UITableViewController, UISearchResultsUpdatin
     searchController.dismiss(animated: false, completion: nil)
   }
 }
-

@@ -44,16 +44,18 @@ class EventController {
   init(controller: RemindersController) {
     remindersController = controller   
     remindersController.remindersUpdatedDelegate = self
-    remindersController.loadReminderData { [unowned self] (Reminders) in
-      if !Reminders.isEmpty {
-        self.setupControllerData()
-        for date in (self.toDoDates) {
-          autoreleasepool {
-            let listOfReminders = Reminders.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
-            self.datesRemindersList[date] = listOfReminders
+    if UserDefaults.standard.bool(forKey: "ReminderPermission") {
+      remindersController.loadReminderData { [unowned self] (Reminders) in
+        if !Reminders.isEmpty {
+          self.setupControllerData()
+          for date in (self.toDoDates) {
+            autoreleasepool {
+              let listOfReminders = Reminders.filter({(Helper.formatDateToString(date: ($0.dueDate ?? Date()), format: dateAndTime.yearMonthDay)) == date })
+              self.datesRemindersList[date] = listOfReminders
+            }
           }
+          self.delegate?.updateTableView()
         }
-        self.delegate?.updateTableView()
       }
     }
   }

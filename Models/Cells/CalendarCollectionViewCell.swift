@@ -14,5 +14,3 @@ class CalendarCollectionViewCell: UICollectionViewCell {
   @IBOutlet weak var numberOfMonthLabel: UILabel!
   @IBOutlet weak var dayIndicatorView: UIView!
 }
-
-

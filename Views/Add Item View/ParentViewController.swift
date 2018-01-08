@@ -86,5 +86,3 @@ class ParentViewController: UITableViewController, UISearchResultsUpdating {
     searchController.dismiss(animated: false, completion: nil)
   }
 }
-
-

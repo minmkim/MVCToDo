@@ -24,14 +24,8 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = contextItemTableView.dequeueReusableCell(withIdentifier: "ContextItem", for: indexPath) as! ContextItemTableViewCell
     let reminder = controller.returnToDoItemForCell(indexPath)
-//    if toDoItem.contextSection != "" {
-//      cell.layoutMargins = UIEdgeInsetsMake(0, 30, 0, 0)
-//    } else {
-//      cell.layoutMargins = UIEdgeInsetsMake(0, 0, 0, 0)
-//    }
     cell.reminder = reminder
     cell.toDoItemLabel.textColor = themeController.mainTextColor
-//    cell.checkMarkButton.setTitle(cell.toDoItem?.calendarRecordID, for: .normal)
     cell.checkMarkButton.addTarget(self,action:#selector(checkmarkButtonPress), for:.touchUpInside)
     if cell.reminder.isChecked {
       cell.checkMarkButton.setImage(UIImage(named: themeController.checkedCheckmarkIcon), for: .normal)
@@ -98,7 +92,7 @@ extension ContextItemViewController: UITableViewDelegate, UITableViewDataSource 
     label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.bold)
     label.translatesAutoresizingMaskIntoConstraints = false
     label.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 18).isActive = true
-    label.bottomAnchor.constraint(equalTo: returnedView.bottomAnchor, constant: -6).isActive = true
+    label.bottomAnchor.constraint(equalTo: returnedView.bottomAnchor, constant: -4).isActive = true
     label.heightAnchor.constraint(equalToConstant: 24).isActive = true
     separator.translatesAutoresizingMaskIntoConstraints = false
     separator.leadingAnchor.constraint(equalTo: returnedView.leadingAnchor, constant: 16).isActive = true

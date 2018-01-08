@@ -35,7 +35,5 @@ extension EventViewController: UITableViewDropDelegate {
 
     return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
   }
-
   
 }
-

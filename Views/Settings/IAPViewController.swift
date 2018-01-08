@@ -154,6 +154,4 @@ class IAPViewController: UIViewController, SKProductsRequestDelegate, SKPaymentT
     // Dispose of any resources that can be recreated.
   }
   
-  
 }
-

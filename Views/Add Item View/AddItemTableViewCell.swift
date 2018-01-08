@@ -36,8 +36,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var dailyRepeatButton: UIButton!
   @IBOutlet weak var neverRepeatButton: UIButton!
   @IBOutlet weak var alarmTime: UILabel!
+  @IBOutlet weak var dueTimeClearButton: UIButton!
+  @IBOutlet weak var dueDateClearButton: UIButton!
   lazy var previousStepperValue = 0
-  
   @IBOutlet weak var alarmTimeStepper: UIStepper!
   @IBAction func alarmTimeStepperPress(_ sender: UIStepper) {
     if alarmTime.text != "" {
@@ -217,13 +218,6 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     //self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     navigationItem.setLeftBarButton(nil, animated: true)
   }  // end viewdidload
-//
-//  override func viewWillAppear(_ animated: Bool) {
-//    themeController.checkTheme()
-//    if tableView.backgroundColor != themeController.backgroundColor {
-//      tableView.reloadData()
-//    }
-//  }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
@@ -244,9 +238,9 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
     dueDateField.textColor = themeController.mainTextColor
     dueTimeField.textColor = themeController.mainTextColor
     repeatingField.textColor = themeController.mainTextColor
-
+    alarmTime.textColor = themeController.mainTextColor
     tableView.backgroundColor = themeController.addBackgroundColor
-    print("here1")
+    
     if navigationController?.navigationBar.barTintColor != nil && navigationController?.navigationBar.barTintColor != .black {
       infoButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
       notesButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
@@ -257,6 +251,14 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       customButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
       saveButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
       cancelButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      neverRepeatButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      dailyRepeatButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      weeklyRepeatButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      monthlyRepeatButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      customRepeatButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      dueDateClearButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      dueTimeClearButton.setTitleColor(navigationController?.navigationBar.barTintColor, for: .normal)
+      alarmTimeStepper.tintColor = navigationController?.navigationBar.barTintColor
     } else {
       print("setting color here: \(themeController.mainThemeColor)")
       infoButton.setTitleColor(themeController.mainThemeColor, for: .normal)
@@ -268,6 +270,14 @@ class AddItemTableViewController: UITableViewController, UITextFieldDelegate {
       customButton.setTitleColor(themeController.mainThemeColor, for: .normal)
       saveButton.setTitleColor(themeController.mainThemeColor, for: .normal)
       cancelButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      neverRepeatButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      dailyRepeatButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      weeklyRepeatButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      monthlyRepeatButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      customRepeatButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      dueDateClearButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      dueTimeClearButton.setTitleColor(themeController.mainThemeColor, for: .normal)
+      alarmTimeStepper.tintColor = themeController.mainThemeColor
     }
     dueDatePicker.setValue(themeController.mainTextColor, forKeyPath: "textColor")
     dueTimePicker.setValue(themeController.mainTextColor, forKey: "textColor")

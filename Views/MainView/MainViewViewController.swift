@@ -17,7 +17,17 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
   
   @IBOutlet weak var addItemButton: UIButton!
   @IBAction func addButtonPressed(_ sender: Any) {
-    controller.addContextButtonPressed()
+    if UserDefaults.standard.bool(forKey: "ReminderPermission") {
+      controller.addContextButtonPressed()
+    } else {
+      UserDefaults.standard.set(false, forKey: "ReminderPermission")
+      let alertController = UIAlertController(title: "Sorry!", message: "Due Life uses the iCloud Reminders backend to store your reminders. Please go to Settings and give Due Life permission to your reminders to use this app!", preferredStyle: UIAlertControllerStyle.alert)
+      let okayAction = UIAlertAction(title: "Okay", style: .default) { (result : UIAlertAction) -> Void in
+        alertController.dismiss(animated: true, completion: nil)
+      }
+      alertController.addAction(okayAction)
+      self.present(alertController, animated: true, completion: nil)
+    }
   }
   
   override func viewDidLoad() {
@@ -42,6 +52,10 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     }
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    controller.updateCollectionViewDelegate = self
+  }
+  
   func setNavigationItemProperties() {
     navigationItem.title = "Contexts"
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
@@ -55,16 +69,14 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    controller.updateCollectionViewDelegate = self
+    
     self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    DispatchQueue.main.async() { // update contexts
-      self.contextCollectionView.reloadData()
+    if UserDefaults.standard.bool(forKey: "ReminderPermission") {
+      DispatchQueue.main.async() { // update contexts
+        self.contextCollectionView.reloadData()
+      }
     }
-//    if themeController.isDarkTheme {
-//      addContextField.keyboardAppearance = .dark
-//    } else {
-//      addContextField.keyboardAppearance = .light
-//    }
+    
     themeController.checkTheme()
     if contextCollectionView.backgroundColor != themeController.backgroundColor {
       addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
@@ -108,7 +120,9 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
       let destination = segue.destination as! ViewController
       destination.passToDoModelDelegate = self
       destination.remindersController = controller.remindersController
-      UIApplication.shared.statusBarStyle = .lightContent
+      DispatchQueue.main.async {
+        UIApplication.shared.statusBarStyle = .lightContent
+      }
     }
   }
   
@@ -116,5 +130,3 @@ class MainViewViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     print("unwind")
   }
 }
-
-

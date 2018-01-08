@@ -77,9 +77,9 @@ class ContextItemController {
   
   func returnContextHeaderHeight(_ section: Int) -> CGFloat {
     if listOfContextHeaders[section] == "" {
-      return 30.0
+      return 18.0
     } else {
-      return 48.0
+      return 32.0
     }
   }
   

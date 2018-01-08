@@ -34,12 +34,13 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
       return cell
     case 1:
       cell.contextItemLabel.text = "Today"
-//      cell.numberOfContextLabel.text = controller.returnCellNumberOfToday()
+      cell.numberOfContextLabel.text = controller.returnCellNumberOfToday()
       cell.backView.backgroundColor =  colors.darkRed
       return cell
     case (controller.listOfContext.count + 2):
       cell.contextItemLabel.text = ""
       cell.contextItemLabel.attributedPlaceholder = NSAttributedString(string: "Add Context", attributes: [NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+      cell.deleteButton.isHidden = true
       cell.numberOfContextLabel.text = ""
       cell.isEditing = true
       cell.backView.backgroundColor = .red
@@ -61,9 +62,31 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
         DispatchQueue.main.async {
         switch indexPath.row {
         case 0:
-          self.performSegue(withIdentifier: segueIdentifiers.allSegue, sender: nil)
+          if UserDefaults.standard.bool(forKey: "ReminderPermission") {
+            self.performSegue(withIdentifier: segueIdentifiers.allSegue, sender: nil)
+          } else {
+            UserDefaults.standard.set(false, forKey: "ReminderPermission")
+            let alertController = UIAlertController(title: "Sorry!", message: "Due Life uses the iCloud Reminders backend to store your reminders. Please go to Settings and give Due Life permission to your reminders to use this app!", preferredStyle: UIAlertControllerStyle.alert)
+            let okayAction = UIAlertAction(title: "Okay", style: .default) { (result : UIAlertAction) -> Void in
+              alertController.dismiss(animated: true, completion: nil)
+            }
+            alertController.addAction(okayAction)
+            self.present(alertController, animated: true, completion: nil)
+          }
+          
         case 1:
-          self.performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: self)
+          if UserDefaults.standard.bool(forKey: "ReminderPermission") {
+            self.performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: nil)
+          } else {
+            UserDefaults.standard.set(false, forKey: "ReminderPermission")
+            let alertController = UIAlertController(title: "Sorry!", message: "Due Life uses the iCloud Reminders backend to store your reminders. Please go to Settings and give Due Life permission to your reminders to use this app!", preferredStyle: UIAlertControllerStyle.alert)
+            let okayAction = UIAlertAction(title: "Okay", style: .default) { (result : UIAlertAction) -> Void in
+              alertController.dismiss(animated: true, completion: nil)
+            }
+            alertController.addAction(okayAction)
+            self.present(alertController, animated: true, completion: nil)
+          }
+          
         default:
           self.controller.setIndexPathForContextSelect(indexPath.row - 2)
           self.performSegue(withIdentifier: segueIdentifiers.contextItemSegue, sender: self)
@@ -148,6 +171,7 @@ extension MainViewViewController: UICollectionViewDelegate, UICollectionViewData
     self.view.addSubview(fakeLabel)
     self.view.addSubview(fakeBody)
     self.view.bringSubview(toFront: fakeBody)
+    self.view.bringSubview(toFront: addItemButton)
     
     let width = self.view.frame.width
     var headerHeight: Double = 0.0

@@ -266,7 +266,6 @@ struct Reminder {
     self.calendarRecordID = calendarRecordID
   }
   
-  
     func returnParentFromNotes(for note: String) -> String? {
       if note.hasSuffix("}#@{!}") {
         let rangeOfZero = note.range(of: "{!}@#{", options: .backwards)

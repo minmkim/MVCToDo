@@ -22,21 +22,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       
       let rootNavigationViewController = window!.rootViewController as? UINavigationController
       rootNavigationViewController?.popToRootViewController(animated: false)
+      let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
       let firstVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AllViewController") as! ViewController
+      firstVC.navigationController?.isNavigationBarHidden = true
+      firstVC.remindersController = rootViewController.controller.remindersController
       rootNavigationViewController?.pushViewController(firstVC, animated: false)
-      firstVC.performSegue(withIdentifier: segueIdentifiers.addToDoSegue, sender: nil)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        firstVC.delegateEventControllerToSegue()
+      }
+      
     case "com.minkim.DueLife.today":
       self.window!.rootViewController?.dismiss(animated: false, completion: nil)
       
       let rootNavigationViewController = window!.rootViewController as? UINavigationController
       rootNavigationViewController?.popToRootViewController(animated: false)
-      let newVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TodayView") as! TodayViewController
-      rootNavigationViewController?.pushViewController(newVC, animated: false)
+      let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
+      rootViewController.performSegue(withIdentifier: segueIdentifiers.todayViewSegue, sender: nil)
     case "com.minkim.DueLife.context":
       self.window!.rootViewController?.dismiss(animated: false, completion: nil)
-      
       let rootNavigationViewController = window!.rootViewController as? UINavigationController
       rootNavigationViewController?.popToRootViewController(animated: false)
+      let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
+      rootViewController.controller.loadData()
     default:
       print("unknown shortcut")
     }
@@ -44,26 +51,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    UINavigationBar.appearance().tintColor = .white
-    UINavigationBar.appearance().barStyle = .black
-    let rootNavigationViewController = window!.rootViewController as? UINavigationController
+    UserDefaults.standard.set(true, forKey: "ReminderPermission")
+    let rootNavigationViewController = self.window!.rootViewController as? UINavigationController
     let rootViewController = rootNavigationViewController?.viewControllers.first as! MainViewViewController
     let remindersController = RemindersController()
     rootViewController.controller = MainViewController(controller: remindersController)
     rootViewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
-    rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
+    
+    UINavigationBar.appearance().tintColor = .white
+    UINavigationBar.appearance().barStyle = .black
     
     let eventStore = EKEventStore()
+    print("here1")
     eventStore.requestAccess(to: EKEntityType.reminder, completion:
       {(granted, error) in
-        if error != nil {
+        if granted {
+          DispatchQueue.main.async {
+            rootViewController.performSegue(withIdentifier: "AllSegue", sender: nil)
+          }
+        } else {
+          DispatchQueue.main.async {
+            UserDefaults.standard.set(false, forKey: "ReminderPermission")
+            let alertController = UIAlertController(title: "Sorry!", message: "Due Life uses the iCloud Reminders backend to store your reminders. Please go to Settings and give Due Life permission to your reminders to use this app!", preferredStyle: UIAlertControllerStyle.alert)
+            let okayAction = UIAlertAction(title: "Okay", style: .default) { (result : UIAlertAction) -> Void in
+              alertController.dismiss(animated: true, completion: nil)
+            }
+            alertController.addAction(okayAction)
+            self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+          }
           print("error: \(String(describing: error?.localizedDescription))")
           print("Access to store not granted")
-          UserDefaults.standard.set(false, forKey: "ReminderPermission")
-        } else {
-          UserDefaults.standard.set(true, forKey: "ReminderPermission")
+          
         }
     })
+    print("here4")
+    
+    
+    
+    
     return true
   }
 

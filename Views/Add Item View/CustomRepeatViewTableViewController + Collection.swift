@@ -85,6 +85,4 @@ extension CustomRepeatViewTableViewController: UICollectionViewDelegate, UIColle
     }
   }
   
-  
-  
 }

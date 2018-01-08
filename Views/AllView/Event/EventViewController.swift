@@ -84,6 +84,11 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
       }
     }
   }
+  
+  func segueToAddToDo() {
+    print("delegate end")
+    performSegue(withIdentifier: segueIdentifiers.addToDoSegue, sender: nil)
+  }
   // end delegate functions
   
   @IBOutlet weak var footerView: UIView!
@@ -123,6 +128,7 @@ class EventViewController: UIViewController, InformEventTableDelegate, UpdateTab
     eventTableView.backgroundColor = themeController.backgroundColor
     footerView.backgroundColor = themeController.backgroundColor
     addItemButton.setImage(UIImage(named: themeController.addCircle), for: .normal)
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
